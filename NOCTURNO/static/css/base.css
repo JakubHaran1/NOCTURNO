@@ -1,0 +1,63 @@
+.user-profile {
+  background-color: #9b30ff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+  padding: 0 1rem 1rem 1rem;
+  background-color: #0b0c10;
+}
+
+.navbar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 15rem;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+  font-family: "Tilt Neon", sans-serif;
+  text-align: center;
+  color: #ffea00;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  background: rgba(42, 38, 64, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  border-radius: 0 0 15px 15px;
+}
+
+.navbar-under {
+  position: static;
+  opacity: 0;
+}
+
+.main-header {
+  font-size: 2rem;
+  text-shadow: 0 0 2px #ffea00, 0 0 5px #ffea00, 0 0 10px #ffea00, 0 0 20px #ffd900, 0 0 40px #ffd900;
+}
+
+.navbar.nav {
+  bottom: 0;
+  padding: 1rem;
+  border-radius: 15px 15px 0 0;
+}
+.navbar.nav a {
+  color: #ffd900;
+  font-size: 1.8rem;
+  transition: color 0.4s ease, text-shadow 0.4s ease;
+}
+.navbar.nav a:hover {
+  color: #ffea00;
+  text-shadow: 0 0 1px #ffea00, 0 0 1px #ffea00, 0 0 2px #ffea00, 0 0 5px #ffd900, 0 0 10px #ffd900;
+}
+
+/*# sourceMappingURL=base.css.map */

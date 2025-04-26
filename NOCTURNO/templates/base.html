@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/base.css" %}" />
+    {% block style %}{% endblock %}
+    <title>🧊 NOCTURNO 🧊</title>
+  </head>
+  <body>
+    <div class="navbar">
+        <h2 class="main-header"> Nocturno </h2>
+    </div>
+
+    <div class="navbar navbar-under">
+      <h2 class="main-header"> Nocturno </h2>
+  </div>
+
+    {% block content %}{% endblock %}
+    <nav class="nav navbar">
+        <a href="#" class="nav-el"><i class="fas fa-home"></i></a>
+        <a href="#" class="nav-el"><i class="fas fa-map-marker-alt"></i></a>
+    </nav>
+    <script src="https://kit.fontawesome.com/aa2fbe4dd6.js" crossorigin="anonymous"></script>
+  </body>
+</html>
