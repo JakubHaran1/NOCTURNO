@@ -1,6 +1,6 @@
-@use "variables.scss";
-@use "main.scss";
-
+@use "./variables" as v;
+@use "./main";
+@use "./mixins" as m;
 * {
   margin: 0;
   padding: 0;
@@ -9,24 +9,29 @@
 
 body {
   position: relative;
-  min-height: 100vh;
-  padding: 0 1rem 1rem 1rem;
-  background-color: variables.$bg-main;
+  font-family: "Roboto", sans-serif;
+  background-color: v.$bg-main;
+  margin-bottom: 1rem;
+
+  h4 {
+    @include m.header;
+  }
+}
+
+.layout {
+  max-width: 2000px;
 }
 
 .navbar {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
   width: 15rem;
   margin: 0 auto;
   padding: 0.5rem 1rem;
   font-family: "Tilt Neon", sans-serif;
   text-align: center;
-  color: variables.$cta-yellow-hover;
+  color: v.$cta-yellow-hover;
   text-transform: uppercase;
   letter-spacing: 3px;
-  background: #2a264099;
+  background: v.$bg-card;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -34,34 +39,35 @@ body {
   border-radius: 0 0 15px 15px;
 }
 
-.navbar-under {
-  position: static;
-  opacity: 0;
-}
-
 .main-header {
   font-size: 2rem;
-  text-shadow: 0 0 2px variables.$cta-yellow-hover,
-    0 0 5px variables.$cta-yellow-hover, 0 0 10px variables.$cta-yellow-hover,
-    0 0 20px variables.$cta-yellow, 0 0 40px variables.$cta-yellow;
+  text-shadow: 0 0 2px v.$cta-yellow-hover, 0 0 5px v.$cta-yellow-hover,
+    0 0 10px v.$cta-yellow-hover, 0 0 20px v.$cta-yellow, 0 0 40px v.$cta-yellow;
 }
 
 .navbar.nav {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
   bottom: 0;
-
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 15px 15px 0 0;
+  transition: 0.1s;
 
   a {
-    color: variables.$cta-yellow;
+    color: v.$cta-yellow;
     font-size: 1.8rem;
+    margin: 1rem;
     transition: color 0.4s ease, text-shadow 0.4s ease;
   }
 
   a:hover {
     color: #ffea00;
-    text-shadow: 0 0 1px variables.$cta-yellow-hover,
-      0 0 1px variables.$cta-yellow-hover, 0 0 2px variables.$cta-yellow-hover,
-      0 0 5px variables.$cta-yellow, 0 0 10px variables.$cta-yellow;
+    text-shadow: 0 0 1px v.$cta-yellow-hover, 0 0 1px v.$cta-yellow-hover,
+      0 0 2px v.$cta-yellow-hover, 0 0 5px v.$cta-yellow, 0 0 10px v.$cta-yellow;
   }
+}
+
+.navbar.nav.scroll {
+  bottom: -10%;
 }

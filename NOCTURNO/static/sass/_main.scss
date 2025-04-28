@@ -1,5 +1,112 @@
-@use "variables.scss";
+@use "./variables" as v;
+@use "./mixins" as m;
+
+@mixin row-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .user-profile {
-  background-color: variables.$accent-purple;
+  margin: 1rem 0;
+  padding: 0.8rem 0.5rem;
+  margin: 1rem;
+  background-color: v.$bg-section-2;
+  border-radius: 5px;
+  color: v.$text-main;
+
+  .user-card {
+    @include row-center;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    h4 {
+      margin: 0.5rem 0 0;
+    }
+
+    img {
+      border-radius: 50px;
+      -webkit-box-shadow: 0px 0px 45px -11px rgba(66, 68, 90, 1);
+      -moz-box-shadow: 0px 0px 45px -11px rgba(66, 68, 90, 1);
+      box-shadow: 0px 0px 45px -11px rgba(66, 68, 90, 1);
+    }
+  }
+
+  .friends-actions {
+    @include row-center;
+    gap: 1rem;
+    width: 100%;
+    border-top: 1px solid;
+    padding-top: 1rem;
+    text-align: center;
+
+    i {
+      font-size: 1.4rem;
+    }
+  }
+}
+
+.main-party {
+  background-color: v.$bg-section;
+  padding: 0.75rem;
+  h2 {
+    @include m.header;
+    padding: 1rem;
+  }
+}
+
+.row {
+  display: flex;
+  overflow-x: scroll;
+  padding: 1rem;
+  border-radius: 5px;
+
+  -webkit-box-shadow: inset 0px 0px 16px 1px #0b0c10;
+  -moz-box-shadow: inset 0px 0px 16px 1px #0b0c10;
+  box-shadow: inset 0px 0px 16px 1px #0b0c10;
+}
+
+.party {
+  flex: 0 0 15rem;
+  padding: 0.8rem;
+
+  img {
+    width: 100%;
+    border-radius: 5px;
+  }
+
+  h4 {
+    text-align: center;
+  }
+  .desc {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    text-align: center;
+    color: v.$text-main;
+    font-size: 1.2rem;
+
+    p {
+      font-size: 1rem;
+      color: v.$text-secondary;
+    }
+  }
+}
+
+.user-party {
+  margin: 1rem 0;
+}
+
+@media (min-width: 819px) {
+  .layout {
+    position: relative;
+    width: 80%;
+    margin: 0 auto;
+  }
+  .user-profile {
+    margin: 2rem;
+  }
+  .main-party {
+    margin: 0 2rem;
+  }
 }

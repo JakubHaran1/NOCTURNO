@@ -1,38 +1,71 @@
 {% extends "base.html" %}
 {% load static %}
 
-
+{% block head %}
+<script defer src={% static "js/main.js" %}></script>
+{% endblock  %}
 
 {% block content %} 
 
-<section class="user-profile">
-    
-    <div class="user-card">
-    
-        <div class="user-img">
-            <img src="" alt="User profile image">
-        </div>
+    <section class="user-profile">
+        
+        <div class="user-card">
+        
+            <div class="user-img">
+                <img src="{% static "imgs/avatar.svg" %}" alt="User profile image">
+            </div>
 
-        <div class="user-info">
-            <div class="position">
-                <h4>Name:</h4>
-                <p>Nicolas</p>
+            <div  iv class="user-info">
+                <div class="position">
+                    <h4>Name:</h4>
+                    <p>Nicolas</p>
+                </div>
+                <div class="position">
+                    <h4>Surname:</h4>
+                    <p>Cage</p>
+                </div>
             </div>
-            <div class="position">
-                <h4>Second name:</h4>
-                <p>Cage</p>
+            <div class="user-info">
+                <div class="position">
+                    <h4>Nick:</h4>
+                    <p>Myster R</p>
+                </div>
+                <div class="position">
+                    <h4>Age:</h4>
+                    <p>18</p>
+                </div>
             </div>
-            <div class="position">
-                <h4>Nick:</h4>
-                <p>Myster R</p>
-            </div>
-            <div class="position">
-                <h4>Email:</h4>
-                <p>Nicolas@gmail.com</p>
+
+            <div class="friends-actions">
+                <div class="acction">
+                    <i class="fas fa-user-friends"></i>
+                    <h4>Buddies</h4>
+                </div>
+                <div class="acction">
+                    <i class="fas fa-user-plus"></i>
+                    <h4>Add buddie</h4>
+                </div>
+                <div class="acction">
+                    <i class="fas fa-users"></i>
+                    <h4>Groups</h4>
+                </div>
             </div>
         </div>
+    </section>
 
-    </div>
-</section>
+    <section class="main-party">
+        <h2>Trending:</h2>
+        
+            {% include "includes/parties.html" %}
+        
+        <div class="user-party">
+            <h2>Your parties:</h2>
+        
+                {% include "includes/parties.html" %}
+            
+        </div>
+    </section>
+
+
 
 {% endblock %}
