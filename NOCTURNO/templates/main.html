@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
+
 {% block head %}
 <script defer src={% static "js/main.js" %}></script>
 {% endblock  %}
@@ -54,15 +55,17 @@
     </section>
 
     <section class="main-party">
-        <h2>Trending:</h2>
-        
-            {% include "includes/parties.html" %}
-        
-        <div class="user-party">
-            <h2>Your parties:</h2>
-        
+        <div class="popular-party">
+            <div class="parties">
+                <h2>Trending:</h2>
                 {% include "includes/parties.html" %}
-            
+            </div>
+        </div>
+        <div class="user-party">
+            <div class="parties">
+                <h2>Trending:</h2>
+                {% include "includes/parties.html" %}
+            </div>
         </div>
     </section>
 

@@ -1,5 +1,6 @@
-@use "./variables" as v;
 @use "./main";
+@use "./map";
+@use "./variables" as v;
 @use "./mixins" as m;
 * {
   margin: 0;
@@ -11,13 +12,15 @@ body {
   position: relative;
   font-family: "Roboto", sans-serif;
   background-color: v.$bg-main;
-  margin-bottom: 1rem;
-
-  h4 {
-    @include m.header;
-  }
+}
+section h4,
+section h2 {
+  @include m.header;
 }
 
+h2 {
+  padding: 1rem;
+}
 .layout {
   max-width: 2000px;
 }
@@ -28,7 +31,6 @@ body {
   padding: 0.5rem 1rem;
   font-family: "Tilt Neon", sans-serif;
   text-align: center;
-  color: v.$cta-yellow-hover;
   text-transform: uppercase;
   letter-spacing: 3px;
   background: v.$bg-card;
@@ -37,22 +39,25 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
   border-radius: 0 0 15px 15px;
-}
 
-.main-header {
-  font-size: 2rem;
-  text-shadow: 0 0 2px v.$cta-yellow-hover, 0 0 5px v.$cta-yellow-hover,
-    0 0 10px v.$cta-yellow-hover, 0 0 20px v.$cta-yellow, 0 0 40px v.$cta-yellow;
+  .main-header {
+    padding: 0;
+    font-size: 2rem;
+    color: v.$cta-yellow-hover;
+    text-shadow: 0 0 2px v.$cta-yellow-hover, 0 0 5px v.$cta-yellow-hover,
+      0 0 10px v.$cta-yellow-hover, 0 0 20px v.$cta-yellow,
+      0 0 40px v.$cta-yellow;
+  }
 }
 
 .navbar.nav {
   position: fixed;
-  left: 50%;
   transform: translateX(-50%);
+  left: 50%;
   bottom: 0;
   padding: 0.5rem;
   border-radius: 15px 15px 0 0;
-  transition: 0.1s;
+  transition: 0.3s;
 
   a {
     color: v.$cta-yellow;

@@ -22,8 +22,8 @@
 
       {% block content %}{% endblock %}
       <nav class="nav navbar">
-          <a href="#" class="nav-el"><i class="fas fa-home"></i></a>
-          <a href="#" class="nav-el"><i class="fas fa-map-marker-alt"></i></a>
+          <a href="{% url "home" %}" class="nav-el"><i class="fas fa-home"></i></a>
+          <a href="{% url "map" %}" class="nav-el"><i class="fas fa-map-marker-alt"></i></a>
       </nav>
     </div>
     <script src="https://kit.fontawesome.com/aa2fbe4dd6.js" crossorigin="anonymous"></script>

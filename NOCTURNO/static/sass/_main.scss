@@ -47,48 +47,53 @@
 }
 
 .main-party {
-  background-color: v.$bg-section;
-  padding: 0.75rem;
-  h2 {
-    @include m.header;
-    padding: 1rem;
+  .user-party,
+  .popular-party {
+    padding: 0.75rem;
+    background-color: v.$bg-section;
   }
 }
 
-.row {
-  display: flex;
-  overflow-x: scroll;
+.main-party .row {
+  scrollbar-color: v.$bg-section v.$bg-section;
+}
+.parties {
   padding: 1rem;
   border-radius: 5px;
-
   -webkit-box-shadow: inset 0px 0px 16px 1px #0b0c10;
   -moz-box-shadow: inset 0px 0px 16px 1px #0b0c10;
   box-shadow: inset 0px 0px 16px 1px #0b0c10;
-}
 
-.party {
-  flex: 0 0 15rem;
-  padding: 0.8rem;
-
-  img {
-    width: 100%;
-    border-radius: 5px;
-  }
-
-  h4 {
-    text-align: center;
-  }
-  .desc {
+  .row {
     display: flex;
-    justify-content: center;
-    gap: 1rem;
-    text-align: center;
-    color: v.$text-main;
-    font-size: 1.2rem;
+    justify-content: space-around;
+    overflow-x: scroll;
+  }
 
-    p {
-      font-size: 1rem;
-      color: v.$text-secondary;
+  .party {
+    flex: 0 0 15rem;
+    padding: 0.8rem;
+
+    img {
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    h4 {
+      text-align: center;
+    }
+    .desc {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      text-align: center;
+      color: v.$text-main;
+      font-size: 1.2rem;
+
+      p {
+        font-size: 1rem;
+        color: v.$text-secondary;
+      }
     }
   }
 }
