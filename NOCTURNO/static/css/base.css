@@ -116,12 +116,149 @@
   padding: 0 0.8rem 0.8rem 0.8rem;
 }
 
+#map .navbar {
+  display: none;
+}
+
+.party-creator.hidden {
+  transform: translate(-3rem, -4rem);
+  opacity: 0;
+  transition: transform 0.4s;
+}
+
+.party-creator {
+  background-color: #2a2640;
+  text-align: center;
+  padding: 2rem;
+  padding-top: 0;
+  border-radius: 5px;
+  background-color: #3a3459;
+}
+.party-creator .form-creator {
+  padding: 1rem 2rem 1.4rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+.party-creator .form-positions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  gap: 0.5rem;
+  margin: 0 auto;
+}
+.party-creator .form-positions .position {
+  grid-column: 1/4;
+  width: 100%;
+  margin-bottom: 0.7rem;
+}
+.party-creator .form-positions .position:nth-child(5) {
+  grid-column: 1/2;
+  width: 50%;
+  justify-self: end;
+}
+.party-creator .form-positions .position:nth-child(6) {
+  grid-column: 2/4;
+  width: 50%;
+  justify-self: start;
+}
+.party-creator .form-positions label {
+  display: block;
+  color: #a1a1b5;
+  margin-bottom: 0.3rem;
+}
+.party-creator .form-positions input {
+  width: 70%;
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+.party-creator .form-positions #Alcohol {
+  transform: scale(1.7);
+  width: auto;
+  margin: 0.5rem;
+}
+.party-creator button {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.5rem;
+  font-size: 16px;
+  color: #ffea00;
+  background: transparent;
+  border: 2px solid #ffea00;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px #ffea00;
+  font-weight: bold;
+  overflow: hidden;
+  z-index: 1;
+  width: 10rem;
+  margin-top: 1rem;
+}
+.party-creator button:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffd900;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+.party-creator button:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
+}
+.party-creator button:hover {
+  color: #2a2640;
+  border-color: #ffd900;
+  text-shadow: none;
+}
+
+@media (min-width: 390px) {
+  .form-positions {
+    width: 20rem;
+  }
+}
+@media (min-width: 620px) {
+  .party-creator .form-positions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 30rem;
+  }
+  .party-creator .form-positions .position:nth-child(odd) {
+    grid-column: 1/2;
+  }
+  .party-creator .form-positions .position:nth-child(even) {
+    grid-column: 2/4;
+  }
+  .party-creator .form-positions .position:nth-last-child(1) {
+    grid-column: 1/4;
+  }
+  .party-creator .form-positions input {
+    width: 100%;
+  }
+  .party-creator button {
+    width: 12rem;
+    margin-top: 1rem;
+  }
+}
 @media (min-width: 1250px) {
   #map {
     width: 100%;
     height: 100vh;
     margin: 0;
     border-radius: 0;
+  }
+  .layout.map .navbar {
+    display: none;
+  }
+  #map .navbar {
+    display: block;
   }
   .layout.map {
     width: 100%;
@@ -151,6 +288,17 @@
     width: 90%;
     margin: 0 auto;
     overflow-x: auto;
+  }
+  .party-creator {
+    padding: 0;
+  }
+  .party-creator .form-creator {
+    padding: 1rem;
+  }
+  .party-creator .form-creator .form-positions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: auto;
   }
 }
 * {
@@ -193,6 +341,7 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
   border-radius: 0 0 15px 15px;
+  z-index: 99999999;
 }
 .navbar .main-header {
   padding: 0;
