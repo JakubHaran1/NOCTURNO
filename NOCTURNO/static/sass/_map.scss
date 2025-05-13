@@ -57,16 +57,13 @@
       margin-bottom: 0.7rem;
     }
 
-    .position:nth-child(5) {
-      grid-column: 1/2;
-      width: 50%;
-      justify-self: end;
+    .position.date {
+      grid-column: 1/4;
     }
-    .position:nth-child(6) {
-      grid-column: 2/4;
-      width: 50%;
-      justify-self: start;
+    .position.people_number {
+      grid-column: 1/4;
     }
+
     label {
       display: block;
       color: v.$text-secondary;
@@ -111,7 +108,22 @@
       .position:nth-child(even) {
         grid-column: 2/4;
       }
-
+      .position.party_title {
+        grid-column: 1/4;
+        grid-row: 1/2;
+      }
+      .position.date {
+        grid-column: 2/4;
+        grid-row: 3/4;
+      }
+      .position.people_number {
+        grid-column: 1/2;
+        grid-row: 4/5;
+      }
+      .position.age {
+        grid-column: 2/4;
+        grid-row: 4/5;
+      }
       .position:nth-last-child(1) {
         grid-column: 1/4;
       }

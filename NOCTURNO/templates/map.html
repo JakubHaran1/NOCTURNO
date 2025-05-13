@@ -1,6 +1,5 @@
 
 {% load static %}
-{% csrf_token %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,40 +46,26 @@
             <section class="map-parties">
                 <div class="party-creator">
                     <h2 >Configure your party:</h2>
-                    <form action="POST" class="form-creator">
+                    <form method="POST" class="form-creator">
+                        {% csrf_token %}
+                        
                         <div class="form-positions">
-                            <div class="position">
-                                <label for="City" >City:</label>
-                                <input id="City" name="City" type="text">
+                             {% for field in addressForm%}
+                            <div class="position {{field.name}}">
+                                {{field.label_tag}}
+                                {{field}}
+                                {{field.errors}}
                             </div>
-                            <div class="position">
-                                <label for="Street" >Street:</label>
-                                <input id="Street" name="Street" type="text" >
+                          {% endfor %}
+                            
+                             
+                          {% for field in partyForm %}
+                            <div class="position {{field.name}}" >
+                                {{field.label_tag}}
+                                {{field}}
+                                {{field.errors}}
                             </div>
-                            <div class="position">
-                                <label id="Number" for="Number">Number:</label>
-                                <input name="house_number" id="Number" type="Number">
-                            </div>
-                            <div class="position">
-                                <label for="Date">Date:</label>
-                                <input id="Date" name="Date" type="datetime-local">
-                            </div>
-                            <div class="position">
-                                <label for="People">People:</label>
-                                <input id="People" name="People" type="text">
-                            </div>
-                            <div class="position">
-                                <label for="Age">Age:</label>
-                                <input id="Age" name="Age" type="number" value="16" min="16">
-                            </div>
-                            <div class="position">
-                                <label for="Alcohol">Alcohol:</label>
-                                <input id="Alcohol" name="Alcohol" value="True" type="checkbox">
-                                <input id="Alcohol" name="Alcohol" value="False" type="checkbox">
-
-                            </div>
-
-                          
+                          {% endfor %}
                         </div>
                         <button>Create</button>
                     </form>

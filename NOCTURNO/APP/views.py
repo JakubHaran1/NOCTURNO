@@ -1,6 +1,10 @@
+from APP.forms import PartyForm, AddressForm
+
+
 from django.shortcuts import render
 from django.views import View
 from django.http import JsonResponse
+
 import json
 import requests
 
@@ -23,5 +27,12 @@ def mainView(request):
 
 
 class mapView(View):
+
     def get(self, request):
-        return render(request, "map.html")
+        partyForm = PartyForm()
+        print(partyForm)
+        addressForm = AddressForm()
+        return render(request, "map.html", {
+            "partyForm": partyForm,
+            "addressForm": addressForm
+        })

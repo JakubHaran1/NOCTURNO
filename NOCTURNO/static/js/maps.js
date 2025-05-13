@@ -44,8 +44,9 @@ class Map {
     tile.on("load", () => this.map.spin(false));
     tile.addTo(this.map);
   }
-
-  // Tworzenie znacznikow
+  // Tworzenie znaczników
+  // createPointer()
+  // Podpinanie znacznikow
   onMapClick(e) {
     const latlng = Object.values(e.latlng);
     // Dodawanie ikony
@@ -61,15 +62,31 @@ class Map {
 
   async getAdress(lat, lng) {
     try {
+      // Recerse geocoding
       const adress = await fetch(
         `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=18`
       );
+      // Sprawdzanie czy ok
       if (!adress.ok)
         throw new Error(
           `We have problems with ours satelite. Error code:${adress.status}!`
         );
+      // json -> obj
       const data = await adress.json();
-      console.log(data["address"]);
+      if (data["type"] == "university") {
+        throw new Error("This isn't good place to party");
+      }
+      const cityField = document.getElementById("id_city");
+      const streetField = document.getElementById("id_street");
+      const houseField = document.getElementById("id_house_number");
+      console.log(data["type"]);
+      // Wyciąganie adresu
+      const { address: clearData } = data;
+
+      console.log(clearData);
+      cityField.value = clearData["city"];
+      streetField.value = clearData["road"];
+      houseField.value = clearData["house_number"];
     } catch (error) {
       console.log(error);
     }
