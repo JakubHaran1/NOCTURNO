@@ -1,5 +1,5 @@
 from django import forms
-from .models import PartyModel, AddressModel
+from APP.models import PartyModel, AddressModel
 from django.forms.widgets import DateInput
 
 
@@ -8,12 +8,11 @@ class myDateInput(DateInput):
 
 
 class PartyForm(forms.ModelForm):
-    date = forms.DateField(
-        input_formats=['%d/%m/%Y'], widget=myDateInput)
+    date = forms.DateField( widget=myDateInput)
 
     class Meta:
         model = PartyModel
-        exclude = ["creation_day", "address"]
+        exclude=["creation_day","address"]
 
 
 class AddressForm(forms.ModelForm):

@@ -46,12 +46,13 @@
             <section class="map-parties">
                 <div class="party-creator">
                     <h2 >Configure your party:</h2>
-                    <form method="POST" class="form-creator">
+                    <form method="POST" class="form-creator" action="{% url "map" %}">
                         {% csrf_token %}
                         
                         <div class="form-positions">
-                             {% for field in addressForm%}
-                            <div class="position {{field.name}}">
+        
+                            {% for field in addressForm%}
+                            <div class="position address {{field.name}}">
                                 {{field.label_tag}}
                                 {{field}}
                                 {{field.errors}}
