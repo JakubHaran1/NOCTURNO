@@ -4,9 +4,12 @@ import { menuFunction } from "./_menuScroll.js";
 class Map {
   spinColor = "#9b30ff";
   iconMarkerUrl = "static/imgs/marker.svg";
+  formSection = document.querySelector(".party-creator");
 
   constructor() {
     menuFunction();
+    // Chowanie party_creator
+    this.formSection.classList.add("hidden");
 
     // INICJACJA MAPY
     this.map = L.map("map");
@@ -62,6 +65,7 @@ class Map {
 
   // PODPINANIE ZNACZNIKÓW
   async onMapClick(e) {
+    this.formSection.classList.remove("hidden");
     const latlng = Object.values(e.latlng);
     // Dodawanie ikony
     this.createPointer(latlng);
@@ -72,7 +76,7 @@ class Map {
     const address = await this.getAdress(lat, lng);
 
     //Wypełnienie addressForm
-    this.fillForm(address);
+    this.fillForm(address, lat, lng);
   }
 
   // POZYSKIWANIE  WSPÓŁŻĘDNYCH EVENTU
@@ -103,20 +107,22 @@ class Map {
   }
 
   // WYPEŁNIANIE FORMADDRESS
-  fillForm(data) {
+  fillForm(data, lat, lng) {
     const addressFields = document.querySelectorAll(".address input");
+    const latField = document.querySelector(".lat input");
+    const lngField = document.querySelector(".lng input");
 
     // Wyciąganie adresu
     const { address: clearData } = data;
-    console.log(clearData);
+
     // Uzupełnianie pół
     addressFields.forEach((field) => {
-      console.log(field.name);
       field.value = clearData[`${field.name}`];
-      if (field.value == "undefined") {
+      if (field.value == "undefined")
         field.value = `No ${field.name.split("_").join(" ")}`;
-      }
     });
+    latField.value = String(lat).slice(0, 8);
+    lngField.value = String(lng).slice(0, 8);
   }
 }
 

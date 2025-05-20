@@ -48,16 +48,34 @@
                     <h2 >Configure your party:</h2>
                     <form method="POST" class="form-creator" action="{% url "map" %}">
                         {% csrf_token %}
-                        
+                       
                         <div class="form-positions">
-        
-                            {% for field in addressForm%}
-                            <div class="position address {{field.name}}">
-                                {{field.label_tag}}
-                                {{field}}
-                                {{field.errors}}
+                            <div class="position address {{addressForm.city.name}}">
+                                {{addressForm.city.label_tag}}
+                                {{addressForm.city}}
+                                {{addressForm.city.errors}}
                             </div>
-                          {% endfor %}
+                             <div class="position address {{addressForm.road.name}}">
+                                {{addressForm.road.label_tag}}
+                                {{addressForm.road}}
+                                {{addressForm.road.errors}}
+                            </div>
+                            <div class="position address {{addressForm.house_number.name}}">
+                                {{addressForm.house_number.label_tag}}
+                                {{addressForm.house_number}}
+                                {{addressForm.house_number.errors}}
+                            </div>
+                             <div class="position {{addressForm.lat.name}}">
+                                {{addressForm.lat.label_tag}}
+                                {{addressForm.lat}}
+                                {{addressForm.lat.errors}}
+                            </div>
+                             <div class="position {{addressForm.lng.name}}">
+                                {{addressForm.lng.label_tag}}
+                                {{addressForm.lng}}
+                                {{addressForm.lng.errors}}
+                            </div>
+                        
                             
                              
                           {% for field in partyForm %}
@@ -67,6 +85,8 @@
                                 {{field.errors}}
                             </div>
                           {% endfor %}
+
+                         
                         </div>
                         <button>Create</button>
                     </form>

@@ -1,6 +1,22 @@
 @use "./variables" as v;
 @use "./mixins" as m;
 
+.errorlist {
+  color: red;
+  li {
+    list-style: none;
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+  }
+}
+
+.position.lat,
+.position.lng {
+  position: absolute;
+  opacity: 0;
+  z-index: -10000;
+}
+
 #map {
   height: 400px;
   border-radius: 15px;
@@ -9,6 +25,8 @@
 
 .map-parties {
   .row {
+    display: flex;
+    gap: 1rem;
     padding: 0 0 1rem;
     scrollbar-color: v.$bg-section v.$bg-main;
 
@@ -16,8 +34,20 @@
       margin-bottom: 0;
     }
   }
-  .party:nth-of-type(1) {
-    padding: 0 0.8rem 0.8rem 0.8rem;
+
+  .party {
+    width: 90%;
+    margin: 0 auto;
+    background-color: v.$bg-light;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 37px -12px v.$bg-main;
+    -moz-box-shadow: 0px 0px 37px -12px v.$bg-main;
+    box-shadow: 0px 0px 37px -12px v.$bg-main;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+
+    h4 {
+      margin: 0.8rem;
+    }
   }
 }
 
@@ -26,9 +56,8 @@
 }
 
 .party-creator.hidden {
-  transform: translate(-3rem, -4rem);
+  display: none;
   opacity: 0;
-  transition: transform 0.4s;
 }
 
 .party-creator {
@@ -38,6 +67,7 @@
   padding-top: 0;
   border-radius: 5px;
   background-color: #3a3459;
+  overflow: hidden;
 
   .form-creator {
     padding: 1rem 2rem 1.4rem;
@@ -182,15 +212,29 @@
     scrollbar-color: v.$bg-section v.$bg-section;
 
     .row {
-      display: block;
-      width: 90%;
+      flex-direction: column;
+      gap: 2rem;
       margin: 0 auto;
       overflow-x: auto;
+      padding: 1rem 0;
+      
+      .party{
+        width: 85%;
+      }
+      
+      .party:hover {
+        box-shadow: 0 12px 30px -8px v.$bg-main; // mocniejszy cień
+        transform: translateY(-5px); // lekkie uniesienie
+      }
+
+      
     }
   }
 
   .party-creator {
     padding: 0;
+    margin-bottom: 1rem;
+
 
     .form-creator {
       padding: 1rem;

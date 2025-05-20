@@ -8,8 +8,11 @@ from django.http import JsonResponse
 import json
 import requests
 
+import datetime
 
 # Helping functions
+
+
 def reverseGeo(request):
     if request.method == "POST":
         [lat, lng] = json.loads(request.body)
@@ -30,36 +33,25 @@ class mapView(View):
 
     def get(self, request):
         partyForm = PartyForm()
-        
+
         addressForm = AddressForm()
         return render(request, "map.html", {
             "partyForm": partyForm,
             "addressForm": addressForm
         })
 
-    def post(self,request):
+    def post(self, request):
         address = AddressForm(request.POST)
         party = PartyForm(request.POST)
+
         if party.is_valid() and address.is_valid():
             address.save()
             address_instance = address.instance
-            geoUrl = 'https://nominatim.openstreetmap.org/search?'
-            print(address_instance)
-            # for field in address_instance:
-            #     if field.value != f"No {field.name.split("_").join(" ")}":geoUrl+=str(field.value)
-                
-            # geoHeader = {'User-Agent':'NOCTURNO'}
-            # print(geoUrl)
-            # coords = requests.get(geoUrl,headers=geoHeader).json()
-            # print(coords)
             party.save(commit=False)
-            party.instance.address = address_instance  
+            party.instance.address = address_instance
             party.save(commit=True)
 
         return render(request, "map.html", {
             "partyForm": party,
             "addressForm": address
         })
-
-  
-            
