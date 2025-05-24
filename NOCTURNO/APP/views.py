@@ -42,7 +42,7 @@ class mapView(View):
 
     def post(self, request):
         address = AddressForm(request.POST)
-        party = PartyForm(request.POST)
+        party = PartyForm(request.POST, request.FILES)
 
         if party.is_valid() and address.is_valid():
             address.save()

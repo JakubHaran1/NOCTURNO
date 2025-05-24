@@ -1,0 +1,58 @@
+@use "./variables" as v;
+@use "./mixins" as m;
+
+.parties {
+  padding: 1rem;
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0px 0px 16px 1px #0b0c10;
+  -moz-box-shadow: inset 0px 0px 16px 1px #0b0c10;
+  box-shadow: inset 0px 0px 16px 1px #0b0c10;
+
+  .row {
+    display: flex;
+    justify-content: space-around;
+    overflow-x: scroll;
+    gap: 1rem;
+    padding: 0 0 1rem;
+    scrollbar-color: v.$bg-section v.$bg-main;
+
+        h4 {
+        margin: .8rem 0;
+        } 
+    }
+
+  .party {
+    width: 90%;
+    margin: 0 auto;
+    background-color: #3a3459;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 37px -12px #0b0c10;
+    -moz-box-shadow: 0px 0px 37px -12px #0b0c10;
+    box-shadow: 0px 0px 37px -12px #0b0c10;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    flex: 0 0 15rem;
+    padding: 0.8rem;
+
+    img {
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    h4 {
+      text-align: center;
+    }
+    .desc {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      text-align: center;
+      color: v.$text-main;
+      font-size: 1.2rem;
+
+      p {
+        font-size: 1rem;
+        color: v.$text-secondary;
+      }
+    }
+  }
+}

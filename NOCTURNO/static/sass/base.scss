@@ -1,3 +1,4 @@
+@use "./_parties";
 @use "./main";
 @use "./map";
 @use "./variables" as v;
@@ -18,14 +19,15 @@ section h2 {
   @include m.header;
 }
 
-
-
-
 h2 {
   padding: 1rem;
 }
 .layout {
   max-width: 2000px;
+}
+
+.layout.unload i {
+  opacity: 0;
 }
 
 .navbar {

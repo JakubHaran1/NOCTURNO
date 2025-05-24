@@ -1,10 +1,23 @@
 "use strict";
 
-import { menuFunction } from "./_menuScroll.js";
+const menuFunction = () => {
+  const menu = document.querySelector(".nav");
+  const menuHeight = menu.getBoundingClientRect().height;
+  const layout = document.querySelector(".layout");
+  console.log("123");
+  layout.style.marginBottom = `${menuHeight + menuHeight / 2}px`;
+};
 
-let timeOut;
+const iconLoad = () => {
+  const layout = document.querySelector(".layout");
+  layout.classList.add("unload");
+  window.addEventListener("load", () => {
+    layout.classList.remove("unload");
+  });
+};
 
 const show = () => {
+  let timeOut;
   const menu = document.querySelector(".nav");
   menu.classList.add("scroll");
   clearTimeout(timeOut);
@@ -13,9 +26,4 @@ const show = () => {
   }, 300);
 };
 
-const main = () => {
-  window.addEventListener("scroll", show);
-  menuFunction();
-};
-
-document.addEventListener("DOMContentLoaded", main);
+export { menuFunction, iconLoad, show };

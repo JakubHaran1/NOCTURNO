@@ -20,7 +20,8 @@ class PartyModel(models.Model):
         validators=[validators.MinValueValidator(1)], verbose_name="People")
     age = models.IntegerField(validators=[validators.MinValueValidator(
         16, "You can't invite such young person..")], verbose_name="Age")
-    alco = models.BooleanField(verbose_name="Alcohol")
+    alco = models.BooleanField(verbose_name="Alcohol", default=False)
+    file = models.FileField(upload_to="party_images/")
 
     def __str__(self):
         return f"{self.party_title}: {self.date}"

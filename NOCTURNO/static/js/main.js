@@ -1,14 +1,5 @@
 "use strict";
-const main = () => {
-  const menu = document.querySelector(".nav");
-  const menuFunction = () => {
-    const menuHeight = menu.getBoundingClientRect().height;
+import { menuFunction, show } from "./base.js";
 
-    const layout = document.querySelector(".layout");
-
-    layout.style.marginBottom = `${menuHeight + menuHeight / 2}px`;
-  };
-
-  menuFunction();
-};
-document.addEventListener("DOMContentLoaded", main);
+document.addEventListener("DOMContentLoaded", menuFunction);
+window.addEventListener("scroll", show);

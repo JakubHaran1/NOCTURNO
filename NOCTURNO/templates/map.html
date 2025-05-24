@@ -16,9 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/spin.js@2.3.2/spin.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/makinacorpus/Leaflet.Spin/leaflet.spin.js"></script>
 
-    <script type=module src="{% static "js/_menuScroll.js" %}"></script>
     <script type=module src="{% static 'js/maps.js' %}"></script>
-    
     <link rel="stylesheet" href={% static "css/base.css" %}>
   
 </head>
@@ -43,10 +41,10 @@
                 </nav> 
             </div>
 
-            <section class="map-parties">
+            <section class="parties">
                 <div class="party-creator">
                     <h2 >Configure your party:</h2>
-                    <form method="POST" class="form-creator" action="{% url "map" %}">
+                    <form method="POST" class="form-creator" enctype="multipart/form-data" action="{% url "map" %}">
                         {% csrf_token %}
                        
                         <div class="form-positions">
@@ -92,7 +90,7 @@
                     </form>
     
                 </div>
-                <div class="parties">
+                <div class=" parties-wrapper">
                     <h2>Near you</h2>
                     {% include "includes/parties.html" %}
                 </div>

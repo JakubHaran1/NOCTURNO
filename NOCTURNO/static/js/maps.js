@@ -1,6 +1,6 @@
 "use strict";
 
-import { menuFunction } from "./_menuScroll.js";
+import { menuFunction } from "./base.js";
 class Map {
   spinColor = "#9b30ff";
   iconMarkerUrl = "static/imgs/marker.svg";
@@ -84,7 +84,7 @@ class Map {
     try {
       // Reverse geocoding
       const adress = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=18`
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=jsongf&zoom=18`
       );
 
       // Sprawdzanie czy ok
@@ -111,6 +111,8 @@ class Map {
     const addressFields = document.querySelectorAll(".address input");
     const latField = document.querySelector(".lat input");
     const lngField = document.querySelector(".lng input");
+    const ageField = document.querySelector(".age input");
+    const alcoField = document.querySelector(".alco");
 
     // Wyciąganie adresu
     const { address: clearData } = data;
@@ -123,6 +125,22 @@ class Map {
     });
     latField.value = String(lat).slice(0, 8);
     lngField.value = String(lng).slice(0, 8);
+
+    let age = "";
+    ageField.addEventListener("input", (e) => {
+      if (Number(e.data)) {
+        age += e.data;
+        console.log(e.data);
+      } else {
+        const num = ageField.value;
+        age = num;
+      }
+
+      console.log(age);
+      if (Number(age) >= 18) {
+        alcoField.style.display = "block";
+      }
+    });
   }
 }
 
