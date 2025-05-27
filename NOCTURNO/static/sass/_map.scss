@@ -11,6 +11,7 @@
 }
 
 .layout.map {
+  position: relative;
   overflow: hidden;
 }
 
@@ -74,13 +75,9 @@
       position: relative;
     }
     .position.file input {
-      font-size: initial;
       padding: 0;
       width: 6.77rem;
-      position: absolute;
-      left: 50%;
 
-      transform: translateX(-50%);
       font-size: 0;
       &::file-selector-button {
         font-size: initial;
@@ -114,10 +111,54 @@
   }
 
   button {
-    @include m.neon-button;
     width: 10rem;
     margin-top: 1rem;
+    @include m.neon-button;
   }
+}
+
+.pop-up {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%);
+  z-index: 11111;
+  width: 75%;
+  padding: 1rem 1.5rem;
+  background-color: v.$bg-section-2;
+  text-align: center;
+  color: v.$text-secondary;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+
+  .pop-content {
+    margin: 1rem;
+  }
+
+  a {
+    @include m.neon-button;
+    text-decoration: none;
+  }
+}
+
+.overlay {
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1111;
+  background-color: #0b0c109c;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.pop-up.hidden {
+  display: none;
 }
 
 @media (min-width: 390px) {
@@ -198,7 +239,6 @@
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 100000000;
     }
   }
 

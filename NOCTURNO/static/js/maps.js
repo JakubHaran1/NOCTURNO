@@ -4,7 +4,10 @@ import { menuFunction } from "./base.js";
 class Map {
   spinColor = "#9b30ff";
   iconMarkerUrl = "static/imgs/marker.svg";
+  overlay = document.querySelector(".overlay");
   formSection = document.querySelector(".party-creator");
+  btnClosePopUp = document.querySelector(".pop-up button");
+  popUp = document.querySelector(".pop-up");
 
   constructor() {
     menuFunction();
@@ -73,28 +76,35 @@ class Map {
     const [lat, lng] = latlng;
 
     // Pozyskiwanie współżędnych eventu
-    const address = await this.getAdress(lat, lng);
+    let address;
+    try {
+      address = await this.getAdress(lat, lng);
+    } catch (error) {
+      console.log(`Error:${error.message}, code:${error.status}`);
+      this.openPopUp(
+        "😭 We have problems with reverse geolocalization 😭",
+        "Try again later ⌛"
+      );
+    }
 
     //Wypełnienie addressForm
-    this.fillForm(address, lat, lng);
+    if (address != undefined) this.fillForm(address, lat, lng);
   }
 
   // POZYSKIWANIE  WSPÓŁŻĘDNYCH EVENTU
   async getAdress(lat, lng) {
+    let address;
     try {
       // Reverse geocoding
-      const adress = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=jsongf&zoom=18`
+      address = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=18`
       );
 
       // Sprawdzanie czy ok
-      if (!adress.ok)
-        throw new Error(
-          `We have problems with ours satelite. Error code:${adress.status}!`
-        );
+      if (!address.ok) throw new Error(`Data isn't correct!`);
 
       // json -> obj
-      const data = await adress.json();
+      const data = await address.json();
 
       if (data["type"] == "university")
         throw new Error("This isn't good place to party");
@@ -102,7 +112,7 @@ class Map {
       return data;
     } catch (error) {
       // Dodać return coś - i wyświetlenie jakiegoś popup z odp wiadomością
-      console.log(error);
+      throw new Error(`Reverse geocoding failed!`);
     }
   }
 
@@ -141,6 +151,15 @@ class Map {
         alcoField.style.display = "block";
       }
     });
+  }
+
+  openPopUp(header, content) {
+    const popHeader = document.querySelector(".pop-header");
+    const popContent = document.querySelector(".pop-content");
+    popHeader.textContent = header;
+    popContent.textContent = content;
+    this.popUp.classList.remove("hidden");
+    this.overlay.classList.remove("hidden");
   }
 }
 

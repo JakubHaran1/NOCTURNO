@@ -33,7 +33,6 @@ class mapView(View):
 
     def get(self, request):
         partyForm = PartyForm()
-
         addressForm = AddressForm()
         return render(request, "map.html", {
             "partyForm": partyForm,

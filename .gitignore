@@ -10,7 +10,7 @@ env/
 
 
 .prettierignore
-
+.prettierrc
 
 
 .vscode/
