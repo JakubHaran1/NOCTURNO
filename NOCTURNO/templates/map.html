@@ -44,7 +44,7 @@
             <section class="parties">
                 <div class="party-creator">
                     <h2 >Configure your party:</h2>
-                    <form method="POST" class="form-creator" enctype="multipart/form-data" action="{% url "map" %}">
+                    <form method="POST" class="form form-creator" enctype="multipart/form-data" action="{% url "map" %}">
                         {% csrf_token %}
                        
                         <div class="form-positions">

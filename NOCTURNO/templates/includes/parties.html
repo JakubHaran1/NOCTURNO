@@ -1,103 +1,25 @@
 {% load static %}
 <div class="row">
+  {% for party in parties %}
   <div class="party">
     <div class="img-hero">
-      <img src="{% static "imgs/basic-party.webp" %}" alt="">
+      <img src="{{party.file.url}}" alt="{{party.party_title}}" />
     </div>
-    <h4>Gruba impreza w Kaktus Wrocław</h4>
+    <h4>{{party.party_title}}</h4>
     <div class="desc">
       <div class="el">
         <i class="fas fa-wine-glass-alt"></i>
-        <p>Yes</p>
+        <p>{{party.alco}}</p>
       </div>
       <div class="el">
         <i class="far fa-id-card"></i>
-        <p>16+</p>
+        <p>{{party.age}}+</p>
       </div>
       <div class="el">
         <i class="fas fa-users"></i>
-        <p>>18</p>
+        <p>>{{party.people_number}}</p>
       </div>
     </div>
   </div>
-  <div class="party">
-    <div class="img-hero">
-      <img src="{% static "imgs/basic-party.webp" %}" alt="">
-    </div>
-    <h4>Gruba impreza w Kaktus Wrocław</h4>
-    <div class="desc">
-      <div class="el">
-        <i class="fas fa-wine-glass-alt"></i>
-        <p>Yes</p>
-      </div>
-      <div class="el">
-        <i class="far fa-id-card"></i>
-        <p>16+</p>
-      </div>
-      <div class="el">
-        <i class="fas fa-users"></i>
-        <p>>18</p>
-      </div>
-    </div>
-  </div>
-  <div class="party">
-    <div class="img-hero">
-      <img src="{% static "imgs/basic-party.webp" %}" alt="">
-    </div>
-    <h4>Gruba impreza w Kaktus Wrocław</h4>
-    <div class="desc">
-      <div class="el">
-        <i class="fas fa-wine-glass-alt"></i>
-        <p>Yes</p>
-      </div>
-      <div class="el">
-        <i class="far fa-id-card"></i>
-        <p>16+</p>
-      </div>
-      <div class="el">
-        <i class="fas fa-users"></i>
-        <p>>18</p>
-      </div>
-    </div>
-  </div>
-  <div class="party">
-    <div class="img-hero">
-      <img src="{% static "imgs/basic-party.webp" %}" alt="">
-    </div>
-    <h4>Gruba impreza w Kaktus Wrocław</h4>
-    <div class="desc">
-      <div class="el">
-        <i class="fas fa-wine-glass-alt"></i>
-        <p>Yes</p>
-      </div>
-      <div class="el">
-        <i class="far fa-id-card"></i>
-        <p>16+</p>
-      </div>
-      <div class="el">
-        <i class="fas fa-users"></i>
-        <p>>18</p>
-      </div>
-    </div>
-  </div>
-  <div class="party">
-    <div class="img-hero">
-      <img src="{% static "imgs/basic-party.webp" %}" alt="">
-    </div>
-    <h4>Gruba impreza w Kaktus Wrocław</h4>
-    <div class="desc">
-      <div class="el">
-        <i class="fas fa-wine-glass-alt"></i>
-        <p>Yes</p>
-      </div>
-      <div class="el">
-        <i class="far fa-id-card"></i>
-        <p>16+</p>
-      </div>
-      <div class="el">
-        <i class="fas fa-users"></i>
-        <p>>18</p>
-      </div>
-    </div>
-  </div>
+  {% endfor %}
 </div>

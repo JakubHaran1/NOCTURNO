@@ -16,14 +16,15 @@
     padding: 0 0 1rem;
     scrollbar-color: v.$bg-section v.$bg-main;
 
-        h4 {
-        margin: .8rem 0;
-        } 
+    h4 {
+      margin: 0.8rem 0;
     }
+  }
 
   .party {
     width: 90%;
     margin: 0 auto;
+    margin-top: 1.25rem;
     background-color: #3a3459;
     border-radius: 10px;
     -webkit-box-shadow: 0px 0px 37px -12px #0b0c10;
@@ -32,6 +33,13 @@
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     flex: 0 0 15rem;
     padding: 0.8rem;
+
+    &:hover {
+      transform: translateY(-10px);
+      -webkit-box-shadow: 0px 0px 45px -10px #0b0c10;
+      -moz-box-shadow: 0px 0px 45px -10px #0b0c10;
+      box-shadow: 0px 0px 45px -10px #0b0c10;
+    }
 
     img {
       width: 100%;

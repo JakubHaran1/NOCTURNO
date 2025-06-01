@@ -1,0 +1,34 @@
+@use "./variables" as v;
+@use "./mixins" as m;
+
+.position label {
+  display: block;
+  color: v.$text-secondary;
+  margin-bottom: 0.3rem;
+}
+
+.position input {
+  width: 100%;
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.form button {
+  width: 10rem;
+  margin-top: 1rem;
+  @include m.neon-button;
+}
+.errorlist {
+  color: red;
+  li {
+    list-style: none;
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+  }
+}
+// sprawdzic czy tego buttona nie wyciągnąc
+button {
+  width: 12rem;
+  margin-top: 1rem;
+}

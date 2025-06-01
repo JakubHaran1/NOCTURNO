@@ -19,6 +19,7 @@
 .parties .party {
   width: 90%;
   margin: 0 auto;
+  margin-top: 1.25rem;
   background-color: #3a3459;
   border-radius: 10px;
   -webkit-box-shadow: 0px 0px 37px -12px #0b0c10;
@@ -27,6 +28,12 @@
   transition: box-shadow 0.3s ease, transform 0.3s ease;
   flex: 0 0 15rem;
   padding: 0.8rem;
+}
+.parties .party:hover {
+  transform: translateY(-10px);
+  -webkit-box-shadow: 0px 0px 45px -10px #0b0c10;
+  -moz-box-shadow: 0px 0px 45px -10px #0b0c10;
+  box-shadow: 0px 0px 45px -10px #0b0c10;
 }
 .parties .party img {
   width: 100%;
@@ -46,6 +53,75 @@
 .parties .party .desc p {
   font-size: 1rem;
   color: #a1a1b5;
+}
+
+.position label {
+  display: block;
+  color: #a1a1b5;
+  margin-bottom: 0.3rem;
+}
+
+.position input {
+  width: 100%;
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.form button {
+  width: 10rem;
+  margin-top: 1rem;
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.5rem;
+  font-size: 16px;
+  color: #ffea00;
+  background: transparent;
+  border: 2px solid #ffea00;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px #ffea00;
+  font-weight: bold;
+  overflow: hidden;
+  z-index: 1;
+}
+.form button:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffd900;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+.form button:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
+}
+.form button:hover {
+  color: #2a2640;
+  border-color: #ffd900;
+  text-shadow: none;
+}
+
+.errorlist {
+  color: red;
+}
+.errorlist li {
+  list-style: none;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+button {
+  width: 12rem;
+  margin-top: 1rem;
 }
 
 .user-profile {
@@ -113,15 +189,6 @@
     margin: 0 2rem;
   }
 }
-.errorlist {
-  color: red;
-}
-.errorlist li {
-  list-style: none;
-  font-size: 0.9rem;
-  margin-top: 0.3rem;
-}
-
 .layout.map {
   position: relative;
   overflow: hidden;
@@ -152,7 +219,7 @@
 .party-creator {
   background-color: #2a2640;
   text-align: center;
-  padding: 2rem;
+  padding: 1rem;
   padding-top: 0;
   border-radius: 5px;
   background-color: #3a3459;
@@ -171,90 +238,33 @@
   margin: 0 auto;
   margin-bottom: 2rem;
 }
-.party-creator .form-positions .position {
+.party-creator .position {
   grid-column: 1/4;
   width: 100%;
   margin-bottom: 0.7rem;
 }
-.party-creator .form-positions .position.date {
-  grid-column: 1/4;
-}
-.party-creator .form-positions .position.people_number {
-  grid-column: 1/4;
-}
-.party-creator .form-positions .position.file {
+.party-creator .position.file {
   position: relative;
 }
-.party-creator .form-positions .position.file input {
+.party-creator .position.file input {
   padding: 0;
   width: 6.77rem;
   font-size: 0;
 }
-.party-creator .form-positions .position.file input::file-selector-button {
+.party-creator .position.file input::file-selector-button {
   font-size: initial;
 }
-.party-creator .form-positions label {
-  display: block;
-  color: #a1a1b5;
-  margin-bottom: 0.3rem;
-}
-.party-creator .form-positions input {
-  width: 90%;
-  font-size: 0.8rem;
-  padding: 0.5rem;
-  border-radius: 5px;
-}
-.party-creator .form-positions .alco {
+
+.position .alco {
   display: none;
   margin-top: 0.35rem;
 }
-.party-creator .form-positions .alco #id_alco {
+.position .alco .position #id_alco {
   width: auto;
   transform: scale(1.4);
   cursor: pointer;
   width: auto;
   accent-color: #9b30ff;
-}
-.party-creator button {
-  width: 10rem;
-  margin-top: 1rem;
-  position: relative;
-  display: inline-block;
-  padding: 0.5rem 0.5rem;
-  font-size: 16px;
-  color: #ffea00;
-  background: transparent;
-  border: 2px solid #ffea00;
-  border-radius: 6px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 8px #ffea00;
-  font-weight: bold;
-  overflow: hidden;
-  z-index: 1;
-}
-.party-creator button:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #ffd900;
-  opacity: 0;
-  transition: all 0.3s ease;
-  z-index: -1;
-}
-.party-creator button:hover::before {
-  opacity: 1;
-  box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
-}
-.party-creator button:hover {
-  color: #2a2640;
-  border-color: #ffd900;
-  text-shadow: none;
 }
 
 .pop-up {
@@ -371,12 +381,11 @@
   .party-creator .form-positions .position.file {
     grid-row: 5/6;
   }
+  .party-creator .form-positions .position.file input {
+    width: auto;
+  }
   .party-creator .form-positions input {
     width: 100%;
-  }
-  .party-creator button {
-    width: 12rem;
-    margin-top: 1rem;
   }
 }
 @media (min-width: 1250px) {
@@ -456,6 +465,122 @@
     flex-direction: column;
   }
 }
+.log-user {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 700px;
+  color: #a1a1b5;
+  margin: 2rem 0;
+}
+.log-user h2 {
+  padding: 0.5rem 0;
+  text-align: center;
+}
+.log-user p {
+  margin: 0.5rem 0;
+  text-align: center;
+}
+.log-user button {
+  display: block;
+  margin: 2rem auto 1rem;
+}
+
+.login-wrapper {
+  width: 90%;
+  background-color: #2a2640;
+  padding: 1rem;
+  border-radius: 15px;
+}
+.login-wrapper .position {
+  width: 90%;
+  margin: 0 auto;
+}
+.login-wrapper .login-form .position:nth-child(2) {
+  margin-top: 1rem;
+}
+.login-wrapper .reset-btn {
+  margin-top: 0.5rem;
+  text-align: end;
+}
+.login-wrapper .reset-btn a {
+  color: white;
+}
+
+.new-register {
+  text-align: center;
+  padding: 0 1rem;
+  margin: 0 1rem;
+  background-color: #2a2640;
+  border-radius: 15px;
+  max-width: 600px;
+}
+.new-register a {
+  margin: 1.5rem 0 0.5rem;
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.5rem;
+  font-size: 16px;
+  color: #ffea00;
+  background: transparent;
+  border: 2px solid #ffea00;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px #ffea00;
+  font-weight: bold;
+  overflow: hidden;
+  z-index: 1;
+  text-decoration: none;
+}
+.new-register a:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffd900;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+.new-register a:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
+}
+.new-register a:hover {
+  color: #2a2640;
+  border-color: #ffd900;
+  text-shadow: none;
+}
+
+@media (min-width: 361px) {
+  .log-user {
+    margin: 1rem 0;
+  }
+}
+@media (min-width: 410px) {
+  .log-user {
+    margin: 0;
+  }
+  .log-user p {
+    margin: 0.8rem 0;
+  }
+  .new-register {
+    padding: 1rem;
+  }
+}
 * {
   margin: 0;
   padding: 0;
@@ -480,6 +605,7 @@ h2 {
 
 .layout {
   max-width: 2000px;
+  min-height: 100vh;
 }
 
 .layout.unload i {

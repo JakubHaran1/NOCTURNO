@@ -96,16 +96,13 @@ class Map {
     let address;
     try {
       // Reverse geocoding
-      address = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=18`
-      );
-
+      address = await fetch(`/geocode-reverse?lat=${lat}&lng=${lng}`);
       // Sprawdzanie czy ok
       if (!address.ok) throw new Error(`Data isn't correct!`);
 
       // json -> obj
       const data = await address.json();
-
+      console.log(data);
       if (data["type"] == "university")
         throw new Error("This isn't good place to party");
 

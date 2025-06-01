@@ -1,15 +1,6 @@
 @use "./variables" as v;
 @use "./mixins" as m;
 
-.errorlist {
-  color: red;
-  li {
-    list-style: none;
-    font-size: 0.9rem;
-    margin-top: 0.3rem;
-  }
-}
-
 .layout.map {
   position: relative;
   overflow: hidden;
@@ -40,7 +31,7 @@
 .party-creator {
   background-color: v.$bg-section-2;
   text-align: center;
-  padding: 2rem;
+  padding: 1rem;
   padding-top: 0;
   border-radius: 5px;
   background-color: #3a3459;
@@ -58,65 +49,43 @@
     gap: 0.5rem;
     margin: 0 auto;
     margin-bottom: 2rem;
-
-    .position {
-      grid-column: 1/4;
-      width: 100%;
-      margin-bottom: 0.7rem;
-    }
-
-    .position.date {
-      grid-column: 1/4;
-    }
-    .position.people_number {
-      grid-column: 1/4;
-    }
-    .position.file {
-      position: relative;
-    }
-    .position.file input {
-      padding: 0;
-      width: 6.77rem;
-
-      font-size: 0;
-      &::file-selector-button {
-        font-size: initial;
-      }
-    }
-
-    label {
-      display: block;
-      color: v.$text-secondary;
-      margin-bottom: 0.3rem;
-    }
-
-    input {
-      width: 90%;
-      font-size: 0.8rem;
-      padding: 0.5rem;
-      border-radius: 5px;
-    }
-    .alco {
-      display: none;
-      margin-top: 0.35rem;
-
-      #id_alco {
-        width: auto;
-        transform: scale(1.4);
-        cursor: pointer;
-        width: auto;
-        accent-color: v.$accent-purple;
-      }
-    }
   }
 
-  button {
-    width: 10rem;
-    margin-top: 1rem;
-    @include m.neon-button;
+  .position {
+    grid-column: 1/4;
+    width: 100%;
+    margin-bottom: 0.7rem;
+  }
+
+  .position.file {
+    position: relative;
+  }
+
+  .position.file input {
+    padding: 0;
+    width: 6.77rem;
+
+    font-size: 0;
+    &::file-selector-button {
+      font-size: initial;
+    }
   }
 }
 
+.position .alco {
+  display: none;
+  margin-top: 0.35rem;
+
+  .position #id_alco {
+    width: auto;
+    transform: scale(1.4);
+    cursor: pointer;
+    width: auto;
+    accent-color: v.$accent-purple;
+  }
+}
+
+// POP UP - POCZATEK
 .pop-up {
   display: block;
   position: absolute;
@@ -161,6 +130,8 @@
   display: none;
 }
 
+// POP UP - KONIEC
+
 @media (min-width: 390px) {
   .form-positions {
     width: 20rem;
@@ -198,14 +169,13 @@
       }
       .position.file {
         grid-row: 5/6;
+        input {
+          width: auto;
+        }
       }
       input {
         width: 100%;
       }
-    }
-    button {
-      width: 12rem;
-      margin-top: 1rem;
     }
   }
 }
@@ -283,6 +253,7 @@
       }
     }
   }
+
   .layout.map {
     .parties {
       width: 30rem;
