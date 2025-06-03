@@ -1,4 +1,5 @@
 
+from numbers import Number
 from django.db import models
 
 from django.core import validators
@@ -6,11 +7,18 @@ from django.core.exceptions import ValidationError
 
 
 from django.utils.translation import gettext as _
+from django.utils.text import slugify
 
 from django.contrib.auth.models import AbstractUser
 
 
 from datetime import date
+import os
+
+
+def uploadAvatar(username, file):
+    name = slugify(username)
+    return os.path.join("users_image", name, file)
 
 
 def date_checker(value):
@@ -62,8 +70,13 @@ class AddressModel(models.Model):
 
 
 class PartyUser(AbstractUser):
-    email = models.EmailField(_("email field"), max_length=254, blank=True)
-    birth = models.DateField(_("birth date"), blank=True)
+    username = models.CharField(
+        _("Name"), max_length=80, help_text="You can pass only 80 letters username.", unique=True)
+    email = models.EmailField(
+        _("email field"), max_length=254, blank=False, unique=True)
+    birth = models.DateField(
+        _("birth date"), null=True)
+    avatar = models.FileField(_("File"), upload_to=uploadAvatar)
     friends = models.ManyToManyField(
         "self", blank=True)
     groups = models.ManyToManyField("PartyGroup", blank=False)
@@ -71,6 +84,11 @@ class PartyUser(AbstractUser):
     class Meta:
         verbose_name = "partyUser"
         verbose_name_plural = "partyUsers"
+
+    def clean_birth(self):
+        clean_birth = Number(self.cleaned_data["birth"])
+        if Number(date.today().year) - clean_birth >= 16:
+            return ValidationError("You have to be older than 16 years old")
 
 
 class PartyGroup(models.Model):

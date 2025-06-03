@@ -1,4 +1,5 @@
-from .forms import PartyForm, AddressForm
+from django import views
+from .forms import PartyForm, AddressForm, RegisterForm
 from .models import PartyModel, AddressModel
 
 from django.shortcuts import render
@@ -66,3 +67,15 @@ class mapView(View):
 
 class LoginUserView(LoginView):
     template_name = "login.html"
+
+
+class RegisterView(views.View):
+    def get(self, request):
+        form = RegisterForm()
+        return render(request, "register.html", {"form": form})
+
+    def post(self, request):
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return render(request, "register.html", {"form": form})

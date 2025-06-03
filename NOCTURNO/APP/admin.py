@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import PartyModel, AddressModel, PartyUser, PartyGroup
+from django.contrib.auth.admin import UserAdmin
 
 
 class PartyAdmin(admin.ModelAdmin):

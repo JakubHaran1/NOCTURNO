@@ -58,13 +58,12 @@
   scrollbar-color: v.$bg-section v.$bg-section;
 }
 
-
 .user-party {
   margin: 1rem 0;
 }
 
 @media (min-width: 819px) {
-  .layout {
+  .layout.main {
     position: relative;
     width: 80%;
     margin: 0 auto;
@@ -74,5 +73,13 @@
   }
   .main-party {
     margin: 0 2rem;
+  }
+}
+
+@media (min-width: 1250px) {
+  .user-profile,
+  .main-party {
+    width: 80%;
+    margin: 1rem auto;
   }
 }
