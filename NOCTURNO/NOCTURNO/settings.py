@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
-
+from dotenv import load_dotenv
+load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-...'
@@ -65,7 +66,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Język i czas
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -85,3 +86,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = "APP.PartyUser"
+
+MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
+
+# ustawienia email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get("mail")
+EMAIL_HOST_USER = os.environ.get("password")
