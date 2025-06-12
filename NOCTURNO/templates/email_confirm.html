@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block content %}
+
+    <div class="confirm_wrapper">
+        <h2>Thank you for creation your account in our app</h2>
+        <p>We are glad to see you here</p>
+        <p>👇 Confirm your email below 👇</p>
+        <a href="http://{{domain}}{% url "activate_email" uidb64=uid token=token %}"></a>
+        <p>Stay tune and safe 🎶🦸‍♂️</p>
+    </div>
+</body>
+   
+{% endblock  %}
+

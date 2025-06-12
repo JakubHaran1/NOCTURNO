@@ -1,0 +1,9 @@
+@use "./_variables" as v;
+@use "./_mixins" as m;
+
+.confirm-wrapper {
+  width: 80%;
+  margin: 1rem auto;
+  padding: 1rem;
+  background-color: v.$bg-section-2;
+}

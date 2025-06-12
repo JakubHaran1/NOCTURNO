@@ -110,10 +110,8 @@
   text-shadow: none;
 }
 
-.errorlist {
-  color: red;
-}
 .errorlist li {
+  color: red;
   list-style: none;
   font-size: 0.9rem;
   margin-top: 0.3rem;
@@ -497,6 +495,13 @@ button {
   display: block;
   margin: 2rem auto 1rem;
 }
+.log-user .messages {
+  text-align: center;
+  list-style: none;
+}
+.log-user .messages .error {
+  color: crimson;
+}
 
 .login-wrapper {
   width: 90%;
@@ -509,7 +514,7 @@ button {
   margin: 0 auto;
 }
 .login-wrapper .login-form .position:nth-child(2) {
-  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 .login-wrapper .reset-btn {
   margin-top: 0.5rem;
@@ -601,6 +606,17 @@ button {
 .register-form .position:nth-child(1) label {
   margin-top: 0;
 }
+.register-form .position.file {
+  margin-bottom: 1rem;
+}
+.register-form .position.file input {
+  color: #a1a1b5;
+  font-size: 0.9rem;
+}
+.register-form .position.file input::file-selector-button {
+  color: black;
+  margin-right: 1rem;
+}
 .register-form .position ul,
 .register-form p {
   color: #a1a1b5;
@@ -616,9 +632,6 @@ button {
 }
 .register-form .position ul li:first-child,
 .register-form p li:first-child {
-  margin-top: 1rem;
-}
-.register-form p {
   margin-top: 1rem;
 }
 .register-form button {

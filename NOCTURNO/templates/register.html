@@ -14,7 +14,6 @@
             <form enctype="multipart/form-data"  class="form" method="POST">
                 {% csrf_token %}
                 <div class="position">
-                    <p>{{form.username.help_text}}</p>
                     {{form.username.label_tag}}
                     {{form.username}}
                     {{form.username.errors}}
@@ -33,8 +32,8 @@
                 </div>
              
                 <div class="position">
-                    <p>{{form.password2.help_text}}</p>
                     {{form.password2.label_tag}}
+                    <p>{{form.password2.help_text}}</p>
                     {{form.password2}}
                     {{form.password2.errors}}
                 </div>
@@ -44,11 +43,11 @@
                     {{form.birth}}
                     {{form.birth.errors}}
                 </div>
-                <div class="position">
+                <div class="position file">
                     <p>{{form.birth.help_text}}</p>
-                    {{form.file.label_tag}}
-                    {{form.file}}
-                    {{form.file.errors}}
+                    {{form.avatar.label_tag}}
+                    {{form.avatar}}
+                    {{form.avatar.errors}}
                 </div>
                     <button>Sign up</button>
             </form>

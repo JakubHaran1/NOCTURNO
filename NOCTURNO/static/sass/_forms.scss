@@ -20,8 +20,8 @@
   @include m.neon-button;
 }
 .errorlist {
-  color: red;
   li {
+    color: red;
     list-style: none;
     font-size: 0.9rem;
     margin-top: 0.3rem;

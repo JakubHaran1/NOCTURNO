@@ -1,5 +1,4 @@
 
-from numbers import Number
 from django.db import models
 
 from django.core import validators
@@ -75,7 +74,8 @@ class PartyUser(AbstractUser):
     email = models.EmailField(
         _("email field"), max_length=254, blank=False, unique=True)
     birth = models.DateField(
-        _("birth date"), null=True)
+        _("birth date"))
+
     avatar = models.FileField(_("File"), upload_to=uploadAvatar)
     friends = models.ManyToManyField(
         "self", blank=True)
@@ -84,11 +84,6 @@ class PartyUser(AbstractUser):
     class Meta:
         verbose_name = "partyUser"
         verbose_name_plural = "partyUsers"
-
-    def clean_birth(self):
-        clean_birth = Number(self.cleaned_data["birth"])
-        if Number(date.today().year) - clean_birth >= 16:
-            return ValidationError("You have to be older than 16 years old")
 
 
 class PartyGroup(models.Model):

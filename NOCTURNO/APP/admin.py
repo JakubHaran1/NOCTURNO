@@ -12,7 +12,7 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = ["city", "road", "house_number", "lat", "lng"]
 
 
-class UserAdmin(admin.ModelAdmin):
+class UserPartyAdmin(UserAdmin):
     list_display = ["email", "username", "birth"]
 
 
@@ -22,5 +22,5 @@ class GroupAdmin(admin.ModelAdmin):
 
 admin.site.register(PartyModel, PartyAdmin)
 admin.site.register(AddressModel, AddressAdmin)
-admin.site.register(PartyUser, UserAdmin)
+admin.site.register(PartyUser, UserPartyAdmin)
 admin.site.register(PartyGroup, GroupAdmin)
