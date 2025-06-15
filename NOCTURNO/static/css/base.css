@@ -137,6 +137,9 @@ button {
   flex-wrap: wrap;
   gap: 1rem;
 }
+.user-profile .user-card .user-info {
+  align-self: self-start;
+}
 .user-profile .user-card h4 {
   margin: 0.5rem 0 0;
 }
@@ -716,6 +719,17 @@ h2 {
 .navbar.nav a:hover {
   color: #ffea00;
   text-shadow: 0 0 1px #ffea00, 0 0 1px #ffea00, 0 0 2px #ffea00, 0 0 5px #ffd900, 0 0 10px #ffd900;
+}
+
+.reset-password-wrapper.register-wrapper {
+  text-align: center;
+}
+.reset-password-wrapper.register-wrapper h3,
+.reset-password-wrapper.register-wrapper h2 {
+  color: #a1a1b5;
+}
+.reset-password-wrapper.register-wrapper button {
+  margin: 2rem auto 1rem;
 }
 
 .navbar.nav.scroll {

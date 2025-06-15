@@ -83,7 +83,16 @@ h2 {
       0 0 2px v.$cta-yellow-hover, 0 0 5px v.$cta-yellow, 0 0 10px v.$cta-yellow;
   }
 }
-
+.reset-password-wrapper.register-wrapper {
+  text-align: center;
+  h3,
+  h2 {
+    color: v.$text-secondary;
+  }
+  button {
+    margin: 2rem auto 1rem;
+  }
+}
 .navbar.nav.scroll {
   bottom: -10%;
 }

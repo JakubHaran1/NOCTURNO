@@ -1,4 +1,5 @@
 from dataclasses import field, fields
+import email
 from pyexpat import model
 from django import forms
 
@@ -55,3 +56,7 @@ class RegisterForm(UserCreationForm):
         model = PartyUser
         fields = ("username", "email", "password1",
                   "password2", "birth", "avatar")
+
+
+class EmailChangeForm(forms.Form):
+    email = forms.EmailField(required=True)

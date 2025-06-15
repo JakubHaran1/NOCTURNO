@@ -1,24 +1,31 @@
-from atexit import register
+from email import message
+import html
+from django.conf import settings
 
 from django import views
 from django.views import View
-from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
+from django.contrib.auth.views import LoginView, PasswordResetView
+from django.contrib.auth.forms import PasswordResetForm
+
 from django.contrib.auth import get_user_model
 
-from .forms import PartyForm, AddressForm, RegisterForm
+from .forms import PartyForm, AddressForm, RegisterForm, EmailChangeForm
 from .models import PartyModel, AddressModel
 from .tokens import emailActivationToken
+
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
 
-from django.core.mail import EmailMessage
-from django.urls import reverse_lazy
+from django.core.mail import send_mail
+
+from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
-from django.contrib.sites.shortcuts import get_current_site
+from django.utils.html import strip_tags
 
 
 from django.contrib import messages
@@ -48,7 +55,23 @@ def reverseGeo(request):
     return JsonResponse(geoResponse, safe=False)
 
 
+def emailSending(user, mail_subject, context, htmlTemplate):
+
+    html_mail = render_to_string(
+        htmlTemplate, context)
+
+    plain_mail = strip_tags(html_mail)
+    to_addres = user.email
+
+    email = send_mail(subject=mail_subject,
+                      message=plain_mail,
+                      from_email=settings.EMAIL_HOST_USER,
+                      recipient_list=[to_addres],
+                      html_message=html_mail)
+
 # Views
+
+
 @login_required(login_url="login")
 def mainView(request):
     parties = PartyModel.objects.all()
@@ -119,6 +142,7 @@ class RegisterView(views.View):
             user.save()
             user.age = calcAge(
                 user.birth.year, user.birth.month, user.birth.day)
+
             page = get_current_site(request)
             mail_subject = F"Confirm your email to finish user creation"
             mail_context = {"user": user,
@@ -127,30 +151,38 @@ class RegisterView(views.View):
                             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                             "token": emailActivationToken.make_token(user=user)}
 
-            mail_messsage = render_to_string(
-                "email_confirm.html", mail_context)
-            to_addres = user.email
+            htmlTemplate = "email_confirm.html"
+            emailSending(user, mail_subject, mail_context, htmlTemplate)
 
-            email = EmailMessage(subject=mail_subject,
-                                 body=mail_messsage, to=[to_addres])
-            email.send()
-
-            print(user.username)
         return render(request, "register.html", {"form": form})
 
 
-class ConfirmationView(views.View):
+class ConfirmationView(View):
     def get(self, request, uidb64, token):
         users = get_user_model()
+        user = None
         try:
             user_id = urlsafe_base64_decode(uidb64)
             user = users.objects.get(pk=user_id)
         except:
-            user = None
-            messages.add_message(
-                request, messages.ERROR, "Something goes wrong! \n Create new confirmation link!")
+
+            messages.add_message(request, messages.ERROR,
+                                 "Chceck your email - maybe it is wrong ❌❌")
+
+            return redirect("email-change")
 
         if user is not None and emailActivationToken.check_token(user, token):
             user.is_active = True
+            user.save()
             return redirect("home")
         return redirect("register")
+
+
+class ResetPasswordView(PasswordResetView):
+    email_template_name = "txt/reset_password.txt"
+    form_class = PasswordResetForm
+    from_email = settings.EMAIL_HOST_USER
+    html_email_template_name = 'password_mail.html'
+    subject_template_name = "txt/reset_password_subject.txt"
+    success_url = reverse_lazy("login")
+    template_name = "reset_password.html"
