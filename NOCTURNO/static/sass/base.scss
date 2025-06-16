@@ -85,9 +85,16 @@ h2 {
 }
 .reset-password-wrapper.register-wrapper {
   text-align: center;
+  label {
+    text-align: start;
+  }
   h3,
   h2 {
     color: v.$text-secondary;
+  }
+
+  h2 {
+    font-size: 1.28rem;
   }
   button {
     margin: 2rem auto 1rem;

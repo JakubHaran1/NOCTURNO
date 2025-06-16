@@ -5,8 +5,8 @@ from django.conf import settings
 from django import views
 from django.views import View
 from django.urls import reverse_lazy
-from django.contrib.auth.views import LoginView, PasswordResetView
-from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 
 from django.contrib.auth import get_user_model
 
@@ -178,11 +178,21 @@ class ConfirmationView(View):
         return redirect("register")
 
 
-class ResetPasswordView(PasswordResetView):
+class ResetPasswordEmailView(PasswordResetView):
     email_template_name = "txt/reset_password.txt"
     form_class = PasswordResetForm
     from_email = settings.EMAIL_HOST_USER
-    html_email_template_name = 'password_mail.html'
+    html_email_template_name = 'reset_password_message.html'
     subject_template_name = "txt/reset_password_subject.txt"
-    success_url = reverse_lazy("login")
-    template_name = "reset_password.html"
+    success_url = reverse_lazy("password_reset_done")
+    template_name = "reset_password_email.html"
+
+
+class ResetPasswordView(PasswordResetConfirmView):
+    template_name = 'reset_password.html'
+    success_url = '/login'
+    form_class = SetPasswordForm
+
+
+class ResetDoneView(PasswordResetDoneView):
+    template_name = "reset_password_confirmation.html"

@@ -724,9 +724,15 @@ h2 {
 .reset-password-wrapper.register-wrapper {
   text-align: center;
 }
+.reset-password-wrapper.register-wrapper label {
+  text-align: start;
+}
 .reset-password-wrapper.register-wrapper h3,
 .reset-password-wrapper.register-wrapper h2 {
   color: #a1a1b5;
+}
+.reset-password-wrapper.register-wrapper h2 {
+  font-size: 1.28rem;
 }
 .reset-password-wrapper.register-wrapper button {
   margin: 2rem auto 1rem;
