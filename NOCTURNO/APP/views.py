@@ -1,5 +1,6 @@
 from email import message
 import html
+import re
 from django.conf import settings
 
 from django import views
@@ -11,7 +12,7 @@ from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from django.contrib.auth import get_user_model
 
 from .forms import PartyForm, AddressForm, RegisterForm, EmailChangeForm
-from .models import PartyModel, AddressModel
+from .models import PartyModel, AddressModel, PartyUser
 from .tokens import emailActivationToken
 
 
@@ -68,6 +69,26 @@ def emailSending(user, mail_subject, context, htmlTemplate):
                       from_email=settings.EMAIL_HOST_USER,
                       recipient_list=[to_addres],
                       html_message=html_mail)
+
+
+def searchingBuddie(request):
+    if request.method == "GET":
+        nick = request.GET.get("nick", "")
+        nick_type = "username"
+        search_type_cookie = request.COOKIES.get("searchOption")
+
+        if "@" in nick:
+            nick_type = "email"
+        else:
+            nick_type = "username"
+
+        filter_query = f'{nick_type}__unaccent__icontains'
+
+        user_response = PartyUser.objects.filter(**{filter_query: nick})
+        user_data = list(user_response.values('avatar', "username"))
+
+        return JsonResponse(user_data, safe=False)
+
 
 # Views
 
@@ -196,3 +217,7 @@ class ResetPasswordView(PasswordResetConfirmView):
 
 class ResetDoneView(PasswordResetDoneView):
     template_name = "reset_password_confirmation.html"
+
+
+def buddiesView(request):
+    return render(request, "buddies.html")

@@ -47,6 +47,22 @@
     i {
       font-size: 1.4rem;
     }
+
+    .acction {
+      position: relative;
+      transition: transform 0.3s ease-in-out;
+    }
+    .acction:hover {
+      transform: translateY(-5px);
+    }
+
+    .link {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
   }
 }
 

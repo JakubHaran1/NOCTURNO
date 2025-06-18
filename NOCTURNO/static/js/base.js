@@ -4,7 +4,6 @@ const menuFunction = () => {
   const menu = document.querySelector(".nav");
   const menuHeight = menu.getBoundingClientRect().height;
   const layout = document.querySelector(".layout");
-  console.log("123");
   layout.style.marginBottom = `${menuHeight + menuHeight / 2}px`;
 };
 

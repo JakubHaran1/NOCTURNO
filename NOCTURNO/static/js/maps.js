@@ -102,7 +102,7 @@ class Map {
 
       // json -> obj
       const data = await address.json();
-      console.log(data);
+
       if (data["type"] == "university")
         throw new Error("This isn't good place to party");
 

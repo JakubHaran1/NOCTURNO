@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block header %}
+{% block head %}
+    <script type=module src={% static "js/buddies.js" %}></script>
+{% endblock  %}
+
+{% endblock  %}
+
+
+ {% block content %}
+ 
+    <section class="buddies-wrapper">
+      
+            
+        <div class="search-wrapper">
+            <h2>Find your friend!</h2>
+            <div class="search">
+                {% if messages %}
+                    {% for message in messages  %}
+                        <p class="error">{{message}}</p>
+                    {% endfor %}
+                {% endif %}
+                <div class="search-nav">
+                    <p class="search-link active"data-option='Yours'>Yours</p>
+                    <p class="search-link"  data-option='Find'>Find</p>
+                </div>
+                
+                <form class="main-form" >
+                    <div class="position">
+                        <label for="find_friend">Your friend's name/email:</label>
+                        <input id="find_friend" required  name='nick' type="text">
+                    </div>
+                    <button class="searching-btn">Find</button>
+                </form>
+            </div>
+
+        </div>
+      <div class="search-row">
+            {% if user_response %}
+                {% for response in user_response  %}
+
+                    <p>{{response}}</p>
+                
+                {% endfor %}
+
+            {% else %}
+                <div class="buddy-box">
+                    <img src="{% static "imgs/avatar.svg" %}" alt="">
+                    <div class="buddy-info">
+                        <h3 class='nick'>Borys Szyc</h3>
+                        
+                        <form action="POST" >
+                            <button>Add</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="buddy-box">
+                    <img src="{% static "imgs/avatar.svg" %}" alt="">
+                    <div class="buddy-info">
+                        <h3 class='nick'>Borys Szyc</h3>
+                        
+                        <form action="POST" >
+                            <button>Add</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="buddy-box">
+                    <img src="{% static "imgs/avatar.svg" %}" alt="">
+                    <div class="buddy-info">
+                        <h3 class='nick'>Borys Szyc</h3>
+                        
+                        <form action="POST" >
+                            <button>Add</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="buddy-box">
+                    <img src="{% static "imgs/avatar.svg" %}" alt="">
+                    <div class="buddy-info">
+                        <h3 class='nick'>Borys Szyc</h3>
+                        
+                        <form action="POST" >
+                            <button>Add</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="buddy-box">
+                    <img src="{% static "imgs/avatar.svg" %}" alt="">
+                    <div class="buddy-info">
+                        <h3 class='nick'>Borys Szyc</h3>
+                        
+                        <form action="POST" >
+                            <button>Add</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="buddy-box">
+                    <img src="{% static "imgs/avatar.svg" %}" alt="">
+                    <div class="buddy-info">
+                        <h3 class='nick'>Borys Szyc</h3>
+                        
+                        <form action="POST" >
+                            <button>Add</button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+            
+        </div>
+
+     
+    </section>
+ 
+ {% endblock %}
+

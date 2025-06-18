@@ -1,5 +1,6 @@
+from os import name
 from django.urls import path, include
-from APP.views import mainView, mapView, LoginUserView, reverseGeo, RegisterView, ConfirmationView, ResetPasswordEmailView, ResetPasswordView, ResetDoneView
+from APP.views import reverseGeo, searchingBuddie, mainView, mapView, LoginUserView, RegisterView, ConfirmationView, ResetPasswordEmailView, ResetPasswordView, ResetDoneView, buddiesView
 
 
 urlpatterns = [
@@ -15,6 +16,9 @@ urlpatterns = [
     path('reset-password', ResetPasswordEmailView.as_view(), name='reset-password'),
     path('change-password/<uidb64>/<token>',
          ResetPasswordView.as_view(), name='change-password'),
-    path('reset-done', ResetDoneView.as_view(), name='password_reset_done')
+    path('reset-done', ResetDoneView.as_view(), name='password_reset_done'),
+
+    path("buddies", buddiesView, name="buddies"),
+    path("buddies/find-buddie/", searchingBuddie, name="searchBuddie")
 
 ]

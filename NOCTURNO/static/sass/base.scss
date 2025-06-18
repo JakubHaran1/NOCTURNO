@@ -6,6 +6,7 @@
 @use "./map";
 @use "./login";
 @use "./register";
+@use "./buddies";
 
 * {
   margin: 0;
@@ -29,6 +30,7 @@ h2 {
 .layout {
   max-width: 2000px;
   min-height: 100vh;
+  margin: 0 auto;
 }
 
 .layout.unload i {
@@ -102,12 +104,6 @@ h2 {
 }
 .navbar.nav.scroll {
   bottom: -10%;
-}
-
-@media (min-width: 819px) {
-  .layout {
-    width: 80%;
-  }
 }
 
 @media (min-width: 1250px) {
