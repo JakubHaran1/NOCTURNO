@@ -2,10 +2,11 @@
 @use "./mixins" as m;
 
 .buddies-wrapper {
-  background-color: v.$bg-section-2;
-  padding: 0.5rem;
   width: 95%;
+  min-height: 80vh;
   margin: 1rem auto;
+  padding: 0.5rem;
+  background-color: v.$bg-section-2;
   border-radius: 5px;
 }
 
@@ -13,10 +14,12 @@
   padding: 1rem;
   border-radius: 5px;
   @include m.shadow;
+
   label,
   input {
     display: block;
   }
+
   button {
     @include m.neon-button;
     width: 8rem;

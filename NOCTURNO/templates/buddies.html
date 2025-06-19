@@ -38,74 +38,23 @@
 
         </div>
       <div class="search-row">
-            {% if user_response %}
-                {% for response in user_response  %}
+            {% if user_friends %}
+                {% for friend in user_friends %}
 
-                    <p>{{response}}</p>
+                    <div class="buddy-box">
+                        <img src="{{el.avatar}}" alt="{{el.name}}">
+                        <div class="buddy-info">
+                            <h3 class='nick'>{{el.name}}</h3>
+                            <form action="POST" >
+                                <button>Add</button>
+                            </form>
+                        </div>
+                    </div> 
                 
                 {% endfor %}
 
             {% else %}
-                <div class="buddy-box">
-                    <img src="{% static "imgs/avatar.svg" %}" alt="">
-                    <div class="buddy-info">
-                        <h3 class='nick'>Borys Szyc</h3>
-                        
-                        <form action="POST" >
-                            <button>Add</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="buddy-box">
-                    <img src="{% static "imgs/avatar.svg" %}" alt="">
-                    <div class="buddy-info">
-                        <h3 class='nick'>Borys Szyc</h3>
-                        
-                        <form action="POST" >
-                            <button>Add</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="buddy-box">
-                    <img src="{% static "imgs/avatar.svg" %}" alt="">
-                    <div class="buddy-info">
-                        <h3 class='nick'>Borys Szyc</h3>
-                        
-                        <form action="POST" >
-                            <button>Add</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="buddy-box">
-                    <img src="{% static "imgs/avatar.svg" %}" alt="">
-                    <div class="buddy-info">
-                        <h3 class='nick'>Borys Szyc</h3>
-                        
-                        <form action="POST" >
-                            <button>Add</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="buddy-box">
-                    <img src="{% static "imgs/avatar.svg" %}" alt="">
-                    <div class="buddy-info">
-                        <h3 class='nick'>Borys Szyc</h3>
-                        
-                        <form action="POST" >
-                            <button>Add</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="buddy-box">
-                    <img src="{% static "imgs/avatar.svg" %}" alt="">
-                    <div class="buddy-info">
-                        <h3 class='nick'>Borys Szyc</h3>
-                        
-                        <form action="POST" >
-                            <button>Add</button>
-                        </form>
-                    </div>
-                </div>
+                
             {% endif %}
             
         </div>

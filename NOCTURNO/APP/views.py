@@ -75,19 +75,31 @@ def searchingBuddie(request):
     if request.method == "GET":
         nick = request.GET.get("nick", "")
         nick_type = "username"
-        search_type_cookie = request.COOKIES.get("searchOption")
+        search_type_cookie = request.COOKIES.get("searchingType")
 
         if "@" in nick:
             nick_type = "email"
         else:
             nick_type = "username"
 
-        filter_query = f'{nick_type}__unaccent__icontains'
+        if search_type_cookie == "Find":
+            filter_query = f'{nick_type}__unaccent__icontains'
 
-        user_response = PartyUser.objects.filter(**{filter_query: nick})
-        user_data = list(user_response.values('avatar', "username"))
+            quering_response = PartyUser.objects.filter(**{filter_query: nick})
+            quering_data = list(quering_response.values('avatar', "username"))
 
-        return JsonResponse(user_data, safe=False)
+            return JsonResponse(quering_data, safe=False)
+        else:
+
+            if not request.user.is_authenticated:
+                return
+
+            user = request.user
+            quering_response = user.friends.all()
+            print(quering_response)
+
+            quering_data = list(quering_response.values('avatar', "username"))
+            return JsonResponse(quering_data, safe=False)
 
 
 # Views
@@ -219,5 +231,9 @@ class ResetDoneView(PasswordResetDoneView):
     template_name = "reset_password_confirmation.html"
 
 
-def buddiesView(request):
-    return render(request, "buddies.html")
+class BuddiesView(View):
+    def get(self, request):
+        user_friends = request.user.friends.order_by("-date_joined")[:5]
+        return render(request, "buddies.html", {
+            "user_friends": user_friends
+        })

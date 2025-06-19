@@ -663,10 +663,11 @@ button {
   }
 }
 .buddies-wrapper {
-  background-color: #2a2640;
-  padding: 0.5rem;
   width: 95%;
+  min-height: 80vh;
   margin: 1rem auto;
+  padding: 0.5rem;
+  background-color: #2a2640;
   border-radius: 5px;
 }
 

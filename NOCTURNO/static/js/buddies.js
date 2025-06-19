@@ -12,7 +12,7 @@ const changeSearch = function (e) {
   searchOption = el;
   searchOption.classList.add("active");
   document.cookie = `searchingType=${el.textContent}`;
-  print(`searchingType=${el.textContent}`);
+  console.log(document.cookie);
 };
 
 // Searching
@@ -43,9 +43,10 @@ const searchingBuddie = async function (e) {
         </div>
     </div>
     `;
+
     searchRowHtml += html;
   });
-
+  searchRow.textContent = "";
   searchRow.insertAdjacentHTML("afterbegin", searchRowHtml);
 };
 

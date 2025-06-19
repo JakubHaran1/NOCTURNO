@@ -14,6 +14,9 @@ class AddressAdmin(admin.ModelAdmin):
 
 class UserPartyAdmin(UserAdmin):
     list_display = ["email", "username", "birth"]
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        ('Personal info', {'fields': ("avatar", 'email', 'birth', "friends")}))
 
 
 class GroupAdmin(admin.ModelAdmin):

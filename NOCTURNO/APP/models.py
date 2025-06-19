@@ -78,7 +78,7 @@ class PartyUser(AbstractUser):
 
     avatar = models.FileField(_("File"), upload_to=uploadAvatar)
     friends = models.ManyToManyField(
-        "self", blank=True)
+        "self", blank=True, symmetrical=False)
     groups = models.ManyToManyField("PartyGroup", blank=False)
 
     class Meta:
