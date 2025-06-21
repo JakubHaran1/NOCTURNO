@@ -38,13 +38,13 @@
 
         </div>
       <div class="search-row">
-            {% if user_friends %}
-                {% for friend in user_friends %}
+            {% if friends_data %}
+                {% for friend in friends_data %}
 
                     <div class="buddy-box">
-                        <img src="{{el.avatar}}" alt="{{el.name}}">
+                        <img src="{% static "friend.avatar" %}" alt="{{friend.username}}">
                         <div class="buddy-info">
-                            <h3 class='nick'>{{el.name}}</h3>
+                            <h3 class='nick'>{{friend.username}}</h3>
                             <form action="POST" >
                                 <button>Add</button>
                             </form>
@@ -54,7 +54,8 @@
                 {% endfor %}
 
             {% else %}
-                
+                <p>You don't have any buddies 😮</p>
+                <p>☝ Click above ☝ - "Find" to follow someone </p>
             {% endif %}
             
         </div>

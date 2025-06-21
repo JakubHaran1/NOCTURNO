@@ -71,40 +71,47 @@ def emailSending(user, mail_subject, context, htmlTemplate):
                       html_message=html_mail)
 
 
+# Wyszukiwanie i zwracanie użytkowników
 def searchingBuddie(request):
     if request.method == "GET":
         nick = request.GET.get("nick", "")
         nick_type = "username"
         search_type_cookie = request.COOKIES.get("searchingType")
-
+        print(search_type_cookie)
         if "@" in nick:
             nick_type = "email"
         else:
             nick_type = "username"
 
-        if search_type_cookie == "Find":
-            filter_query = f'{nick_type}__unaccent__icontains'
+        filter_query = f'{nick_type}__unaccent__icontains'
 
+        if search_type_cookie == "Find":
             quering_response = PartyUser.objects.filter(**{filter_query: nick})
             quering_data = list(quering_response.values('avatar', "username"))
 
             return JsonResponse(quering_data, safe=False)
         else:
-
-            if not request.user.is_authenticated:
-                return
-
             user = request.user
-            quering_response = user.friends.all()
-            print(quering_response)
-
+            quering_response = user.friends.filter(**{filter_query: nick})
             quering_data = list(quering_response.values('avatar', "username"))
             return JsonResponse(quering_data, safe=False)
 
 
+# Pobiera 5 (10) najnowszych użytkowników dla find lub 5/10 dla uzytkownika
+def initFindBuddie(request):
+    search_type_cookie = request.COOKIES.get("searchingType")
+
+    if search_type_cookie == "Find":
+        new_user_query = PartyUser.objects.order_by("-date_joined")[:5]
+    else:
+        user = request.user
+        new_user_query = user.friends.order_by("-date_joined")[:5]
+
+    user_response = list(new_user_query.values("avatar", "username"))
+    return JsonResponse(user_response, safe=False)
+
+
 # Views
-
-
 @login_required(login_url="login")
 def mainView(request):
     parties = PartyModel.objects.all()
@@ -118,7 +125,6 @@ def mainView(request):
 
 
 class mapView(View):
-
     def get(self, request):
         partyForm = PartyForm()
         addressForm = AddressForm()
@@ -231,9 +237,11 @@ class ResetDoneView(PasswordResetDoneView):
     template_name = "reset_password_confirmation.html"
 
 
+# Początkowe wyświetlanie buddies
 class BuddiesView(View):
     def get(self, request):
         user_friends = request.user.friends.order_by("-date_joined")[:5]
+        friends_data = list(user_friends.values('avatar', "username"))
         return render(request, "buddies.html", {
-            "user_friends": user_friends
+            "friends_data": friends_data
         })
