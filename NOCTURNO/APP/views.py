@@ -21,12 +21,13 @@ from django.shortcuts import redirect, render
 from django.http import JsonResponse
 
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
-from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.html import strip_tags
+from django.template.loader import render_to_string
 
 
 from django.contrib import messages
@@ -103,6 +104,7 @@ def initFindBuddie(request):
 
     if search_type_cookie == "Find":
         new_user_query = PartyUser.objects.order_by("-date_joined")[:5]
+
     else:
         user = request.user
         new_user_query = user.friends.order_by("-date_joined")[:5]
@@ -111,7 +113,19 @@ def initFindBuddie(request):
     return JsonResponse(user_response, safe=False)
 
 
+def addBuddie(request):
+    if request.method == "POST":
+        data = request.POST.get("friend")
+        user = request.user
+        print("data:", data)
+        friendObj = PartyUser.objects.get(username=data)
+        user.friends.add(friendObj)
+        return JsonResponse("Buddies sucessful added ")
+
+
 # Views
+
+
 @login_required(login_url="login")
 def mainView(request):
     parties = PartyModel.objects.all()

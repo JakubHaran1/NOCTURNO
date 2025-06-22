@@ -3,6 +3,7 @@
 
 {% block header %}
 {% block head %}
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <script type=module src={% static "js/buddies.js" %}></script>
 {% endblock  %}
 
@@ -22,10 +23,10 @@
                         <p class="error">{{message}}</p>
                     {% endfor %}
                 {% endif %}
-                <div class="search-nav">
+                <nav class="search-nav">
                     <p class="search-link active"data-option='Yours'>Yours</p>
                     <p class="search-link"  data-option='Find'>Find</p>
-                </div>
+                </nav>
                 
                 <form class="main-form" >
                     <div class="position">
@@ -37,30 +38,29 @@
             </div>
 
         </div>
-      <div class="search-row">
-            {% if friends_data %}
+        {% if friends_data %}
+            <div class="search-row">
                 {% for friend in friends_data %}
 
-                    <div class="buddy-box">
+                    <div class="buddy-box" data-name="{{friend.username}}">
                         <img src="{% static "friend.avatar" %}" alt="{{friend.username}}">
                         <div class="buddy-info">
                             <h3 class='nick'>{{friend.username}}</h3>
-                            <form action="POST" >
+                            
+                            <form class="add-buddie" action="{% url "add_buddie" %}" method='POST'>
+                                {% csrf_token %}
                                 <button>Add</button>
                             </form>
                         </div>
                     </div> 
                 
-                {% endfor %}
-
-            {% else %}
+                {% endfor %} 
+            </div>
+        {% else %}
                 <p>You don't have any buddies 😮</p>
                 <p>☝ Click above ☝ - "Find" to follow someone </p>
-            {% endif %}
-            
-        </div>
-
-     
+        {% endif %}
+       
     </section>
  
  {% endblock %}
