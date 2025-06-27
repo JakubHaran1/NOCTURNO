@@ -1,6 +1,9 @@
+from asyncio.windows_events import NULL
 from email import message
 import html
+from logging import log
 import re
+from sys import flags
 from django.conf import settings
 
 from django import views
@@ -12,14 +15,14 @@ from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from django.contrib.auth import get_user_model
 
 from .forms import PartyForm, AddressForm, RegisterForm, EmailChangeForm
-from .models import PartyModel, AddressModel, PartyUser
+from .models import PartyModel, AddressModel, PartyUser, FollowModel
 from .tokens import emailActivationToken
 
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
-
+from django.urls import reverse
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
 
@@ -50,10 +53,12 @@ def reverseGeo(request):
     url = 'https://nominatim.openstreetmap.org/reverse?'
     lat = request.GET.get('lat')
     lng = request.GET.get('lng')
-    geoApi = f'{url}lat={lat}&lon={lng}&format=json&zoom=18`'
+
     geoHeader = {'User-Agent': 'NOCTURNO'}
-    geoResponse = requests.get(geoApi, headers=geoHeader, params={
-                               "lat": lat, "lng": lng, "zoom": 18}).json()
+
+    geoResponse = requests.get(url, headers=geoHeader, params={
+        "lat": lat, "lng": lng, "zoom": 18}).json()
+
     return JsonResponse(geoResponse, safe=False)
 
 
@@ -72,66 +77,10 @@ def emailSending(user, mail_subject, context, htmlTemplate):
                       html_message=html_mail)
 
 
-# Wyszukiwanie i zwracanie użytkowników
-def searchingBuddie(request):
-    if request.method == "GET":
-        nick = request.GET.get("nick", "")
-        nick_type = "username"
-        search_type_cookie = request.COOKIES.get("searchingType")
-        print(search_type_cookie)
-        if "@" in nick:
-            nick_type = "email"
-        else:
-            nick_type = "username"
-
-        filter_query = f'{nick_type}__unaccent__icontains'
-
-        if search_type_cookie == "Find":
-            quering_response = PartyUser.objects.filter(**{filter_query: nick})
-            quering_data = list(quering_response.values('avatar', "username"))
-
-            return JsonResponse(quering_data, safe=False)
-        else:
-            user = request.user
-            quering_response = user.friends.filter(**{filter_query: nick})
-            quering_data = list(quering_response.values('avatar', "username"))
-            return JsonResponse(quering_data, safe=False)
-
-
-# Pobiera 5 (10) najnowszych użytkowników dla find lub 5/10 dla uzytkownika
-def initFindBuddie(request):
-    search_type_cookie = request.COOKIES.get("searchingType")
-
-    if search_type_cookie == "Find":
-        new_user_query = PartyUser.objects.order_by("-date_joined")[:5]
-
-    else:
-        user = request.user
-        new_user_query = user.friends.order_by("-date_joined")[:5]
-
-    user_response = list(new_user_query.values("avatar", "username"))
-    return JsonResponse(user_response, safe=False)
-
-
-def addBuddie(request):
-    if request.method == "POST":
-        data = request.POST.get("friend")
-        user = request.user
-        print("data:", data)
-        friendObj = PartyUser.objects.get(username=data)
-        user.friends.add(friendObj)
-        return JsonResponse("Buddies sucessful added ")
-
-
 # Views
-
-
 @login_required(login_url="login")
 def mainView(request):
     parties = PartyModel.objects.all()
-
-    if request.user.is_authenticated:
-        print(request.user)
 
     return render(request, "main.html", {
         "parties": parties
@@ -251,11 +200,91 @@ class ResetDoneView(PasswordResetDoneView):
     template_name = "reset_password_confirmation.html"
 
 
-# Początkowe wyświetlanie buddies
+# Początkowe wyświetlanie buddies -> generowanie pocztkowego html wraz z buddies uzytkownika
+# BuddiesView stanowi baze dla dalszych operacji na template -> jedyny view odnoszący się do buddies który nie zwraca json response
 class BuddiesView(View):
     def get(self, request):
-        user_friends = request.user.friends.order_by("-date_joined")[:5]
-        friends_data = list(user_friends.values('avatar', "username"))
+        users_subscriptions = request.user.following.all()
         return render(request, "buddies.html", {
-            "friends_data": friends_data
+            "friends_relation": users_subscriptions
         })
+
+
+# Zwraca 5 (10) najnowszych użytkowników dla find/yours 5/10 -> umozliwia zmiane typow i dynamiczne generowanie html bez przeładowania strony
+def initFindBuddie(request):
+    search_type_cookie = request.COOKIES.get("searchingType")
+    user = request.user
+
+    # Zdobywanie id zaobserwowanych przez uzytkownika
+    friends_ids = list(user.following.values_list("followed__id", flat=True))
+
+    # Sprawdzanie typu
+    if search_type_cookie == "Find":
+        new_friend_query = PartyUser.objects.all()
+
+        user_response = list(new_friend_query.values(
+            "id", "avatar", "username"))
+        # Dla find dodatkowo zwracany friends_ids do wygenerowania odpowiedniego przycisku
+        return JsonResponse([user_response, friends_ids], safe=False)
+
+    else:
+        # Kod dla Yours
+        # Zwrócenie queryseta z zaobserwowanymi userami na podstawie id
+        new_friend_query = PartyUser.objects.filter(
+            id__in=friends_ids)
+
+        user_response = list(new_friend_query.values(
+            "id", "avatar", "username"))
+
+        return JsonResponse([user_response], safe=False)
+
+
+# Wyszukiwanie i zwracanie użytkowników
+def searchingBuddie(request):
+    if request.method == "GET":
+        nick = request.GET.get("nick", "")
+        nick_type = "username"
+        search_type_cookie = request.COOKIES.get("searchingType")
+
+        if "@" in nick:
+            nick_type = "email"
+        else:
+            nick_type = "username"
+
+        filter_query = f'{nick_type}__unaccent__icontains'
+
+        user = request.user
+        if search_type_cookie == "Find":
+            quering_response = PartyUser.objects.filter(**{filter_query: nick})
+            quering_data = list(quering_response.values(
+                'avatar', "username", "id"))
+            friends_ids = list(user.following.values_list(
+                "followed__id", flat=True))
+
+            return JsonResponse([quering_data, friends_ids], safe=False)
+        else:
+
+            quering_response = PartyUser.objects.filter(
+                followers__follower=user, **{filter_query: nick})
+
+            quering_data = list(quering_response.values('avatar', "username"))
+            return JsonResponse(quering_data, safe=False)
+
+
+def addDeleteBuddie(request):
+    if request.method == "POST":
+        action_friend = json.loads(request.body)
+
+        [friendID, action] = action_friend
+        user = request.user
+
+        if str(friendID) == str(user.id):
+            return JsonResponse({"error": "You can't observe yourself :("}, safe=False)
+
+        friend = PartyUser.objects.get(id=friendID)
+        if action == "add":
+            user.follow(friend)
+        else:
+            user.un_follow(friend)
+
+        return JsonResponse({"redirect": reverse("buddies")}, safe=False)

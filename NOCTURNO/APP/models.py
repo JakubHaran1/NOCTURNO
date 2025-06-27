@@ -1,6 +1,8 @@
 
+from enum import unique
+from pickle import TRUE
 from django.db import models
-
+from django.contrib.postgres.fields import ArrayField
 from django.core import validators
 from django.core.exceptions import ValidationError
 
@@ -70,20 +72,32 @@ class AddressModel(models.Model):
 
 class PartyUser(AbstractUser):
     username = models.CharField(
-        _("Name"), max_length=80, help_text="You can pass only 80 letters username.", unique=True)
+        _("Name"), max_length=30, help_text="You can pass only 30 letters username.", unique=True)
     email = models.EmailField(
         _("email field"), max_length=254, blank=False, unique=True)
     birth = models.DateField(
         _("birth date"))
 
     avatar = models.FileField(_("File"), upload_to=uploadAvatar)
-    friends = models.ManyToManyField(
-        "self", blank=True, symmetrical=False)
-    groups = models.ManyToManyField("PartyGroup", blank=False)
 
     class Meta:
         verbose_name = "partyUser"
         verbose_name_plural = "partyUsers"
+
+    def __str__(self):
+        return f'{self.username},{self.email},{self.id}'
+
+    def follow(self, other_user):
+        if self != other_user:
+            FollowModel.objects.get_or_create(
+                follower=self, followed=other_user)
+
+    def un_follow(self, other_user):
+
+        FollowModel.objects.filter(follower=self, followed=other_user).delete()
+
+    def has_friends(self):
+        return self.following.exists()
 
 
 class PartyGroup(models.Model):
@@ -93,3 +107,19 @@ class PartyGroup(models.Model):
     class Meta:
         verbose_name = "partyGroup"
         verbose_name_plural = "partyGroups"
+
+
+class FollowModel(models.Model):
+    follower = models.ForeignKey(
+        PartyUser,  on_delete=models.CASCADE, related_name="following")
+
+    followed = models.ForeignKey(
+        PartyUser, on_delete=models.CASCADE, related_name="followers")
+
+    data_followed = models.DateField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ["follower", "followed"]
+
+    def __str__(self):
+        return f'{self.follower}  -> following -> {self.followed}'

@@ -699,9 +699,9 @@ button {
   font-weight: bold;
   overflow: hidden;
   z-index: 1;
-  width: 8rem;
   display: block;
   margin: 1rem auto;
+  width: 8rem;
 }
 .search-wrapper button:before {
   content: "";
@@ -764,6 +764,16 @@ button {
   margin-top: 2rem;
   padding: 1rem;
 }
+.search-row .buddies-txt {
+  grid-column: 1/10;
+  align-self: center;
+  text-align: center;
+  margin-top: 4rem;
+  color: #a1a1b5;
+  font-weight: bold0;
+  letter-spacing: 1.5px;
+  width: 80%;
+}
 
 .buddy-box {
   width: 90%;
@@ -820,6 +830,21 @@ button {
   color: #2a2640;
   border-color: #ffd900;
   text-shadow: none;
+}
+.buddy-box .delete-buddie {
+  color: #ff0000;
+  border: 2px solid #ff0000;
+  box-shadow: 0 0 8px #ff0000;
+  display: block;
+}
+.buddy-box .delete-buddie:before {
+  background: #ff0000;
+}
+.buddy-box .delete-buddie:hover {
+  border-color: #ff0000;
+}
+.buddy-box .delete-buddie:hover::before {
+  box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
 }
 
 @media (min-width: 500px) {

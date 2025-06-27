@@ -12,7 +12,7 @@
 
  {% block content %}
  
-    <section class="buddies-wrapper">
+    <section class="buddies-wrapper" >
       
             
         <div class="search-wrapper">
@@ -38,28 +38,30 @@
             </div>
 
         </div>
-        {% if friends_data %}
-            <div class="search-row">
-                {% for friend in friends_data %}
+        <div class="search-row">
+                {% if friends_relation %}
+                    {% for relation in friends_relation %}
 
-                    <div class="buddy-box" data-name="{{friend.username}}">
-                        <img src="{% static "friend.avatar" %}" alt="{{friend.username}}">
-                        <div class="buddy-info">
-                            <h3 class='nick'>{{friend.username}}</h3>
-                            
-                            <form class="add-buddie" action="{% url "add_buddie" %}" method='POST'>
-                                {% csrf_token %}
-                                <button>Add</button>
-                            </form>
-                        </div>
-                    </div> 
-                
-                {% endfor %} 
+                        <div class="buddy-box">
+                            <img src="{% static "relation.followed.avatar" %}" alt="{{relation.followed.username}}">
+                            <div class="buddy-info">
+                                <h3 class='nick'>{{relation.followed.username}}</h3>
+                                <form   action="{% url "add_delete_buddie" %}" method='POST'>
+                                    {% csrf_token %}
+                                    <button class="delete-buddie actionBtn" data-id="{{relation.followed.id}}" data-action="delete">delete</button>
+                                </form>
+                            </div>
+                        </div> 
+                    
+                    {% endfor %} 
+                {% else %}
+                <div class="buddies-txt">
+                        <p>You don't have any buddies 😮</p>
+                        <p>☝ Click above ☝ - "Find" to follow someone </p>
+                </div>
+                       
+                {% endif %}
             </div>
-        {% else %}
-                <p>You don't have any buddies 😮</p>
-                <p>☝ Click above ☝ - "Find" to follow someone </p>
-        {% endif %}
        
     </section>
  
