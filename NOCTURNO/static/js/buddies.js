@@ -38,46 +38,51 @@ class Buddies {
   }
 
   createBuddiesBox(data, friendsId = null) {
-    let searchRowHtml = "";
-
     this.searchRow.textContent = "";
 
-    // Dwie wersje pętli tworzących aby przy generowaniu "Yours" nie sprawedzało czy znajduje sie na liscie znajomych tylko od razu generowało z przyciskiem delete -> lepsze wydajność
-    // Dla find sprawdza żeby był wyświetlany przycisk delete lub add
+    const generate = (el, btnAction) => {
+      const buddyBox = document.createElement("div");
+      buddyBox.classList.add("buddy-box");
+
+      const buddyInfo = document.createElement("div");
+      buddyInfo.classList.add("buddy-info");
+
+      const avatar = document.createElement("img");
+      avatar.setAttribute("src", `{% static ${el.avatar} %}`);
+      avatar.setAttribute("alt", `${el.username}`);
+
+      const nick = document.createElement("h3");
+      nick.classList.add("nick");
+      nick.textContent = `${el.username}`;
+
+      const button = document.createElement("button");
+
+      button.setAttribute("data-id", `${el.id}`);
+      button.classList.add(`${btnAction}-buddie`);
+      button.textContent = `${btnAction}`;
+
+      buddyInfo.appendChild(nick);
+      buddyInfo.appendChild(button);
+      buddyBox.appendChild(avatar);
+      buddyBox.appendChild(buddyInfo);
+      this.searchRow.appendChild(buddyBox);
+    };
+
     if (friendsId != null) {
-      console.log("a", data);
       data.forEach((el) => {
         let keyWord = "";
-
         if (friendsId.includes(el.id)) keyWord = "delete";
         else keyWord = "add";
-        searchRowHtml += `
-            <div class="buddy-box">
-                <img src="{% static "${el.avatar}" %}" alt="${el.username}">
-                <div class="buddy-info">
-                    <h3 class='nick'>${el.username}</h3>
-                    <form action="buddies/action-buddie/" method='POST'>
-                        <button class="${keyWord}-buddie actionBtn" data-id="${el.id}" data-action="${keyWord}">${keyWord}</button>
-                    </form>
-                </div>
-            </div>`;
+        generate(el, keyWord);
       });
     } else {
       data.forEach((el) => {
-        searchRowHtml += `
-            <div class="buddy-box">
-                <img src="{% static "${el.avatar}" %}" alt="${el.username}">
-                <div class="buddy-info">
-                    <h3 class='nick'>${el.username}</h3>
-                    <form action="buddies/action-buddie/" method='POST'>
-                            <button class="delete-buddie actionBtn"  data-id="${el.id}" data-action="delete">delete</button>
-                    </form>
-                </div>
-            </div>`;
+        generate(el);
       });
     }
 
-    this.searchRow.insertAdjacentHTML("afterbegin", searchRowHtml);
+    // Dwie wersje pętli tworzących aby przy generowaniu "Yours" nie sprawedzało czy znajduje sie na liscie znajomych tylko od razu generowało z przyciskiem delete -> lepsze wydajność
+    // Dla find sprawdza żeby był wyświetlany przycisk delete lub add
   }
 
   // Zmiana typów wyszukiwań (inicjacja generowania buddiesbox)
@@ -91,6 +96,7 @@ class Buddies {
     document.cookie = `searchingType=${el.dataset.option}`;
     const fetchLink = "buddies/initial-find";
     const [friendsList, friendsId] = await this.getData(fetchLink);
+
     console.log(friendsList, friendsId);
     console.log(friendsId);
     this.createBuddiesBox(friendsList, friendsId);
