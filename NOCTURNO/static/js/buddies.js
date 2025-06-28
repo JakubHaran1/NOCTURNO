@@ -24,23 +24,27 @@ class Buddies {
     // Dodawnie buddietgo do listy zaiobserwowanych przez zalogowanego uzytkownika
     this.searchRow.addEventListener("click", this.addBuddie.bind(this));
   }
-
+  errorHandler(first, second = "Try again") {
+    const errorBox = `
+    <div class="buddies-txt">
+        <p>${first}</p>
+        <p>${second}</p>
+    </div>`;
+    this.searchRow.textContent = "";
+    this.searchRow.insertAdjacentHTML("afterbegin", errorBox);
+  }
   // Funkcja pomocnicza do pobierania danych i tworzenia userbox
   async getData(link) {
-    try {
-      const fetchResponse = await fetch(link);
-      if (!fetchResponse.ok) throw new Error("Wrong link ✋✋");
-      const data = await fetchResponse.json();
-      return data;
-    } catch (error) {
-      throw new Error(error);
-    }
+    const fetchResponse = await fetch(link);
+    if (!fetchResponse.ok) throw new Error("Something goes wrong with link");
+    const data = await fetchResponse.json();
+    return data;
   }
 
   createBuddiesBox(data, friendsId = null) {
     this.searchRow.textContent = "";
 
-    const generate = (el, btnAction) => {
+    const generate = (el, btnAction = "delete") => {
       const buddyBox = document.createElement("div");
       buddyBox.classList.add("buddy-box");
 
@@ -68,11 +72,13 @@ class Buddies {
       this.searchRow.appendChild(buddyBox);
     };
 
+    // Dwie wersje pętli tworzących aby przy generowaniu "Yours" nie sprawedzało czy znajduje sie na liscie znajomych tylko od razu generowało z przyciskiem delete -> lepsze wydajność
+    // Dla find sprawdza żeby był wyświetlany przycisk delete lub add
+
     if (friendsId != null) {
       data.forEach((el) => {
-        let keyWord = "";
+        let keyWord = "add";
         if (friendsId.includes(el.id)) keyWord = "delete";
-        else keyWord = "add";
         generate(el, keyWord);
       });
     } else {
@@ -80,9 +86,6 @@ class Buddies {
         generate(el);
       });
     }
-
-    // Dwie wersje pętli tworzących aby przy generowaniu "Yours" nie sprawedzało czy znajduje sie na liscie znajomych tylko od razu generowało z przyciskiem delete -> lepsze wydajność
-    // Dla find sprawdza żeby był wyświetlany przycisk delete lub add
   }
 
   // Zmiana typów wyszukiwań (inicjacja generowania buddiesbox)
@@ -95,22 +98,28 @@ class Buddies {
     this.searchOption.classList.add("active");
     document.cookie = `searchingType=${el.dataset.option}`;
     const fetchLink = "buddies/initial-find";
-    const [friendsList, friendsId] = await this.getData(fetchLink);
+    try {
+      const [friendsList, friendsId] = await this.getData(fetchLink);
 
-    console.log(friendsList, friendsId);
-    console.log(friendsId);
-    this.createBuddiesBox(friendsList, friendsId);
+      this.createBuddiesBox(friendsList, friendsId);
+    } catch {
+      this.errorHandler("Something goes wrong with initiation 😥");
+    }
   }
 
   // Właściwe wyszukiwanie buddies
   async searchingBuddie(e) {
     e.preventDefault();
     const value = this.searchingInput.value.trim().toLowerCase();
-    if (value == "") return;
-    const fetchLink = `/buddies/find-buddie/?nick=${value}`;
-    const [fetchData, friendsId] = await this.getData(fetchLink);
-    console.log(fetchData, friendsId);
-    this.createBuddiesBox(fetchData, friendsId);
+    let fetchLink = `/buddies/find-buddie/?nick=${value}`;
+    if (value == "") fetchLink = "/buddies/find-buddie";
+    try {
+      const [fetchData, friendsId] = await this.getData(fetchLink);
+      console.log(fetchData, friendsId);
+      this.createBuddiesBox(fetchData, friendsId);
+    } catch {
+      this.errorHandler("Something goes wrong with search engine 😥");
+    }
   }
 
   // Dodawanie,usuwanie buddies
@@ -134,6 +143,7 @@ class Buddies {
             .getAttribute("content"),
         },
       });
+
       if (!sendData.ok)
         throw new Error("We can't add this buddie to your list 😭");
       const backData = await sendData.json();
@@ -144,7 +154,7 @@ class Buddies {
         throw new Error(backData.error);
       }
     } catch (err) {
-      console.log(err);
+      this.errorHandler(err);
     }
   }
 }
