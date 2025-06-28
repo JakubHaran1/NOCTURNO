@@ -62,7 +62,8 @@ class Buddies {
       const button = document.createElement("button");
 
       button.setAttribute("data-id", `${el.id}`);
-      button.classList.add(`${btnAction}-buddie`);
+      button.setAttribute("data-action", `${btnAction}`);
+      button.classList.add(`${btnAction}-buddie`, "actionBtn");
       button.textContent = `${btnAction}`;
 
       buddyInfo.appendChild(nick);
@@ -126,6 +127,7 @@ class Buddies {
   async addBuddie(e) {
     e.preventDefault();
     const el = e.target.closest(".actionBtn");
+    console.log(el);
     if (!el) return;
     const action = el.dataset.action;
     const friendID = el.dataset.id;
