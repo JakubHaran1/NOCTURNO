@@ -1,6 +1,7 @@
 "use strict";
-
+const nav = document.querySelector(".nav");
 const menuFunction = () => {
+  window.addEventListener("scroll", show);
   const menu = document.querySelector(".nav");
   const menuHeight = menu.getBoundingClientRect().height;
   const layout = document.querySelector(".layout");
@@ -15,14 +16,24 @@ const iconLoad = () => {
   });
 };
 
+//
+let timeOut;
 const show = () => {
-  let timeOut;
-  const menu = document.querySelector(".nav");
-  menu.classList.add("scroll");
   clearTimeout(timeOut);
+  nav.classList.add("scroll");
   timeOut = setTimeout(() => {
-    menu.classList.remove("scroll");
+    nav.classList.remove("scroll");
   }, 300);
 };
 
-export { menuFunction, iconLoad, show };
+const partiesSlider = (e) => {
+  if (!e.target.closest(".row-parties")) return;
+  e.preventDefault();
+  const container = e.target.closest(".row-parties");
+  if (e.deltaY != 0) {
+    container.scrollLeft -= e.deltaY;
+  }
+  console.log(e);
+};
+
+export { menuFunction, iconLoad, show, partiesSlider };

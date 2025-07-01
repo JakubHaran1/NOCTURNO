@@ -52,12 +52,14 @@ def calcAge(birth_year, birth_month, birth_day):
 def reverseGeo(request):
     url = 'https://nominatim.openstreetmap.org/reverse?'
     lat = request.GET.get('lat')
-    lng = request.GET.get('lng')
+    lon = request.GET.get('lng')
 
     geoHeader = {'User-Agent': 'NOCTURNO'}
 
     geoResponse = requests.get(url, headers=geoHeader, params={
-        "lat": lat, "lng": lng, "zoom": 18}).json()
+        "lat": lat, "lon": lon, "zoom": 18, "format": "json"},).json()
+
+    print(geoResponse)
 
     return JsonResponse(geoResponse, safe=False)
 
@@ -102,18 +104,21 @@ class mapView(View):
         address = AddressForm(request.POST)
         party = PartyForm(request.POST, request.FILES)
         parties = PartyModel.objects.all()
-
+        attempt = 0
         if party.is_valid() and address.is_valid():
             address.save()
             address_instance = address.instance
             party.save(commit=False)
             party.instance.address = address_instance
             party.save(commit=True)
+        else:
+            attempt = 1
 
         return render(request, "map.html", {
             "partyForm": party,
             "addressForm": address,
-            "parties": parties
+            "parties": parties,
+            "attempt": attempt
         })
 
 

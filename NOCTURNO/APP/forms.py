@@ -25,8 +25,19 @@ class PartyForm(forms.ModelForm):
         model = PartyModel
         exclude = ["creation_day", "address"]
 
+    def clean(self):
+        cleaned_data = super().clean()
+        age = cleaned_data.get("age")
+        alco = cleaned_data.get("alco")
+        print(alco)
+        if age < 18 and alco:
+            raise ValidationError("You can't drink alcohol before 18")
+        return cleaned_data
+
 
 class AddressForm(forms.ModelForm):
+    alco = forms.BooleanField(required=False)
+
     class Meta:
         model = AddressModel
         fields = '__all__'

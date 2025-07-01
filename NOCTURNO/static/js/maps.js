@@ -12,8 +12,12 @@ class Map {
   constructor() {
     menuFunction();
     // Chowanie party_creator
-    this.formSection.classList.add("hidden");
+    if (!this.formSection.classList.contains("attempt"))
+      this.formSection.classList.add("hidden");
 
+    this.formSection
+      .querySelectorAll(".static input")
+      .forEach((el) => (el.value = ""));
     // INICJACJA MAPY
     this.map = L.map("map");
     this.map.spin(true, { color: this.spinColor });

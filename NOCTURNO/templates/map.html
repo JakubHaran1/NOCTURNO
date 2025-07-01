@@ -42,49 +42,69 @@
             </div>
 
             <section class="parties">
-                <div class="party-creator">
+                <div class="party-creator {% if attempt == 1 %}attempt{% endif %}">
                     <h2 >Configure your party:</h2>
                     <form method="POST" class="form form-creator" enctype="multipart/form-data" action="{% url "map" %}">
-                        {% csrf_token %}
                        
+                       {% csrf_token %}
                         <div class="form-positions">
-                            <div class="position address {{addressForm.city.name}}">
+                            <div class="position address city">
                                 {{addressForm.city.label_tag}}
                                 {{addressForm.city}}
                                 {{addressForm.city.errors}}
                             </div>
-                             <div class="position address {{addressForm.road.name}}">
+                             <div class="position address road">
                                 {{addressForm.road.label_tag}}
                                 {{addressForm.road}}
                                 {{addressForm.road.errors}}
                             </div>
-                            <div class="position address {{addressForm.house_number.name}}">
+                            <div class="position address house_number">
                                 {{addressForm.house_number.label_tag}}
                                 {{addressForm.house_number}}
                                 {{addressForm.house_number.errors}}
                             </div>
-                             <div class="position {{addressForm.lat.name}}">
+                             <div class="position lat">
                                 {{addressForm.lat.label_tag}}
                                 {{addressForm.lat}}
                                 {{addressForm.lat.errors}}
                             </div>
-                             <div class="position {{addressForm.lng.name}}">
+                             <div class="position lng">
                                 {{addressForm.lng.label_tag}}
                                 {{addressForm.lng}}
                                 {{addressForm.lng.errors}}
                             </div>
-                        
                             
-                             
-                          {% for field in partyForm %}
-                            <div class="position {{field.name}}" >
-                                {{field.label_tag}}
-                                {{field}}
-                                {{field.errors}}
+                            <div class="position party_title static" >
+                                {{partyForm.party_title.label_tag}}
+                                {{partyForm.party_title}}
+                                {{partyForm.party_title.errors}}
                             </div>
-                          {% endfor %}
+                             <div class="position date static" >
+                                {{partyForm.date.label_tag}}
+                                {{partyForm.date}}
+                                {{partyForm.date.errors}}
+                            </div>
 
-                         
+                            <div class="position people_number static" >
+                                {{partyForm.people_number.label_tag}}
+                                {{partyForm.people_number}}
+                                {{partyForm.people_number.errors}}
+                            </div>
+                            <div class="position age static" >
+                                {{partyForm.age.label_tag}}
+                                {{partyForm.age}}
+                                {{partyForm.age.errors}}
+                            </div>    
+                            <div class="position alco" >
+                                {{partyForm.alco.label_tag}}
+                                {{partyForm.alco}}
+                                {{partyForm.alco.errors}}
+                            </div>      
+                            <div class="position file" >
+                                {{partyForm.file.label_tag}}
+                                {{partyForm.file}}
+                                {{partyForm.file.errors}}
+                            </div>
                         </div>
                         <button>Create</button>
                     </form>

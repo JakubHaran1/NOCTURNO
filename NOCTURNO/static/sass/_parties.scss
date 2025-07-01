@@ -8,14 +8,13 @@
   -moz-box-shadow: inset 0px 0px 16px 1px #0b0c10;
   box-shadow: inset 0px 0px 16px 1px #0b0c10;
 
-  .row {
+  .row-parties {
     display: flex;
     justify-content: space-around;
-    overflow-x: scroll;
     gap: 1rem;
     padding: 0 0 1rem;
     scrollbar-color: v.$bg-section v.$bg-main;
-
+    overflow-x: scroll;
     h4 {
       margin: 0.8rem 0;
     }

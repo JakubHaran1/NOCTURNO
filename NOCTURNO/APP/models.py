@@ -47,13 +47,6 @@ class PartyModel(models.Model):
     def __str__(self):
         return f"{self.party_title}: {self.date}"
 
-    def clean(self):
-        cleaned_data = super().clean()
-        age = self.age
-        alco = self.alco
-        if age < 18 and alco:
-            raise ValidationError("You can't drink alcohol before 18")
-
 
 class AddressModel(models.Model):
     city = models.CharField(_("city"), max_length=50)
