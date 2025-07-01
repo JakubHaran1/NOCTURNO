@@ -2,9 +2,10 @@
 <div class="row-parties">
   {% for party in parties %}
   <div class="party">
-    <div class="img-hero">
-      <img src="{{party.file.url}}" alt="{{party.party_title}}" />
-    </div>
+    <div
+      class="img-hero"
+      style="background-image: url(media/{{party.file}})"
+    ></div>
     <h4>{{party.party_title}}</h4>
     <div class="desc">
       <div class="el">

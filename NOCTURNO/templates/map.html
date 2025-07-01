@@ -121,8 +121,31 @@
 
 
         <div class="pop-up hidden">
+            
             <h3 class="pop-header"></h3>
             <p class="pop-content"></p>
+            <a href={% url "map" %}>Refresh the page</a>
+        </div>
+
+        <div class="pop-up hidden party-card">
+
+            <div class="icon"><p>X</p></div>
+            <h3 class="pop-header">Gruba biba do rana</h3>
+            <div class="desc">
+                <div class="el">
+                    <i class="fas fa-wine-glass-alt"></i>
+                    <p>{{party.alco}}</p>
+                </div>
+                <div class="el">
+                    <i class="far fa-id-card"></i>
+                    <p>{{party.age}}+</p>
+                </div>
+                <div class="el">
+                    <i class="fas fa-users"></i>
+                    <p>>{{party.people_number}}</p>
+                </div>
+            </div>
+            <p class="pop-content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem consectetur quaerat, totam aliquam repellat doloremque corporis. Ex excepturi cumque exercitationem repudiandae distinctio pariatur fugit atque laboriosam. Nam voluptates ab accusantium.</p>
             <a href={% url "map" %}>Refresh the page</a>
         </div>
 

@@ -35,8 +35,12 @@
   -moz-box-shadow: 0px 0px 45px -10px #0b0c10;
   box-shadow: 0px 0px 45px -10px #0b0c10;
 }
-.parties .party img {
+.parties .party .img-hero {
   width: 100%;
+  aspect-ratio: 1/0.5;
+  background-position: center;
+  background-repeat: no-repeat;
+  max-height: 200px;
   border-radius: 5px;
 }
 .parties .party h4 {
@@ -286,12 +290,26 @@ button {
   accent-color: #9b30ff;
 }
 
+.party-card .desc {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  color: #f5f5f5;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+.party-card .desc p {
+  font-size: 1rem;
+  color: #a1a1b5;
+}
+
 .pop-up {
   display: block;
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%);
+  transform: translate(-50%, -50%);
   z-index: 11111;
   width: 75%;
   padding: 1rem 1.5rem;
@@ -362,6 +380,11 @@ button {
 
 .pop-up.hidden {
   display: none;
+}
+
+.party-card {
+  width: 50%;
+  aspect-ratio: 1/0.8;
 }
 
 @media (min-width: 390px) {
@@ -439,17 +462,17 @@ button {
     background-color: #2a2640;
     scrollbar-color: #1f1d39 #1f1d39;
   }
-  .map-parties .row {
+  .map-parties .row-parties {
     flex-direction: column;
     gap: 2rem;
     margin: 0 auto;
     overflow-x: auto;
     padding: 1rem 0;
   }
-  .map-parties .row .party {
+  .map-parties .row-parties .party {
     width: 85%;
   }
-  .map-parties .row .party:hover {
+  .map-parties .row-parties .party:hover {
     box-shadow: 0 12px 30px -8px #0b0c10;
     transform: translateY(-5px);
   }
@@ -476,7 +499,7 @@ button {
   .layout.map .parties-wrapper {
     box-shadow: inset 0px 0px 16px 1px #0b0c10;
   }
-  .layout.map .row {
+  .layout.map .row-parties {
     overflow-x: auto;
     flex-direction: column;
   }

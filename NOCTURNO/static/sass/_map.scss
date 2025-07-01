@@ -85,13 +85,18 @@
   }
 }
 
+.party-card .desc {
+  @include m.description;
+  margin-top: 1rem;
+}
+
 // POP UP - POCZATEK
 .pop-up {
   display: block;
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%);
+  transform: translate(-50%, -50%);
   z-index: 11111;
   width: 75%;
   padding: 1rem 1.5rem;
@@ -131,6 +136,13 @@
 }
 
 // POP UP - KONIEC
+
+// PARTY CARD = POCZATEK
+
+.party-card {
+  width: 50%;
+  aspect-ratio: 1/0.8;
+}
 
 @media (min-width: 390px) {
   .form-positions {
@@ -217,7 +229,7 @@
     background-color: v.$bg-section-2;
     scrollbar-color: v.$bg-section v.$bg-section;
 
-    .row {
+    .row-parties {
       flex-direction: column;
       gap: 2rem;
       margin: 0 auto;
@@ -264,7 +276,7 @@
       box-shadow: inset 0px 0px 16px 1px #0b0c10;
     }
 
-    .row {
+    .row-parties {
       overflow-x: auto;
       flex-direction: column;
     }

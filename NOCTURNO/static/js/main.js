@@ -4,7 +4,7 @@ const rowParties = document.querySelectorAll(".row-parties");
 document.addEventListener("DOMContentLoaded", menuFunction);
 
 window.addEventListener("scroll", show);
-
-rowParties.forEach((el) => {
-  el.addEventListener("wheel", partiesSlider);
-});
+if (matchMedia("(min-width: 724px)").matches)
+  rowParties.forEach((el) => {
+    el.addEventListener("wheel", partiesSlider);
+  });

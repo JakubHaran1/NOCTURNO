@@ -40,8 +40,14 @@
       box-shadow: 0px 0px 45px -10px #0b0c10;
     }
 
-    img {
+    .img-hero {
       width: 100%;
+      aspect-ratio: 1/0.5;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      max-height: 200px;
+
       border-radius: 5px;
     }
 
