@@ -27,14 +27,11 @@ const show = () => {
   }, 300);
 };
 
-let lasScroll = container.scrollLeft;
+let lastScroll = container.scrollLeft;
 let working = false;
 const partiesSlider = (e) => {
   e.preventDefault();
   const now = Date.now();
-
-  time = now;
-  console.log("action");
   if (!e.target.closest(".row-parties")) return;
   const container = e.target.closest(".row-parties");
   if (e.deltaY != 0) {
