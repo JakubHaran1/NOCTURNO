@@ -12,6 +12,7 @@
   padding: 0 0 1rem;
   scrollbar-color: #1f1d39 #0b0c10;
   overflow-x: scroll;
+  scroll-behavior: smooth;
 }
 .parties .row-parties h4 {
   margin: 0.8rem 0;

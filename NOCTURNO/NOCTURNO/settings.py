@@ -55,7 +55,7 @@ WSGI_APPLICATION = 'NOCTURNO.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nocturnobase',
+        'NAME': 'nocturno',
         'USER': os.environ.get("db_user"),
         'PASSWORD': os.environ.get("db_password"),
         'HOST': 'localhost',

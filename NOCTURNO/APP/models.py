@@ -11,10 +11,11 @@ from django.utils.translation import gettext as _
 from django.utils.text import slugify
 
 from django.contrib.auth.models import AbstractUser
-from django.core.files import File
+from django.core.files.base import ContentFile
 
 from datetime import date
 import os
+from io import BytesIO
 
 from PIL import Image
 
@@ -51,41 +52,33 @@ class PartyModel(models.Model):
     def __str__(self):
         return f"{self.party_title}: {self.date}"
 
-    def save(self, **kwargs):
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         file_path = self.file.path
-        print(file_path)
-        thumb_path = os.path.splitext(file_path)[0] + '.thumbnail.webp'
+        print("name", self.file.name)
+        name_path = self.file.name.split("/")[1]
+        thumb_path = name_path + '_thumbnail.webp'
+
         size = (220, 110)
         # Create thumbnail
         # try:
-        with Image.open(file_path) as im:
+        with Image.open(self.file) as im:
             im.thumbnail(size)
-            self.file_thumb = im.save(thumb_path, 'WEBP')
-            print(self.file_thumb)
+            bufor = BytesIO()
+            im.save(bufor, 'webp')
 
-        with open(file_path, "rb") as im:
-            self.file_thumb.save(os.path.basename(
-                thumb_path), File(im), save=False)
+        self.file_thumb.save(
+            thumb_path,
+            ContentFile(bufor.getvalue()),
+            save=False,
+        )
+        print(self.file_thumb)
+        super().save(*args, **kwargs)
 
         # except OSError:
         #     print("can not create thumbnail for", thumb_path)
 
         # Save new wersion partie's banner
-        file_path = os.path.splitext(file_path)[0] + ".webp"
-        # try:
-        with Image.open(file_path) as im:
-            if (im.width > 1200 or im.height > 1200):
-                im.resize(size=(1200, 1200))
-                self.file = im.save(file_path, 'WEBP')
-
-        with open(file_path, 'rb') as im:
-            self.file.save(os.path.basename(
-                file_path, File(im), save=False))
-
-        # except OSError:
-        #     print("can not resize file", file_path)
-
-        return super().save()
 
 
 class AddressModel(models.Model):
