@@ -11,10 +11,11 @@ from django.utils.translation import gettext as _
 from django.utils.text import slugify
 
 from django.contrib.auth.models import AbstractUser
-
+from django.core.files.base import ContentFile
 
 from datetime import date
 import os
+from io import BytesIO
 
 from PIL import Image
 
@@ -41,8 +42,8 @@ class PartyModel(models.Model):
         16, "You can't invite such young person..")])
     alco = models.BooleanField(_("Alcohol"), default=False)
     file = models.FileField(_("File"), upload_to="party_images/")
-    # file_thumb = models.FileField(
-    #     _("File_thumb"), upload_to="party_images/", blank=True)
+    file_thumb = models.FileField(
+        _("File_thumb"), upload_to="party_images/", blank=True)
 
     class Meta:
         verbose_name = _("party")
@@ -51,28 +52,33 @@ class PartyModel(models.Model):
     def __str__(self):
         return f"{self.party_title}: {self.date}"
 
-    def save(self, **kwargs):
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         file_path = self.file.path
-        thumb_path = os.path.splitext(file_path)[0] + '.thumbnail'
+        print("name", self.file.name)
+        name_path = self.file.name.split("/")[1]
+        thumb_path = name_path + '_thumbnail.webp'
+
         size = (220, 110)
         # Create thumbnail
-        try:
-            with Image.open(file_path) as im:
-                im.thumbnail(size)
-                im.save(thumb_path, 'WEBP')
+        # try:
+        with Image.open(self.file) as im:
+            im.thumbnail(size)
+            bufor = BytesIO()
+            im.save(bufor, 'webp')
 
-        except OSError:
-            print("can not create thumbnail for", thumb_path)
+        self.file_thumb.save(
+            thumb_path,
+            ContentFile(bufor.getvalue()),
+            save=False,
+        )
+        print(self.file_thumb)
+        super().save(*args, **kwargs)
+
+        # except OSError:
+        #     print("can not create thumbnail for", thumb_path)
 
         # Save new wersion partie's banner
-        try:
-            with Image.open(file_path) as im:
-                if (im.width > 1200 or im.height > 1200):
-                    im.resize(size=(1200, 1200))
-        except OSError:
-            print("can not resize file", file_path)
-
-        return super().save()
 
 
 class AddressModel(models.Model):
