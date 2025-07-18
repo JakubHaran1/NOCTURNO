@@ -11,7 +11,7 @@ from django.utils.translation import gettext as _
 from django.utils.text import slugify
 
 from django.contrib.auth.models import AbstractUser
-
+from django.core.files import File
 
 from datetime import date
 import os
@@ -41,8 +41,8 @@ class PartyModel(models.Model):
         16, "You can't invite such young person..")])
     alco = models.BooleanField(_("Alcohol"), default=False)
     file = models.FileField(_("File"), upload_to="party_images/")
-    # file_thumb = models.FileField(
-    #     _("File_thumb"), upload_to="party_images/", blank=True)
+    file_thumb = models.FileField(
+        _("File_thumb"), upload_to="party_images/", blank=True)
 
     class Meta:
         verbose_name = _("party")
@@ -53,24 +53,37 @@ class PartyModel(models.Model):
 
     def save(self, **kwargs):
         file_path = self.file.path
-        thumb_path = os.path.splitext(file_path)[0] + '.thumbnail'
+        print(file_path)
+        thumb_path = os.path.splitext(file_path)[0] + '.thumbnail.webp'
         size = (220, 110)
         # Create thumbnail
-        try:
-            with Image.open(file_path) as im:
-                im.thumbnail(size)
-                im.save(thumb_path, 'WEBP')
+        # try:
+        with Image.open(file_path) as im:
+            im.thumbnail(size)
+            self.file_thumb = im.save(thumb_path, 'WEBP')
+            print(self.file_thumb)
 
-        except OSError:
-            print("can not create thumbnail for", thumb_path)
+        with open(file_path, "rb") as im:
+            self.file_thumb.save(os.path.basename(
+                thumb_path), File(im), save=False)
+
+        # except OSError:
+        #     print("can not create thumbnail for", thumb_path)
 
         # Save new wersion partie's banner
-        try:
-            with Image.open(file_path) as im:
-                if (im.width > 1200 or im.height > 1200):
-                    im.resize(size=(1200, 1200))
-        except OSError:
-            print("can not resize file", file_path)
+        file_path = os.path.splitext(file_path)[0] + ".webp"
+        # try:
+        with Image.open(file_path) as im:
+            if (im.width > 1200 or im.height > 1200):
+                im.resize(size=(1200, 1200))
+                self.file = im.save(file_path, 'WEBP')
+
+        with open(file_path, 'rb') as im:
+            self.file.save(os.path.basename(
+                file_path, File(im), save=False))
+
+        # except OSError:
+        #     print("can not resize file", file_path)
 
         return super().save()
 
