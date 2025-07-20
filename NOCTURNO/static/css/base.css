@@ -6,16 +6,19 @@
   box-shadow: inset 0px 0px 16px 1px #0b0c10;
 }
 .parties .row-parties {
-  display: flex;
-  justify-content: space-around;
-  gap: 1rem;
-  padding: 0 0 1rem;
   scrollbar-color: #1f1d39 #0b0c10;
-  overflow-x: scroll;
-  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 .parties .row-parties h4 {
   margin: 0.8rem 0;
+}
+.parties .row-parties .parties_bgc {
+  display: flex;
+  gap: 1rem;
+  padding: 0 0 1rem;
+  will-change: transform;
+  transition: transform 0.3s;
+  overflow: hidden;
 }
 .parties .party {
   width: 90%;

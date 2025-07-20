@@ -27,20 +27,4 @@ const show = () => {
   }, 300);
 };
 
-let lasScroll = container.scrollLeft;
-let working = false;
-const partiesSlider = (e) => {
-  e.preventDefault();
-  const now = Date.now();
-
-  time = now;
-  console.log("action");
-  if (!e.target.closest(".row-parties")) return;
-  const container = e.target.closest(".row-parties");
-  if (e.deltaY != 0) {
-    container.scrollLeft -= e.deltaY;
-  }
-  console.log(e);
-};
-
-export { menuFunction, iconLoad, show, partiesSlider };
+export { menuFunction, iconLoad, show };
