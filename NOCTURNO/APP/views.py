@@ -59,8 +59,6 @@ def reverseGeo(request):
     geoResponse = requests.get(url, headers=geoHeader, params={
         "lat": lat, "lon": lon, "zoom": 18, "format": "json"},).json()
 
-    print(geoResponse)
-
     return JsonResponse(geoResponse, safe=False)
 
 

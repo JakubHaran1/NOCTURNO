@@ -9,15 +9,19 @@
   box-shadow: inset 0px 0px 16px 1px #0b0c10;
 
   .row-parties {
-    display: flex;
-    justify-content: space-around;
-    gap: 1rem;
-    padding: 0 0 1rem;
     scrollbar-color: v.$bg-section v.$bg-main;
-    overflow-x: scroll;
-    scroll-behavior: smooth;
+    overflow-x: hidden;
+
     h4 {
       margin: 0.8rem 0;
+    }
+    .parties_bgc {
+      display: flex;
+      gap: 1rem;
+      padding: 0 0 1rem;
+      will-change: transform;
+      transition: transform 0.3s;
+      overflow: hidden;
     }
   }
 

@@ -1,26 +1,28 @@
 {% load static %}
 <div class="row-parties">
-  {% for party in parties %}
-  <div class="party">
-    <div
-      class="img-hero"
-      style="background-image: url(media/{{party.file}})"
-    ></div>
-    <h4>{{party.party_title}}</h4>
-    <div class="desc">
-      <div class="el">
-        <i class="fas fa-wine-glass-alt"></i>
-        <p>{{party.alco}}</p>
+  <div class="parties_bgc">
+      {% for party in parties %}
+      <div class="party">
+        <div
+          class="img-hero"
+          style="background-image: url(media/{{party.file}})"
+        ></div>
+        <h4>{{party.party_title}}</h4>
+        <div class="desc">
+          <div class="el">
+            <i class="fas fa-wine-glass-alt"></i>
+            <p>{{party.alco}}</p>
+          </div>
+          <div class="el">
+            <i class="far fa-id-card"></i>
+            <p>{{party.age}}+</p>
+          </div>
+          <div class="el">
+            <i class="fas fa-users"></i>
+            <p>>{{party.people_number}}</p>
+          </div>
+        </div>
       </div>
-      <div class="el">
-        <i class="far fa-id-card"></i>
-        <p>{{party.age}}+</p>
-      </div>
-      <div class="el">
-        <i class="fas fa-users"></i>
-        <p>>{{party.people_number}}</p>
-      </div>
-    </div>
+      {% endfor %}
   </div>
-  {% endfor %}
 </div>
