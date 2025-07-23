@@ -9,26 +9,35 @@ window.addEventListener("scroll", show);
 // ////////////////////////////////////////////////
 let animateFrame;
 let currentX = 0;
-let maxAvailable = rowParties.clientWidth - partiesBgc.scrollWidth;
-const animate = (speed, frict) => {
+let maxAvailable = partiesBgc.scrollWidth - rowParties.clientWidth;
+let speed = 0;
+const animate = () => {
   currentX += speed;
-  speed *= frict;
+  if (currentX >= 0) {
+    currentX = 0;
+  }
+
+  if (currentX <= -maxAvailable) {
+    currentX = -maxAvailable;
+    speed = 0;
+  }
+  // speed *= frict;
+  console.log("cur", currentX);
   console.log(maxAvailable);
-  if (currentX > 0) return;
-  else if (currentX >= maxAvailable) return;
+  console.log("sp", speed);
 
   partiesBgc.style.transform = `translateX(${currentX}px)`;
 
-  console.log(Math.abs(speed));
-  if (Math.abs(speed) > 0.1)
-    animateFrame = requestAnimationFrame(() => animate(speed, frict, max));
-  else animateFrame = null;
+  // if (Math.abs(speed) > 25) {
+  //   console.log(Math.abs(speed));
+  //   animateFrame = requestAnimationFrame(() => animate(speed));
+  // } else animateFrame = null;
+  speed = 0;
+  animateFrame = null;
 };
 
 if (matchMedia("(min-width: 724px)").matches) {
-  let friction = 0.95;
-
-  let speed = 0;
+  // let friction = 0.5;
 
   window.addEventListener("resize", () => {
     maxAvailable = partiesBgc.scrollWidth - rowParties.clientWidth;
@@ -38,13 +47,12 @@ if (matchMedia("(min-width: 724px)").matches) {
     "wheel",
     (e) => {
       e.preventDefault();
-      console.log(partiesBgc.scrollWidth, rowParties.clientWidth);
+      console.log(maxAvailable);
       if (e.deltaY == 0) return;
-      speed -= e.deltaY;
-
+      speed = e.deltaY;
+      console.log(e.deltaY);
       if (!animateFrame) {
-        console.log(speed);
-        animateFrame = requestAnimationFrame(() => animate(speed, friction));
+        animateFrame = requestAnimationFrame(() => animate());
       }
     },
     { passive: false }
