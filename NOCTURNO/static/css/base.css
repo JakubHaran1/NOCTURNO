@@ -17,7 +17,7 @@
   gap: 1rem;
   padding: 0 0 1rem;
   will-change: transform;
-  transition: transform 0.3s;
+  transition: transform 0.7s;
 }
 .parties .party {
   width: 90%;

@@ -8,57 +8,31 @@ window.addEventListener("scroll", show);
 
 // ////////////////////////////////////////////////
 
-let maxAvailable = partiesBgc.scrollWidth - rowParties.clientWidth;
-let currentX = 0;
+const animate = (inner, outer, speed) => {
+  let maxScroll = inner.scrollWidth - outer.clientWidth;
+  let currX = new Number(inner.style.transform.match(/-?\d+/g));
+  currX += speed;
 
-const animate = (frame, speed, frict) => {
-  currentX += speed;
-  partiesBgc.style.transform = `translateX(${currentX}px)`;
-  if (currentX >= 0) {
-    currentX = 0;
+  console.log(currX);
+  if (currX > 0) {
+    currX = 0;
+  } else if (currX <= -maxScroll) {
+    currX = -maxScroll;
   }
 
-  if (currentX <= -maxAvailable) {
-    currentX = -maxAvailable;
-    speed = 0;
-  }
-  speed *= frict;
-  console.log("cur", currentX);
-  console.log(maxAvailable);
-  console.log("sp", speed);
-
-  if (Math.abs(speed) > 0.1) {
-    console.log(Math.abs(speed));
-    frame = requestAnimationFrame(() => animate(frame, speed, frict));
-  } else {
-    frame = undefined;
-    speed = 0;
-  }
+  inner.style.transform = `translateX(${currX}px)`;
 };
 
 if (matchMedia("(min-width: 724px)").matches) {
-  window.addEventListener("resize", () => {
-    maxAvailable = partiesBgc.scrollWidth - rowParties.clientWidth;
-  });
-
-  let animateFrame;
-
-  let friction = 0.75;
-
   rowParties.addEventListener(
     "wheel",
     (e) => {
       e.preventDefault();
-      let speed = 0;
+      let speed = e.deltaY;
 
-      if (e.deltaY == 0) return;
-      speed = e.deltaY;
-      if (!animateFrame) {
-        animateFrame = requestAnimationFrame(() => {
-          animate(animateFrame, speed, friction);
-          animateFrame = undefined;
-        });
-      }
+      if (speed == 0) return;
+
+      animate(partiesBgc, rowParties, speed);
     },
     { passive: false }
   );
