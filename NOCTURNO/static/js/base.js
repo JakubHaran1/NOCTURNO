@@ -27,4 +27,17 @@ const show = () => {
   }, 300);
 };
 
-export { menuFunction, iconLoad, show };
+const animateScroll = (inner, outer, speed) => {
+  let maxScroll = inner.scrollWidth - outer.clientWidth;
+  let currX = new Number(inner.style.transform.match(/-?\d+/g));
+  currX += speed;
+  console.log(currX);
+  if (currX > 0) {
+    currX = 0;
+  } else if (currX <= -maxScroll) {
+    currX = -maxScroll;
+  }
+  inner.style.transform = `translateX(${currX}px)`;
+};
+
+export { menuFunction, iconLoad, show, animateScroll };

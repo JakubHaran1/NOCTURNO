@@ -456,29 +456,6 @@ button {
     left: 50%;
     transform: translateX(-50%);
   }
-  .map-parties {
-    width: 30rem;
-    padding: 1rem;
-    height: 100vh;
-    overflow: scroll;
-    text-align: center;
-    background-color: #2a2640;
-    scrollbar-color: #1f1d39 #1f1d39;
-  }
-  .map-parties .row-parties {
-    flex-direction: column;
-    gap: 2rem;
-    margin: 0 auto;
-    overflow-x: auto;
-    padding: 1rem 0;
-  }
-  .map-parties .row-parties .party {
-    width: 85%;
-  }
-  .map-parties .row-parties .party:hover {
-    box-shadow: 0 12px 30px -8px #0b0c10;
-    transform: translateY(-5px);
-  }
   .party-creator {
     padding: 0;
     margin-bottom: 1rem;
@@ -504,6 +481,9 @@ button {
   }
   .layout.map .row-parties {
     overflow-x: auto;
+    flex-direction: column;
+  }
+  .layout.map .row-parties .parties_bgc {
     flex-direction: column;
   }
 }

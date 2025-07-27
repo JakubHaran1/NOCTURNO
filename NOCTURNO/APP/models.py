@@ -1,5 +1,6 @@
 
 from enum import unique
+import io
 from pickle import TRUE
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
@@ -57,28 +58,29 @@ class PartyModel(models.Model):
         file_path = self.file.path
         print("name", self.file.name)
         name_path = self.file.name.split("/")[1]
-        thumb_path = name_path + '_thumbnail.webp'
+        thumb_path = self.party_title + \
+            name_path.split(".")[0] + '_thumbnail.webp'
 
         size = (220, 110)
-        # Create thumbnail
-        # try:
-        with Image.open(self.file) as im:
-            im.thumbnail(size)
-            bufor = BytesIO()
-            im.save(bufor, 'webp')
 
-        self.file_thumb.save(
-            thumb_path,
-            ContentFile(bufor.getvalue()),
-            save=False,
-        )
-        print(self.file_thumb)
-        super().save(*args, **kwargs)
+        try:
+            # Create thumbnail
+            with Image.open(self.file) as im:
+                im.thumbnail(size)
+                bufor = BytesIO()
+                im.save(bufor, 'webp')
 
-        # except OSError:
-        #     print("can not create thumbnail for", thumb_path)
+            # Save new wersion partie's banner in the base
+            self.file_thumb.save(
+                thumb_path,
+                ContentFile(bufor.getvalue()),
+                save=False,
+            )
+            print(self.file_thumb)
+            super().save(*args, **kwargs)
 
-        # Save new wersion partie's banner
+        except OSError:
+            print("can not create thumbnail for", thumb_path)
 
 
 class AddressModel(models.Model):
@@ -104,7 +106,8 @@ class PartyUser(AbstractUser):
     birth = models.DateField(
         _("birth date"))
 
-    avatar = models.FileField(_("File"), upload_to=uploadAvatar)
+    avatar = models.FileField(
+        _("File"), upload_to=f"users_image/", blank=True)
 
     class Meta:
         verbose_name = "partyUser"
@@ -124,6 +127,20 @@ class PartyUser(AbstractUser):
 
     def has_friends(self):
         return self.following.exists()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        size = (100, 100)
+        file_name = self.avatar.name.split("/")[1]
+        avatar_path = file_name.split()[0] + "_thumb.webp"
+
+        with Image.open(self.avatar) as im:
+            im.thumbnail(size)
+            bufor = BytesIO()
+            im.save(bufor, "webp")
+
+            self.avatar.save(avatar_path, bufor, save=False)
+            super().save(*args, **kwargs)
 
 
 class PartyGroup(models.Model):

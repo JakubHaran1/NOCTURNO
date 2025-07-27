@@ -220,33 +220,6 @@
     }
   }
 
-  .map-parties {
-    width: 30rem;
-    padding: 1rem;
-    height: 100vh;
-    overflow: scroll;
-    text-align: center;
-    background-color: v.$bg-section-2;
-    scrollbar-color: v.$bg-section v.$bg-section;
-
-    .row-parties {
-      flex-direction: column;
-      gap: 2rem;
-      margin: 0 auto;
-      overflow-x: auto;
-      padding: 1rem 0;
-
-      .party {
-        width: 85%;
-      }
-
-      .party:hover {
-        box-shadow: 0 12px 30px -8px v.$bg-main; // mocniejszy cień
-        transform: translateY(-5px); // lekkie uniesienie
-      }
-    }
-  }
-
   .party-creator {
     padding: 0;
     margin-bottom: 1rem;
@@ -279,6 +252,10 @@
     .row-parties {
       overflow-x: auto;
       flex-direction: column;
+
+      .parties_bgc {
+        flex-direction: column;
+      }
     }
   }
 }
