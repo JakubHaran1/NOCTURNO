@@ -131,14 +131,16 @@ class PartyUser(AbstractUser):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         size = (100, 100)
-        file_name = self.avatar.name.split("/")[1]
+        file_test = os.path.split(self.avatar.path)
+        [file_dir, file_name] = self.avatar.name.split("/")
+        print(file_dir, file_name, file_test)
         avatar_path = file_name.split()[0] + "_thumb.webp"
 
         with Image.open(self.avatar) as im:
             im.thumbnail(size)
             bufor = BytesIO()
             im.save(bufor, "webp")
-
+            print(avatar_path)
             self.avatar.save(avatar_path, bufor, save=False)
             super().save(*args, **kwargs)
 
