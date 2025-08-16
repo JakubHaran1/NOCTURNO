@@ -55,7 +55,7 @@ WSGI_APPLICATION = 'NOCTURNO.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nocturno',
+        'NAME': 'nocturnobase',
         'USER': os.environ.get("db_user"),
         'PASSWORD': os.environ.get("db_password"),
         'HOST': 'localhost',
@@ -83,7 +83,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = "/media/"
+MEDIA_URL = "media/"
 
 
 # Klucz główny modeli

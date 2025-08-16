@@ -1,18 +1,17 @@
 from os import name
 from django.urls import path, include
-from APP.views import reverseGeo, searchingBuddie, initFindBuddie, addDeleteBuddie, mainView, mapView, LoginUserView, RegisterView, ConfirmationView, ResetPasswordEmailView, ResetPasswordView, ResetDoneView, BuddiesView
+from APP.views import reverseGeo, searchingBuddie, initFindBuddie, addDeleteBuddie, mainView, mapView, LoginUserView, RegisterView, ConfirmationView, ResetPasswordEmailView, ResetPasswordView, ResetDoneView, BuddiesView, generateParties
 
 
 urlpatterns = [
     path("", mainView, name="home"),
     path("map", mapView.as_view(), name="map"),
     path("geocode-reverse", reverseGeo, name="reverseGeo"),
+
     path("login", LoginUserView.as_view(), name="login"),
     path("register", RegisterView.as_view(), name="register"),
     path("email-confirmation/<uidb64>/<token>",
          ConfirmationView.as_view(), name="activate_email"),
-
-
     path('reset-password', ResetPasswordEmailView.as_view(), name='reset-password'),
     path('change-password/<uidb64>/<token>',
          ResetPasswordView.as_view(), name='change-password'),
@@ -21,5 +20,7 @@ urlpatterns = [
     path("buddies", BuddiesView.as_view(), name="buddies"),
     path("buddies/find-buddie/", searchingBuddie, name="searchBuddie"),
     path('buddies/initial-find/', initFindBuddie, name="init_find"),
-    path("buddies/action-buddie/", addDeleteBuddie, name="add_delete_buddie")
+    path("buddies/action-buddie/", addDeleteBuddie, name="add_delete_buddie"),
+    path("map/generate-parties/<coords>",
+         generateParties, name="generateParties")
 ]

@@ -14,8 +14,8 @@ from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 
 from django.contrib.auth import get_user_model
 
-from .forms import PartyForm, AddressForm, RegisterForm, EmailChangeForm
-from .models import PartyModel, AddressModel, PartyUser, FollowModel
+from .forms import PartyForm,  RegisterForm, EmailChangeForm
+from .models import PartyModel,  PartyUser, FollowModel
 from .tokens import emailActivationToken
 
 
@@ -25,6 +25,7 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
+from django.core.serializers import serialize
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
@@ -87,35 +88,43 @@ def mainView(request):
     })
 
 
+# [${[_southWest["lat"], _northEast["lat"]]}]/[${[
+#     _northEast["lng"],
+#     _southWest["lng"],
+# ]}]`s
+
+
+def generateParties(request, coords):
+    coords = coords.split(",")
+    coords_nums = [float(el) for el in coords]
+    latitude = coords_nums[:2]
+    longitude = coords_nums[2:]
+    near_parties = PartyModel.objects.filter(
+        lat__gte=latitude[0], lat__lte=latitude[1], lng__gte=longitude[0], lng__lte=latitude[1])
+
+    serialized = serialize("json", near_parties)
+
+    return JsonResponse(serialized, safe=False)
+
+
 class mapView(View):
     def get(self, request):
         partyForm = PartyForm()
-        addressForm = AddressForm()
-        parties = PartyModel.objects.all()
         return render(request, "map.html", {
             "partyForm": partyForm,
-            "addressForm": addressForm,
-            "parties": parties
         })
 
     def post(self, request):
-        address = AddressForm(request.POST)
-        party = PartyForm(request.POST, request.FILES)
-        parties = PartyModel.objects.all()
+        partyForm = PartyForm(request.POST, request.FILES)
         attempt = 0
-        if party.is_valid() and address.is_valid():
-            address.save()
-            address_instance = address.instance
-            party.save(commit=False)
-            party.instance.address = address_instance
-            party.save(commit=True)
+        if partyForm.is_valid():
+            partyForm.save(commit=True)
+            return redirect("map")
         else:
             attempt = 1
 
         return render(request, "map.html", {
-            "partyForm": party,
-            "addressForm": address,
-            "parties": parties,
+            "partyForm": partyForm,
             "attempt": attempt
         })
 

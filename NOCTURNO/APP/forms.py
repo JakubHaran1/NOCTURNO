@@ -1,13 +1,8 @@
-from dataclasses import field, fields
-import email
-from pyexpat import model
 from django import forms
-
-
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.forms.widgets import DateInput
 from django.urls import include
-from APP.models import PartyModel, AddressModel, PartyUser
+from APP.models import PartyModel,  PartyUser
 
 from django.core.exceptions import ValidationError
 
@@ -23,24 +18,16 @@ class PartyForm(forms.ModelForm):
 
     class Meta:
         model = PartyModel
-        exclude = ["creation_day", "address"]
+        exclude = ["creation_day"]
 
     def clean(self):
         cleaned_data = super().clean()
         age = cleaned_data.get("age")
         alco = cleaned_data.get("alco")
-        print(alco)
+
         if age < 18 and alco:
             raise ValidationError("You can't drink alcohol before 18")
         return cleaned_data
-
-
-class AddressForm(forms.ModelForm):
-    alco = forms.BooleanField(required=False)
-
-    class Meta:
-        model = AddressModel
-        fields = '__all__'
 
 
 class LoginForm(AuthenticationForm):
@@ -62,6 +49,12 @@ class RegisterForm(UserCreationForm):
         if (age) < 16:
             raise ValidationError("You have to be older than 16 years old")
         return clean_birth
+
+    def clean_avatar(self):
+        avatar = self.cleaned_data["avatar"]
+
+        if not avatar.name.lower().endswith((".jpg", ".png", ".webp")):
+            raise ValidationError("Wrong file type!")
 
     class Meta:
         model = PartyUser

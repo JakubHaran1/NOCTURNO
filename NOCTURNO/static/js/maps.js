@@ -1,5 +1,4 @@
 "use strict";
-
 import { menuFunction } from "./base.js";
 class Map {
   spinColor = "#9b30ff";
@@ -16,8 +15,9 @@ class Map {
       this.formSection.classList.add("hidden");
 
     this.formSection
-      .querySelectorAll(".static input")
+      .querySelectorAll(".position input")
       .forEach((el) => (el.value = ""));
+
     // INICJACJA MAPY
     this.map = L.map("map");
     this.map.spin(true, { color: this.spinColor });
@@ -25,8 +25,82 @@ class Map {
     // POBRANIE GEOLOKACJI
     this.getLatLng();
 
+    // DRAG/ZOOM EVENT
+    this.map.on("moveend", (e) => {
+      // Pobieranie map range
+      const range = this.map.getBounds();
+      this.sendMapRange(range);
+    });
+
     // CLICK MAP EVENT
     this.map.on("click", this.onMapClick.bind(this));
+  }
+
+  async sendMapRange(data) {
+    const parties_bgc = document.querySelector(".parties_bgc");
+    const [_southWest, _northEast] = Object.values(data);
+    console.log(Object.values(_southWest));
+
+    const response = await fetch(
+      `map/generate-parties/${[_southWest["lat"], _northEast["lat"]]},${[
+        _southWest["lng"],
+        _northEast["lng"],
+      ]}`
+    );
+    const parties = await response.json();
+    const parties_data = JSON.parse(parties);
+
+    parties_bgc.textContent = "";
+    parties_data.forEach((el) => {
+      console.log(el);
+
+      const party_box = document.createElement("div");
+      party_box.classList.add("party");
+
+      const img_hero = document.createElement("div");
+      img_hero.classList.add("img-hero");
+      img_hero.style.backgroundImage = `url(/media/${el["fields"]["file_thumb"]})`;
+
+      const title = document.createElement("h4");
+      title.textContent = el["fields"]["party_title"];
+
+      const desc = document.createElement("div");
+      desc.classList.add("desc");
+
+      const el1 = document.createElement("div");
+      el1.classList.add("el");
+      let cls = ["fas", "fa-wine-glass-alt"];
+      const icon1 = document.createElement("div");
+      icon1.classList.add(...cls);
+      const paragraph1 = document.createElement("p");
+      paragraph1.textContent = el["fields"]["alco"];
+      el1.append(icon1, paragraph1);
+
+      const el2 = document.createElement("div");
+      el2.classList.add("el");
+      cls = ["far", "fa-id-card"];
+      const icon2 = document.createElement("div");
+      icon2.classList.add(...cls);
+      const paragraph2 = document.createElement("p");
+      paragraph2.textContent = el["fields"]["age"];
+      el2.append(icon2, paragraph2);
+
+      const el3 = document.createElement("div");
+      el3.classList.add("el");
+      cls = ["fas", "fa-users"];
+      const icon3 = document.createElement("div");
+      icon3.classList.add(...cls);
+      const paragraph3 = document.createElement("p");
+      paragraph3.textContent = el["fields"]["people_number"];
+      el3.append(icon3, paragraph3);
+
+      desc.append(el1, el2, el3);
+      party_box.append(img_hero, title, desc);
+      parties_bgc.append(party_box);
+
+      const latlng = [el["fields"]["lat"], el["fields"]["lng"]];
+      this.createPointer(latlng);
+    });
   }
 
   // POBRANIE GEOLOKACJI
@@ -34,7 +108,7 @@ class Map {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude: lat, longitude: lng } = pos.coords;
-        console.log([lat, lng]);
+
         this.createMap(lat, lng);
       },
       () => {
@@ -60,7 +134,7 @@ class Map {
     tile.addTo(this.map);
   }
 
-  // TWORZENIE ZNACZNIKÓW
+  // TWORZENIE ZNACZNIKÓW I PODPINANIE ZNACNZIKÓW
   createPointer(latlng) {
     const myIcon = L.icon({
       iconUrl: this.iconMarkerUrl,
@@ -70,9 +144,10 @@ class Map {
     L.marker(latlng, { icon: myIcon }).addTo(this.map);
   }
 
-  // PODPINANIE ZNACZNIKÓW
+  // PO KLIKNIĘCIU PRZEKAZUJE DANE DO CREATE POINTER -> NASTEPUJE PRZYPIECIE ZNACZNIKA
   async onMapClick(e) {
     this.formSection.classList.remove("hidden");
+    console.log(e);
     const latlng = Object.values(e.latlng);
     // Dodawanie ikony
     this.createPointer(latlng);
@@ -90,9 +165,9 @@ class Map {
         "Try again later ⌛"
       );
     }
-
+    const addressFields = document.querySelectorAll(".address input");
     //Wypełnienie addressForm
-    if (address != undefined) this.fillForm(address, lat, lng);
+    if (address != undefined) this.fillForm(address, lat, lng, addressFields);
   }
 
   // POZYSKIWANIE  WSPÓŁŻĘDNYCH EVENTU
@@ -118,8 +193,7 @@ class Map {
   }
 
   // WYPEŁNIANIE FORMADDRESS
-  fillForm(data, lat, lng) {
-    const addressFields = document.querySelectorAll(".address input");
+  fillForm(data, lat, lng, form_fields) {
     const latField = document.querySelector(".lat input");
     const lngField = document.querySelector(".lng input");
     const ageField = document.querySelector(".age input");
@@ -129,7 +203,7 @@ class Map {
     const { address: clearData } = data;
 
     // Uzupełnianie pół
-    addressFields.forEach((field) => {
+    form_fields.forEach((field) => {
       field.value = clearData[`${field.name}`];
       if (field.value == "undefined")
         field.value = `No ${field.name.split("_").join(" ")}`;
@@ -147,7 +221,6 @@ class Map {
         age = num;
       }
 
-      console.log(age);
       if (Number(age) >= 18) {
         alcoField.style.display = "block";
       }

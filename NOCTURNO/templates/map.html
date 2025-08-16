@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>🧊 NOCTURNO 🧊</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -47,33 +48,7 @@
                     <form method="POST" class="form form-creator" enctype="multipart/form-data" action="{% url "map" %}">
                        
                        {% csrf_token %}
-                        <div class="form-positions">
-                            <div class="position address city">
-                                {{addressForm.city.label_tag}}
-                                {{addressForm.city}}
-                                {{addressForm.city.errors}}
-                            </div>
-                             <div class="position address road">
-                                {{addressForm.road.label_tag}}
-                                {{addressForm.road}}
-                                {{addressForm.road.errors}}
-                            </div>
-                            <div class="position address house_number">
-                                {{addressForm.house_number.label_tag}}
-                                {{addressForm.house_number}}
-                                {{addressForm.house_number.errors}}
-                            </div>
-                             <div class="position lat">
-                                {{addressForm.lat.label_tag}}
-                                {{addressForm.lat}}
-                                {{addressForm.lat.errors}}
-                            </div>
-                             <div class="position lng">
-                                {{addressForm.lng.label_tag}}
-                                {{addressForm.lng}}
-                                {{addressForm.lng.errors}}
-                            </div>
-                            
+                        <div class="form-positions">                         
                             <div class="position party_title static" >
                                 {{partyForm.party_title.label_tag}}
                                 {{partyForm.party_title}}
@@ -105,6 +80,31 @@
                                 {{partyForm.file}}
                                 {{partyForm.file.errors}}
                             </div>
+                              <div class="position address city">
+                                {{partyForm.city.label_tag}}
+                                {{partyForm.city}}
+                                {{partyForm.city.errors}}
+                            </div>
+                             <div class="position address road">
+                                {{partyForm.road.label_tag}}
+                                {{partyForm.road}}
+                                {{partyForm.road.errors}}
+                            </div>
+                            <div class="position address house_number">
+                                {{partyForm.house_number.label_tag}}
+                                {{partyForm.house_number}}
+                                {{partyForm.house_number.errors}}
+                            </div>
+                             <div class="position lat">
+                                {{partyForm.lat.label_tag}}
+                                {{partyForm.lat}}
+                                {{partyForm.lat.errors}}
+                            </div>
+                             <div class="position lng">
+                                {{partyForm.lng.label_tag}}
+                                {{partyForm.lng}}
+                                {{partyForm.lng.errors}}
+                            </div>
                         </div>
                         <button>Create</button>
                     </form>
@@ -112,7 +112,9 @@
                 </div>
                 <div class=" parties-wrapper">
                     <h2>Near you</h2>
-                    {% include "includes/parties.html" %}
+                    <div class="row-parties">
+                        <div class="parties_bgc" style="transform: translateX(0px);"></div>
+                    </div>
                 </div>
             </section>
         

@@ -33,7 +33,6 @@ def date_checker(value):
 
 class PartyModel(models.Model):
     party_title = models.CharField(_("Party title"), max_length=100)
-    address = models.OneToOneField("AddressModel", on_delete=models.CASCADE)
 
     date = models.DateField(_("Date"), validators=[date_checker])
     creation_day = models.DateField(auto_now_add=True)
@@ -45,6 +44,12 @@ class PartyModel(models.Model):
     file = models.FileField(_("File"), upload_to="party_images/")
     file_thumb = models.FileField(
         _("File_thumb"), upload_to="party_images/", blank=True)
+
+    city = models.CharField(_("city"), max_length=50)
+    road = models.CharField(_("road"), max_length=100)
+    house_number = models.CharField(_("house number"), max_length=20)
+    lat = models.CharField(max_length=9, null=True)
+    lng = models.CharField(max_length=9, null=True)
 
     class Meta:
         verbose_name = _("party")
@@ -70,32 +75,17 @@ class PartyModel(models.Model):
                 bufor = BytesIO()
                 im.save(bufor, 'webp')
 
-            # Save new wersion partie's banner in the base
-            self.file_thumb.save(
-                thumb_path,
-                ContentFile(bufor.getvalue()),
-                save=False,
-            )
-            print(self.file_thumb)
-            super().save(*args, **kwargs)
+                # Save new wersion partie's banner in the base
+                self.file_thumb.save(
+                    thumb_path,
+                    bufor,
+                    save=False,
+                )
+                print(self.file_thumb)
+                super().save(*args, **kwargs)
 
         except OSError:
             print("can not create thumbnail for", thumb_path)
-
-
-class AddressModel(models.Model):
-    city = models.CharField(_("city"), max_length=50)
-    road = models.CharField(_("road"), max_length=100)
-    house_number = models.CharField(_("house number"), max_length=20)
-    lat = models.CharField(max_length=9, null=True)
-    lng = models.CharField(max_length=9, null=True)
-
-    class Meta:
-        verbose_name = "address"
-        verbose_name_plural = "addresses"
-
-    def __str__(self):
-        return f"{self.city},{self.road},{self.house_number}"
 
 
 class PartyUser(AbstractUser):
@@ -131,11 +121,12 @@ class PartyUser(AbstractUser):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         size = (100, 100)
-        file_test = os.path.split(self.avatar.path)
-        [file_dir, file_name] = self.avatar.name.split("/")
-        print(file_dir, file_name, file_test)
-        avatar_path = file_name.split()[0] + "_thumb.webp"
+        if not self.avatar.name.lower().endswith((".jpg", ".png", ".webp")):
+            return ValidationError("Wrong img type!")
 
+        file_name = self.avatar.name.split("/")[1]
+
+        avatar_path = f'{self.username}/{file_name.split(".")[0]}_thumb.webp'
         with Image.open(self.avatar) as im:
             im.thumbnail(size)
             bufor = BytesIO()

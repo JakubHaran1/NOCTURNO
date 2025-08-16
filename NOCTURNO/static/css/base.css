@@ -219,6 +219,9 @@ button {
   position: relative;
   overflow: hidden;
 }
+.layout.map .parties_bgc {
+  overflow: scroll;
+}
 
 .position.lat,
 .position.lng {
@@ -269,7 +272,11 @@ button {
   width: 100%;
   margin-bottom: 0.7rem;
 }
+.party-creator .position.alco {
+  grid-column: 1/2;
+}
 .party-creator .position.file {
+  grid-column: 2/3;
   position: relative;
 }
 .party-creator .position.file input {
@@ -401,30 +408,34 @@ button {
     grid-template-columns: 1fr 1fr;
     width: 30rem;
   }
-  .party-creator .form-positions .position:nth-child(odd) {
-    grid-column: 1/2;
-  }
-  .party-creator .form-positions .position:nth-child(even) {
-    grid-column: 2/4;
-  }
   .party-creator .form-positions .position.party_title {
     grid-column: 1/4;
     grid-row: 1/2;
   }
   .party-creator .form-positions .position.date {
-    grid-column: 2/4;
-    grid-row: 3/4;
+    grid-column: 1/2;
   }
   .party-creator .form-positions .position.people_number {
-    grid-column: 1/2;
-    grid-row: 4/5;
+    grid-column: 2/3;
   }
   .party-creator .form-positions .position.age {
-    grid-column: 2/4;
-    grid-row: 4/5;
+    grid-column: 1/2;
+  }
+  .party-creator .form-positions .position.city {
+    grid-column: 2/3;
+    grid-row: 3/4;
+  }
+  .party-creator .form-positions .position.road {
+    grid-column: 1/2;
+  }
+  .party-creator .form-positions .position.house_number {
+    grid-column: 2/3;
+  }
+  .party-creator .form-positions .position.alco {
+    grid-row: 7/8;
   }
   .party-creator .form-positions .position.file {
-    grid-row: 5/6;
+    grid-row: 7/8;
   }
   .party-creator .form-positions .position.file input {
     width: auto;
@@ -439,6 +450,9 @@ button {
     height: 100vh;
     margin: 0;
     border-radius: 0;
+  }
+  .layout.map .parties_bgc {
+    overflow: auto;
   }
   .layout.map .navbar {
     display: none;
