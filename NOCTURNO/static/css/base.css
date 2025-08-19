@@ -9,9 +9,6 @@
   scrollbar-color: #1f1d39 #0b0c10;
   overflow: hidden;
 }
-.parties .row-parties h4 {
-  margin: 0.8rem 0;
-}
 .parties .row-parties .parties_bgc {
   display: flex;
   gap: 1rem;
@@ -47,6 +44,7 @@
   border-radius: 5px;
 }
 .parties .party h4 {
+  margin: 0.8rem 0;
   text-align: center;
 }
 .parties .party .desc {
@@ -219,8 +217,16 @@ button {
   position: relative;
   overflow: hidden;
 }
+.layout.map h2 {
+  padding: 0;
+}
 .layout.map .parties_bgc {
   overflow: scroll;
+}
+.layout.map .navbar {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .position.lat,
@@ -231,9 +237,8 @@ button {
 }
 
 #map {
-  height: 400px;
-  border-radius: 15px;
-  margin: 2rem 0 1rem;
+  height: 80vh;
+  border-radius: 0 0 15px;
 }
 
 #map .navbar {
@@ -390,6 +395,20 @@ button {
 
 .pop-up.hidden {
   display: none;
+}
+
+.map-popup .leaflet-popup-content-wrapper {
+  background-color: #3a3459;
+}
+.map-popup .leaflet-popup-content-wrapper .leaflet-popup-content {
+  font-size: 1rem;
+}
+.map-popup .leaflet-popup-content-wrapper .leaflet-popup-content h4 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.map-popup .leaflet-popup-content-wrapper .leaflet-popup-content p {
+  margin: 0;
 }
 
 .party-card {
@@ -994,6 +1013,16 @@ h2 {
 
 .navbar.nav.scroll {
   bottom: -10%;
+}
+
+.parties .party .desc,
+.map-popup .desc {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  color: #f5f5f5;
+  font-size: 1rem;
 }
 
 @media (min-width: 1250px) {

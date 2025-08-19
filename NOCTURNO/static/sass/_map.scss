@@ -4,8 +4,17 @@
 .layout.map {
   position: relative;
   overflow: hidden;
+  h2 {
+    padding: 0;
+  }
   .parties_bgc {
     overflow: scroll;
+  }
+
+  .navbar {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
@@ -17,9 +26,8 @@
 }
 
 #map {
-  height: 400px;
-  border-radius: 15px;
-  margin: 2rem 0 1rem;
+  height: 80vh;
+  border-radius: 0 0 15px;
 }
 
 #map .navbar {
@@ -141,6 +149,23 @@
   display: none;
 }
 
+// MAP POP-UP
+.map-popup {
+  .leaflet-popup-content-wrapper {
+    background-color: #3a3459;
+
+    .leaflet-popup-content {
+      font-size: 1rem;
+      h4 {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      p {
+        margin: 0;
+      }
+    }
+  }
+}
 // POP UP - KONIEC
 
 // PARTY CARD = POCZATEK

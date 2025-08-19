@@ -11,9 +11,7 @@
   .row-parties {
     scrollbar-color: v.$bg-section v.$bg-main;
     overflow: hidden;
-    h4 {
-      margin: 0.8rem 0;
-    }
+
     .parties_bgc {
       display: flex;
       gap: 1rem;
@@ -55,6 +53,7 @@
     }
 
     h4 {
+      margin: 0.8rem 0;
       text-align: center;
     }
     .desc {

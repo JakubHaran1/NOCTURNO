@@ -1,5 +1,5 @@
 "use strict";
-import { menuFunction } from "./base.js";
+import { menuFunction, safeCreate } from "./base.js";
 class Map {
   spinColor = "#9b30ff";
   iconMarkerUrl = "static/imgs/marker.svg";
@@ -7,7 +7,7 @@ class Map {
   formSection = document.querySelector(".party-creator");
   btnClosePopUp = document.querySelector(".pop-up button");
   popUp = document.querySelector(".pop-up");
-
+  parties_bgc = document.querySelector(".parties_bgc");
   constructor() {
     menuFunction();
     // Chowanie party_creator
@@ -34,12 +34,19 @@ class Map {
 
     // CLICK MAP EVENT
     this.map.on("click", this.onMapClick.bind(this));
+
+    this.parties_bgc.addEventListener("click", async (e) => {
+      if (!e.target.closest(".party")) return;
+      const id = e.target.closest(".party").getAttribute("id");
+      const response = await fetch(`map/getting-partie/${id}`);
+      const data = await response.json();
+      const obj = JSON.parse(data)[0];
+      console.log(obj);
+    });
   }
 
   async sendMapRange(data) {
-    const parties_bgc = document.querySelector(".parties_bgc");
     const [_southWest, _northEast] = Object.values(data);
-    console.log(Object.values(_southWest));
 
     const response = await fetch(
       `map/generate-parties/${[_southWest["lat"], _northEast["lat"]]},${[
@@ -50,56 +57,42 @@ class Map {
     const parties = await response.json();
     const parties_data = JSON.parse(parties);
 
-    parties_bgc.textContent = "";
+    this.parties_bgc.textContent = "";
     parties_data.forEach((el) => {
-      console.log(el);
+      // Create party box and return latlng
+      const party_box = safeCreate(
+        "div",
+        { id: el["pk"], class: "party" },
+        this.parties_bgc
+      );
 
-      const party_box = document.createElement("div");
-      party_box.classList.add("party");
+      safeCreate(
+        "div",
+        {
+          class: "img-hero",
+          style: `background-image:url(/media/${el["fields"]["file_thumb"]})`,
+        },
+        party_box
+      );
 
-      const img_hero = document.createElement("div");
-      img_hero.classList.add("img-hero");
-      img_hero.style.backgroundImage = `url(/media/${el["fields"]["file_thumb"]})`;
+      safeCreate("h4", {}, party_box, el["fields"]["party_title"]);
+      const desc = safeCreate("div", { class: "desc" }, party_box);
 
-      const title = document.createElement("h4");
-      title.textContent = el["fields"]["party_title"];
+      const el1 = safeCreate("div", { class: "el" }, desc);
+      safeCreate("i", { class: "fas fa-wine-glass-alt" }, el1);
+      safeCreate("p", {}, el1, el["fields"]["alco"]);
 
-      const desc = document.createElement("div");
-      desc.classList.add("desc");
+      const el2 = safeCreate("div", { class: "el" }, desc);
+      safeCreate("i", { class: "far fa-id-card" }, el2);
+      safeCreate("p", {}, el2, el["fields"]["age"]);
 
-      const el1 = document.createElement("div");
-      el1.classList.add("el");
-      let cls = ["fas", "fa-wine-glass-alt"];
-      const icon1 = document.createElement("div");
-      icon1.classList.add(...cls);
-      const paragraph1 = document.createElement("p");
-      paragraph1.textContent = el["fields"]["alco"];
-      el1.append(icon1, paragraph1);
-
-      const el2 = document.createElement("div");
-      el2.classList.add("el");
-      cls = ["far", "fa-id-card"];
-      const icon2 = document.createElement("div");
-      icon2.classList.add(...cls);
-      const paragraph2 = document.createElement("p");
-      paragraph2.textContent = el["fields"]["age"];
-      el2.append(icon2, paragraph2);
-
-      const el3 = document.createElement("div");
-      el3.classList.add("el");
-      cls = ["fas", "fa-users"];
-      const icon3 = document.createElement("div");
-      icon3.classList.add(...cls);
-      const paragraph3 = document.createElement("p");
-      paragraph3.textContent = el["fields"]["people_number"];
-      el3.append(icon3, paragraph3);
-
-      desc.append(el1, el2, el3);
-      party_box.append(img_hero, title, desc);
-      parties_bgc.append(party_box);
+      const el3 = safeCreate("div", { class: "el" }, desc);
+      safeCreate("i", { class: "fas fa-users" }, el3);
+      safeCreate("p", {}, el3, el["fields"]["people_number"]);
 
       const latlng = [el["fields"]["lat"], el["fields"]["lng"]];
-      this.createPointer(latlng);
+
+      this.createPointer(latlng, el);
     });
   }
 
@@ -134,14 +127,44 @@ class Map {
     tile.addTo(this.map);
   }
 
-  // TWORZENIE ZNACZNIKÓW I PODPINANIE ZNACNZIKÓW
-  createPointer(latlng) {
+  // TWORZENIE ZNACZNIKÓW I MAP POP UP
+  createPointer(latlng, el = false) {
     const myIcon = L.icon({
       iconUrl: this.iconMarkerUrl,
       iconSize: [38, 95],
     });
+    // Tworzy znaczniki
+    const marker = L.marker(latlng, {
+      icon: myIcon,
+      className: `map-popup-${el["pk"]}`,
+    }).addTo(this.map);
 
-    L.marker(latlng, { icon: myIcon }).addTo(this.map);
+    // Tworzenie popupów
+    if (el) {
+      const popUpContent = safeCreate("div", { class: "map-popup-content" });
+      safeCreate("h4", {}, popUpContent, el["fields"]["party_title"]);
+      // dodać description
+      const desc = safeCreate("div", { class: "desc" }, popUpContent);
+
+      const el1 = safeCreate("div", { class: "el" }, desc);
+      safeCreate("i", { class: "fas fa-wine-glass-alt" }, el1);
+      safeCreate("p", {}, el1, el["fields"]["alco"]);
+
+      const el2 = safeCreate("div", { class: "el" }, desc);
+      safeCreate("i", { class: "far fa-id-card" }, el2);
+      safeCreate("p", {}, el2, el["fields"]["age"]);
+
+      const el3 = safeCreate("div", { class: "el" }, desc);
+      safeCreate("i", { class: "fas fa-users" }, el3);
+      safeCreate("p", {}, el3, el["fields"]["people_number"]);
+
+      marker.bindPopup(popUpContent.innerHTML, {
+        minWidth: 300,
+        maxWidth: 400,
+        keepInView: true,
+        className: "map-popup",
+      });
+    }
   }
 
   // PO KLIKNIĘCIU PRZEKAZUJE DANE DO CREATE POINTER -> NASTEPUJE PRZYPIECIE ZNACZNIKA

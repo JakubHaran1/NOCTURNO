@@ -1,3 +1,4 @@
+from ast import List
 from asyncio.windows_events import NULL
 from email import message
 import html
@@ -78,22 +79,12 @@ def emailSending(user, mail_subject, context, htmlTemplate):
                       html_message=html_mail)
 
 
-# Views
-@login_required(login_url="login")
-def mainView(request):
-    parties = PartyModel.objects.all()
-
-    return render(request, "main.html", {
-        "parties": parties
-    })
-
-
 # [${[_southWest["lat"], _northEast["lat"]]}]/[${[
 #     _northEast["lng"],
 #     _southWest["lng"],
 # ]}]`s
 
-
+# Zwraca party elements w map
 def generateParties(request, coords):
     coords = coords.split(",")
     coords_nums = [float(el) for el in coords]
@@ -105,6 +96,22 @@ def generateParties(request, coords):
     serialized = serialize("json", near_parties)
 
     return JsonResponse(serialized, safe=False)
+
+
+def returnParty(request, party_id):
+    party = PartyModel.objects.get(pk=party_id)
+    serialize_party = serialize("json", [party])
+    return JsonResponse(serialize_party, safe=False)
+
+
+# Views
+@login_required(login_url="login")
+def mainView(request):
+    parties = PartyModel.objects.all()
+
+    return render(request, "main.html", {
+        "parties": parties
+    })
 
 
 class mapView(View):

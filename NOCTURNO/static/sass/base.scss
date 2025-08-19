@@ -106,6 +106,16 @@ h2 {
   bottom: -10%;
 }
 
+.parties .party .desc,
+.map-popup .desc {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  color: #f5f5f5;
+  font-size: 1rem;
+}
+
 @media (min-width: 1250px) {
   .layout {
     width: 100%;

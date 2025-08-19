@@ -40,4 +40,14 @@ const animateScroll = (inner, outer, speed) => {
   inner.style.transform = `translateX(${currX}px)`;
 };
 
-export { menuFunction, iconLoad, show, animateScroll };
+const safeCreate = (tag, attr = {}, parent = false, field_content = null) => {
+  const el = document.createElement(tag);
+  for (const [key, value] of Object.entries(attr)) {
+    el.setAttribute(key, value);
+  }
+  if (field_content != null) el.textContent = field_content;
+  if (parent != false) parent.append(el);
+  return el;
+};
+
+export { menuFunction, iconLoad, show, animateScroll, safeCreate };

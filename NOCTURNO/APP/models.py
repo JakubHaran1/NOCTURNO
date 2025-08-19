@@ -33,7 +33,7 @@ def date_checker(value):
 
 class PartyModel(models.Model):
     party_title = models.CharField(_("Party title"), max_length=100)
-
+    # dodac description
     date = models.DateField(_("Date"), validators=[date_checker])
     creation_day = models.DateField(auto_now_add=True)
     people_number = models.IntegerField(_("People"),

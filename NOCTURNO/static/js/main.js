@@ -1,5 +1,5 @@
 "use strict";
-import { menuFunction, show, animateScroll } from "./base.js";
+import { menuFunction, show, animateScroll, partyGenerator } from "./base.js";
 const rowTrendings = document.querySelector(".popular-party .row-parties");
 const userPerties = document.querySelector(".user-party .row-parties");
 document.addEventListener("DOMContentLoaded", menuFunction);
