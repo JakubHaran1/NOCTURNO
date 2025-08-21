@@ -1,5 +1,5 @@
 "use strict";
-import { menuFunction, show, animateScroll, partyGenerator } from "./base.js";
+import { menuFunction, show, animateScroll } from "./base.js";
 const rowTrendings = document.querySelector(".popular-party .row-parties");
 const userPerties = document.querySelector(".user-party .row-parties");
 document.addEventListener("DOMContentLoaded", menuFunction);
@@ -23,6 +23,7 @@ if (matchMedia("(min-width: 724px)").matches) {
   userPerties.addEventListener(
     "wheel",
     (e) => {
+      console.log(e);
       e.preventDefault();
       if (e.deltaY == 0) return;
       const partiesBgc = userPerties.querySelector(".parties_bgc");

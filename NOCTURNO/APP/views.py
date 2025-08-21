@@ -105,7 +105,7 @@ def returnParty(request, party_id):
 
 
 # Views
-@login_required(login_url="login")
+# @login_required(login_url="login")
 def mainView(request):
     parties = PartyModel.objects.all()
 

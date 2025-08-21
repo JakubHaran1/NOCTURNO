@@ -2,19 +2,41 @@
 @use "./mixins" as m;
 
 .layout.map {
-  position: relative;
   overflow: hidden;
   h2 {
+    padding-left: 1rem;
+    padding-bottom: 0;
+  }
+  .main-header {
     padding: 0;
   }
   .parties_bgc {
     overflow: scroll;
   }
 
-  .navbar {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+  // .navbar {
+  //   position: absolute;
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  // }
+
+  .parties {
+    padding: 0;
+    scroll-behavior: smooth;
+    .party:first-child {
+      margin-left: 1rem;
+    }
+    .party:last-child {
+      margin-right: 1rem;
+    }
+
+    .party.active {
+      background-color: #4a3459;
+      transform: translateY(-10px);
+      -webkit-box-shadow: 0px 0px 45px -10px #0b0c10;
+      -moz-box-shadow: 0px 0px 45px -10px #0b0c10;
+      box-shadow: 0px 0px 45px -10px #0b0c10;
+    }
   }
 }
 

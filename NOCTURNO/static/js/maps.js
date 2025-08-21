@@ -7,7 +7,10 @@ class Map {
   formSection = document.querySelector(".party-creator");
   btnClosePopUp = document.querySelector(".pop-up button");
   popUp = document.querySelector(".pop-up");
+  parties = document.querySelector(".parties");
+  last_party = "";
   parties_bgc = document.querySelector(".parties_bgc");
+
   constructor() {
     menuFunction();
     // Chowanie party_creator
@@ -19,7 +22,7 @@ class Map {
       .forEach((el) => (el.value = ""));
 
     // INICJACJA MAPY
-    this.map = L.map("map");
+    this.map = L.map("map", {});
     this.map.spin(true, { color: this.spinColor });
 
     // POBRANIE GEOLOKACJI
@@ -35,6 +38,7 @@ class Map {
     // CLICK MAP EVENT
     this.map.on("click", this.onMapClick.bind(this));
 
+    // PRZEKSZTAŁCIĆ TO !!!! - FUNKCJA DO PARTYBOX
     this.parties_bgc.addEventListener("click", async (e) => {
       if (!e.target.closest(".party")) return;
       const id = e.target.closest(".party").getAttribute("id");
@@ -43,6 +47,31 @@ class Map {
       const obj = JSON.parse(data)[0];
       console.log(obj);
     });
+  }
+
+  createDesc(el, wrapper) {
+    const desc = safeCreate("div", { class: "desc" }, wrapper);
+
+    const el1 = safeCreate("div", { class: "el" }, desc);
+    safeCreate("i", { class: "fas fa-wine-glass-alt" }, el1);
+    safeCreate("p", {}, el1, el["fields"]["alco"]);
+
+    const el2 = safeCreate("div", { class: "el" }, desc);
+    safeCreate("i", { class: "far fa-id-card" }, el2);
+    safeCreate("p", {}, el2, el["fields"]["age"]);
+
+    const el3 = safeCreate("div", { class: "el" }, desc);
+    safeCreate("i", { class: "fas fa-users" }, el3);
+    safeCreate("p", {}, el3, el["fields"]["people_number"]);
+  }
+
+  scrollMapPartybox(scrollToEl) {
+    if (window.matchMedia("(min-width: 1250px)").matches) {
+      const parties = document.querySelector(".parties");
+      parties.scrollTop = scrollToEl.offsetTop;
+    } else {
+      this.parties_bgc.scrollLeft = scrollToEl.offsetLeft - 16;
+    }
   }
 
   async sendMapRange(data) {
@@ -62,7 +91,7 @@ class Map {
       // Create party box and return latlng
       const party_box = safeCreate(
         "div",
-        { id: el["pk"], class: "party" },
+        { id: `party-${el["pk"]}`, class: "party" },
         this.parties_bgc
       );
 
@@ -76,21 +105,16 @@ class Map {
       );
 
       safeCreate("h4", {}, party_box, el["fields"]["party_title"]);
-      const desc = safeCreate("div", { class: "desc" }, party_box);
-
-      const el1 = safeCreate("div", { class: "el" }, desc);
-      safeCreate("i", { class: "fas fa-wine-glass-alt" }, el1);
-      safeCreate("p", {}, el1, el["fields"]["alco"]);
-
-      const el2 = safeCreate("div", { class: "el" }, desc);
-      safeCreate("i", { class: "far fa-id-card" }, el2);
-      safeCreate("p", {}, el2, el["fields"]["age"]);
-
-      const el3 = safeCreate("div", { class: "el" }, desc);
-      safeCreate("i", { class: "fas fa-users" }, el3);
-      safeCreate("p", {}, el3, el["fields"]["people_number"]);
-
+      this.createDesc(el, party_box);
       const latlng = [el["fields"]["lat"], el["fields"]["lng"]];
+
+      // Ustawianie active partybox gdy resize
+      if (this.last_party.id == `party-${el["pk"]}`) {
+        console.log(party_box);
+        party_box.classList.add("active");
+        this.last_party = party_box;
+        this.scrollMapPartybox(this.last_party);
+      }
 
       this.createPointer(latlng, el);
     });
@@ -124,6 +148,7 @@ class Map {
     });
     // Spin on load
     tile.on("load", () => this.map.spin(false));
+
     tile.addTo(this.map);
   }
 
@@ -137,33 +162,43 @@ class Map {
     const marker = L.marker(latlng, {
       icon: myIcon,
       className: `map-popup-${el["pk"]}`,
+      bubblingMouseEvents: true,
     }).addTo(this.map);
 
-    // Tworzenie popupów
+    // TWWORZENIE POP UP + SCROLL DO PARTYBOX
+    marker.on("click", (e) => {
+      // znajdywanie party box na podstawie id znacznika
+      const target = this.parties_bgc.querySelector(
+        `#${e.target._icon.getAttribute("id")}`
+      );
+
+      if (this.last_party.id != target.id) {
+        target.classList.add("active");
+        this.last_party = target;
+        // Podpięcie w wrapper party scrolla do partyBox
+        this.scrollMapPartybox(target);
+      }
+    });
+
+    // Tworzenie popupów - przerobić to desc do oddzielnej funkcji
     if (el) {
+      marker._icon.setAttribute("id", `party-${el["pk"]}`);
       const popUpContent = safeCreate("div", { class: "map-popup-content" });
       safeCreate("h4", {}, popUpContent, el["fields"]["party_title"]);
       // dodać description
-      const desc = safeCreate("div", { class: "desc" }, popUpContent);
-
-      const el1 = safeCreate("div", { class: "el" }, desc);
-      safeCreate("i", { class: "fas fa-wine-glass-alt" }, el1);
-      safeCreate("p", {}, el1, el["fields"]["alco"]);
-
-      const el2 = safeCreate("div", { class: "el" }, desc);
-      safeCreate("i", { class: "far fa-id-card" }, el2);
-      safeCreate("p", {}, el2, el["fields"]["age"]);
-
-      const el3 = safeCreate("div", { class: "el" }, desc);
-      safeCreate("i", { class: "fas fa-users" }, el3);
-      safeCreate("p", {}, el3, el["fields"]["people_number"]);
-
-      marker.bindPopup(popUpContent.innerHTML, {
-        minWidth: 300,
-        maxWidth: 400,
-        keepInView: true,
-        className: "map-popup",
-      });
+      this.createDesc(el, popUpContent);
+      marker
+        .bindPopup(popUpContent.innerHTML, {
+          minWidth: 300,
+          maxWidth: 400,
+          className: `map-popup `,
+          autoPan: false,
+        })
+        .on("popupclose", () => {
+          this.last_party.classList.remove("active");
+          this.last_party = "";
+          console.log(123);
+        });
     }
   }
 

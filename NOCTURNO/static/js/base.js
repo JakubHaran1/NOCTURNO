@@ -5,8 +5,8 @@ const menuFunction = () => {
   window.addEventListener("scroll", show);
   const menu = document.querySelector(".nav");
   const menuHeight = menu.getBoundingClientRect().height;
-  const layout = document.querySelector(".layout");
-  layout.style.marginBottom = `${menuHeight + menuHeight / 2}px`;
+  const layout = document.querySelector("body");
+  layout.style.paddingBottom = `${menuHeight}px`;
 };
 
 const iconLoad = () => {
