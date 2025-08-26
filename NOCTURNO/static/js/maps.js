@@ -16,10 +16,12 @@ class Map {
 
   constructor() {
     menuFunction();
-    // Chowanie party_creator
+
+    // Wyświetlanie formularza gdy nie uda się zapis
     if (!this.formSection.classList.contains("attempt"))
       this.formSection.classList.add("hidden");
 
+    // Czyszczenie pól w formularzu
     this.formSection
       .querySelectorAll(".position input")
       .forEach((el) => (el.value = ""));
@@ -31,7 +33,7 @@ class Map {
     // POBRANIE GEOLOKACJI
     this.getLatLng();
 
-    // DRAG/ZOOM EVENT
+    // DRAG/ZOOM EVENT na mapie
     this.map.on("moveend", (e) => {
       // Pobieranie map range
       const range = this.map.getBounds();
@@ -41,9 +43,20 @@ class Map {
     // CLICK MAP EVENT
     this.map.on("click", this.onMapClick.bind(this));
 
+    // Click event na partybox
     this.parties_bgc.addEventListener("click", async (e) => {
       if (!e.target.closest(".party")) return;
+      if (e.target.closest(".signup-btn")) {
+        const response = await fetch(
+          `map/sign-up/${
+            e.target.closest(".party").getAttribute("id").split("-")[1]
+          }`
+        );
+      }
+
       this.formSection.classList.add("hidden");
+
+      // Zoom na mapie po kliknięciu w party box
       const id = e.target.closest(".party").id;
       const marker = this.currentParties.find(
         (el) => el.options.className.split("-")[2] == id.split("-")[1]
@@ -54,111 +67,94 @@ class Map {
     });
   }
 
-  createDesc(el, wrapper) {
-    const desc = safeCreate("div", { class: "desc" }, wrapper);
+  // POBRANIE GEOLOKACJI
+  getLatLng = () => {
+    try {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const { latitude: lat, longitude: lng } = pos.coords;
 
-    const el1 = safeCreate("div", { class: "el" }, desc);
-    safeCreate("i", { class: "fas fa-wine-glass-alt" }, el1);
-    safeCreate("p", {}, el1, el["fields"]["alco"]);
-
-    const el2 = safeCreate("div", { class: "el" }, desc);
-    safeCreate("i", { class: "far fa-id-card" }, el2);
-    safeCreate("p", {}, el2, el["fields"]["age"]);
-
-    const el3 = safeCreate("div", { class: "el" }, desc);
-    safeCreate("i", { class: "fas fa-users" }, el3);
-    safeCreate("p", {}, el3, el["fields"]["people_number"]);
-  }
-
-  scrollMapPartybox(scrollToEl) {
-    if (window.matchMedia("(min-width: 1250px)").matches) {
-      const parties = document.querySelector(".parties");
-      parties.scrollTop = scrollToEl.offsetTop;
-    } else {
-      this.parties_bgc.scrollLeft = scrollToEl.offsetLeft - 16;
+          this.createMap(lat, lng);
+        },
+        () => {
+          const lat = 52.237049;
+          const lng = 21.017532;
+          this.createMap(lat, lng);
+        }
+      );
+    } catch {
+      this.openPopUp(
+        "😭 Something goes wrong 😭",
+        "We haven't acces to your geolocation ⌛"
+      );
     }
+  };
+
+  openPopUp(header, content) {
+    const popHeader = document.querySelector(".pop-header");
+    const popContent = document.querySelector(".pop-content");
+    popHeader.textContent = header;
+    popContent.textContent = content;
+    this.popUp.classList.remove("hidden");
+    this.overlay.classList.remove("hidden");
   }
 
+  // Pobiera (po zoomie, przesunięciu) skrajne pozycje widocznej mapy
   async sendMapRange(data) {
     const [_southWest, _northEast] = Object.values(data);
 
-    const response = await fetch(
-      `map/generate-parties/${[_southWest["lat"], _northEast["lat"]]},${[
-        _southWest["lng"],
-        _northEast["lng"],
-      ]}`
-    );
-    const parties = await response.json();
-    const parties_data = JSON.parse(parties);
-
-    this.parties_bgc.textContent = "";
-    parties_data.forEach((el) => {
-      // Create party box and return latlng
-      const party_box = safeCreate(
-        "div",
-        { id: `party-${el["pk"]}`, class: "party" },
-        this.parties_bgc
+    try {
+      const response = await fetch(
+        `map/generate-parties/${[_southWest["lat"], _northEast["lat"]]},${[
+          _southWest["lng"],
+          _northEast["lng"],
+        ]}`
       );
 
-      safeCreate(
-        "div",
-        {
-          class: "img-hero",
-          style: `background-image:url(/media/${el["fields"]["file_thumb"]})`,
-        },
-        party_box
+      const parties = await response.json();
+      const parties_data = JSON.parse(parties);
+
+      this.parties_bgc.textContent = "";
+      parties_data.forEach((el) => {
+        // Create party box and return latlng
+        const party_box = safeCreate(
+          "div",
+          { id: `party-${el["pk"]}`, class: "party" },
+          this.parties_bgc
+        );
+
+        safeCreate(
+          "div",
+          {
+            class: "img-hero",
+            style: `background-image:url(/media/${el["fields"]["file_thumb"]})`,
+          },
+          party_box
+        );
+
+        safeCreate("h4", {}, party_box, el["fields"]["party_title"]);
+        this.createDesc(el, party_box);
+        safeCreate("button", { class: "signup-btn" }, party_box, "Sign up");
+        const latlng = [el["fields"]["lat"], el["fields"]["lng"]];
+
+        // Ustawianie active partybox gdy resize
+        if (this.last_party.id == `party-${el["pk"]}`) {
+          console.log(party_box);
+          party_box.classList.add("active");
+          this.last_party = party_box;
+          this.scrollMapPartybox(this.last_party);
+        }
+
+        this.createPointer(latlng, el);
+      });
+    } catch {
+      this.openPopUp(
+        "😭 We have problems with our database 😭",
+        "Try again later ⌛"
       );
-
-      safeCreate("h4", {}, party_box, el["fields"]["party_title"]);
-      this.createDesc(el, party_box);
-      safeCreate("button", { class: "signup-link" }, party_box, "Sign up");
-      const latlng = [el["fields"]["lat"], el["fields"]["lng"]];
-
-      // Ustawianie active partybox gdy resize
-      if (this.last_party.id == `party-${el["pk"]}`) {
-        console.log(party_box);
-        party_box.classList.add("active");
-        this.last_party = party_box;
-        this.scrollMapPartybox(this.last_party);
-      }
-
-      this.createPointer(latlng, el);
-    });
+    }
   }
 
-  // POBRANIE GEOLOKACJI
-  getLatLng = () => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude: lat, longitude: lng } = pos.coords;
-
-        this.createMap(lat, lng);
-      },
-      () => {
-        const lat = 52.237049;
-        const lng = 21.017532;
-        this.createMap(lat, lng);
-      }
-    );
-  };
-  // TWORZENIE MAPY
-  createMap(lat, lng) {
-    // Ustawianie lokalizacji na mapie
-    this.map.setView([lat, lng], 15);
-
-    // Dodanie warstwy
-    const tile = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution:
-        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    });
-    // Spin on load
-    tile.on("load", () => this.map.spin(false));
-
-    tile.addTo(this.map);
-  }
-
-  // TWORZENIE ZNACZNIKÓW I MAP POP UP
   createPointer(latlng, el = false) {
     const myIcon = L.icon({
       iconUrl: el != false ? this.iconMarkerUrl : this.NewIconMarkerUrl,
@@ -234,6 +230,38 @@ class Map {
     }
   }
 
+  createDesc(el, wrapper) {
+    const desc = safeCreate("div", { class: "desc" }, wrapper);
+
+    const el1 = safeCreate("div", { class: "el" }, desc);
+    safeCreate("i", { class: "fas fa-wine-glass-alt" }, el1);
+    safeCreate("p", {}, el1, el["fields"]["alco"]);
+
+    const el2 = safeCreate("div", { class: "el" }, desc);
+    safeCreate("i", { class: "far fa-id-card" }, el2);
+    safeCreate("p", {}, el2, el["fields"]["age"]);
+
+    const el3 = safeCreate("div", { class: "el" }, desc);
+    safeCreate("i", { class: "fas fa-users" }, el3);
+    safeCreate("p", {}, el3, el["fields"]["people_number"]);
+  }
+  // TWORZENIE MAPY
+  createMap(lat, lng) {
+    // Ustawianie lokalizacji na mapie
+    this.map.setView([lat, lng], 15);
+
+    // Dodanie warstwy
+    const tile = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution:
+        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    });
+    // Spin on load
+    tile.on("load", () => this.map.spin(false));
+
+    tile.addTo(this.map);
+  }
+
   // PO KLIKNIĘCIU PRZEKAZUJE DANE DO CREATE POINTER -> NASTEPUJE PRZYPIECIE ZNACZNIKA
   async onMapClick(e) {
     // Zamknięcie party creator
@@ -264,28 +292,6 @@ class Map {
     const addressFields = document.querySelectorAll(".address input");
     //Wypełnienie addressForm
     if (address != undefined) this.fillForm(address, lat, lng, addressFields);
-  }
-
-  // POZYSKIWANIE  WSPÓŁŻĘDNYCH EVENTU
-  async getAdress(lat, lng) {
-    let address;
-    try {
-      // Reverse geocoding
-      address = await fetch(`/geocode-reverse?lat=${lat}&lng=${lng}`);
-      // Sprawdzanie czy ok
-      if (!address.ok) throw new Error(`Data isn't correct!`);
-
-      // json -> obj
-      const data = await address.json();
-
-      if (data["type"] == "university")
-        throw new Error("This isn't good place to party");
-
-      return data;
-    } catch (error) {
-      // Dodać return coś - i wyświetlenie jakiegoś popup z odp wiadomością
-      throw new Error(`Reverse geocoding failed!`);
-    }
   }
 
   // WYPEŁNIANIE FORMADDRESS
@@ -323,13 +329,36 @@ class Map {
     });
   }
 
-  openPopUp(header, content) {
-    const popHeader = document.querySelector(".pop-header");
-    const popContent = document.querySelector(".pop-content");
-    popHeader.textContent = header;
-    popContent.textContent = content;
-    this.popUp.classList.remove("hidden");
-    this.overlay.classList.remove("hidden");
+  // Scroll do konkretnego partybox
+  scrollMapPartybox(scrollToEl) {
+    if (window.matchMedia("(min-width: 1250px)").matches) {
+      const parties = document.querySelector(".parties");
+      parties.scrollTop = scrollToEl.offsetTop;
+    } else {
+      this.parties_bgc.scrollLeft = scrollToEl.offsetLeft - 16;
+    }
+  }
+
+  // POZYSKIWANIE  WSPÓŁŻĘDNYCH EVENTU
+  async getAdress(lat, lng) {
+    let address;
+    try {
+      // Reverse geocoding
+      address = await fetch(`/geocode-reverse?lat=${lat}&lng=${lng}`);
+      // Sprawdzanie czy ok
+      if (!address.ok) throw new Error(`Data isn't correct!`);
+
+      // json -> obj
+      const data = await address.json();
+
+      if (data["type"] == "university")
+        throw new Error("This isn't good place to party");
+
+      return data;
+    } catch (error) {
+      this.popUp;
+      this.openPopUp("😭 Reverse geocoding failed! 😭", "Try again later ⌛");
+    }
   }
 }
 

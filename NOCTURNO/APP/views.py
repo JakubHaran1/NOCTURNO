@@ -106,6 +106,7 @@ def returnParty(request, party_id):
 
 def partySignUp(request, party_id):
     print(party_id)
+    return JsonResponse("1", safe=False)
 
 # Views
 # @login_required(login_url="login")

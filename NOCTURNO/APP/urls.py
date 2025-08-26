@@ -10,7 +10,7 @@ urlpatterns = [
          generateParties, name="generateParties"),
     path("map/getting-partie/<party_id>",
          returnParty, name="getting"),
-    path("/map/sign-up/<party_id>", partySignUp, name="party-sign-up"),
+    path("map/sign-up/<party_id>", partySignUp, name="party-sign-up"),
     path("geocode-reverse", reverseGeo, name="reverseGeo"),
 
     path("login", LoginUserView.as_view(), name="login"),

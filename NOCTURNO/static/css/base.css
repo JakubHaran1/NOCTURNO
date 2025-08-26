@@ -230,7 +230,7 @@ button {
 .layout.map .parties_bgc {
   overflow: scroll;
 }
-.layout.map .signup-link {
+.layout.map .signup-btn {
   text-decoration: none;
   text-transform: uppercase;
   text-align: center;
@@ -254,7 +254,7 @@ button {
   padding: 0.25rem 0.5rem;
   width: auto;
 }
-.layout.map .signup-link:before {
+.layout.map .signup-btn:before {
   content: "";
   position: absolute;
   top: 0;
@@ -266,11 +266,11 @@ button {
   transition: all 0.3s ease;
   z-index: -1;
 }
-.layout.map .signup-link:hover::before {
+.layout.map .signup-btn:hover::before {
   opacity: 1;
   box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
 }
-.layout.map .signup-link:hover {
+.layout.map .signup-btn:hover {
   color: #2a2640;
   border-color: #ffd900;
   text-shadow: none;
