@@ -3,6 +3,7 @@ import { menuFunction, safeCreate } from "./base.js";
 class Map {
   spinColor = "#9b30ff";
   iconMarkerUrl = "static/imgs/marker.svg";
+  NewIconMarkerUrl = "static/imgs/new_marker.svg";
   overlay = document.querySelector(".overlay");
   formSection = document.querySelector(".party-creator");
   btnClosePopUp = document.querySelector(".pop-up button");
@@ -10,6 +11,8 @@ class Map {
   parties = document.querySelector(".parties");
   last_party = "";
   parties_bgc = document.querySelector(".parties_bgc");
+  currentParties = [];
+  activeMarker = false;
 
   constructor() {
     menuFunction();
@@ -38,14 +41,16 @@ class Map {
     // CLICK MAP EVENT
     this.map.on("click", this.onMapClick.bind(this));
 
-    // PRZEKSZTAŁCIĆ TO !!!! - FUNKCJA DO PARTYBOX
     this.parties_bgc.addEventListener("click", async (e) => {
       if (!e.target.closest(".party")) return;
-      const id = e.target.closest(".party").getAttribute("id");
-      const response = await fetch(`map/getting-partie/${id}`);
-      const data = await response.json();
-      const obj = JSON.parse(data)[0];
-      console.log(obj);
+      this.formSection.classList.add("hidden");
+      const id = e.target.closest(".party").id;
+      const marker = this.currentParties.find(
+        (el) => el.options.className.split("-")[2] == id.split("-")[1]
+      );
+      this.map.setView(marker._latlng);
+      marker.openPopup();
+      this.last_party = e.target.closest(".party");
     });
   }
 
@@ -106,6 +111,7 @@ class Map {
 
       safeCreate("h4", {}, party_box, el["fields"]["party_title"]);
       this.createDesc(el, party_box);
+      safeCreate("button", { class: "signup-link" }, party_box, "Sign up");
       const latlng = [el["fields"]["lat"], el["fields"]["lng"]];
 
       // Ustawianie active partybox gdy resize
@@ -155,18 +161,40 @@ class Map {
   // TWORZENIE ZNACZNIKÓW I MAP POP UP
   createPointer(latlng, el = false) {
     const myIcon = L.icon({
-      iconUrl: this.iconMarkerUrl,
+      iconUrl: el != false ? this.iconMarkerUrl : this.NewIconMarkerUrl,
       iconSize: [38, 95],
     });
+
     // Tworzy znaczniki
-    const marker = L.marker(latlng, {
-      icon: myIcon,
-      className: `map-popup-${el["pk"]}`,
-      bubblingMouseEvents: true,
-    }).addTo(this.map);
+    let marker;
+    if (el != false) {
+      // dla generownych
+      marker = L.marker(latlng, {
+        icon: myIcon,
+        className: `map-popup-${el["pk"]}`,
+        bubblingMouseEvents: true,
+      });
+    } else {
+      // dla nowego - po kliknięciu użytkownika na mape
+      marker = L.marker(latlng, {
+        icon: myIcon,
+        className: `map-popup-${el["pk"]}`,
+        bubblingMouseEvents: true,
+      });
+      if (this.activeMarker) this.activeMarker.remove();
+      this.activeMarker = marker;
+    }
+
+    marker.addTo(this.map);
+    this.currentParties.push(marker);
 
     // TWWORZENIE POP UP + SCROLL DO PARTYBOX
     marker.on("click", (e) => {
+      this.formSection.classList.add("hidden");
+      this.map.setView([
+        parseFloat(el["fields"]["lat"]),
+        parseFloat(el["fields"]["lng"]),
+      ]);
       // znajdywanie party box na podstawie id znacznika
       const target = this.parties_bgc.querySelector(
         `#${e.target._icon.getAttribute("id")}`
@@ -180,32 +208,41 @@ class Map {
       }
     });
 
-    // Tworzenie popupów - przerobić to desc do oddzielnej funkcji
+    // Tworzenie popupów
     if (el) {
       marker._icon.setAttribute("id", `party-${el["pk"]}`);
       const popUpContent = safeCreate("div", { class: "map-popup-content" });
       safeCreate("h4", {}, popUpContent, el["fields"]["party_title"]);
       // dodać description
       this.createDesc(el, popUpContent);
-      marker
-        .bindPopup(popUpContent.innerHTML, {
+      safeCreate("button", { class: "signup-link" }, popUpContent, "Sign up");
+      const mapPopup = L.popup(
+        [parseFloat(el["fields"]["lat"]), parseFloat(el["fields"]["lng"])],
+        {
+          content: popUpContent.innerHTML,
           minWidth: 300,
           maxWidth: 400,
           className: `map-popup `,
           autoPan: false,
-        })
-        .on("popupclose", () => {
-          this.last_party.classList.remove("active");
-          this.last_party = "";
-          console.log(123);
-        });
+        }
+      );
+
+      marker.bindPopup(mapPopup).on("popupclose", () => {
+        this.last_party.classList.remove("active");
+        this.last_party = "";
+      });
     }
   }
 
   // PO KLIKNIĘCIU PRZEKAZUJE DANE DO CREATE POINTER -> NASTEPUJE PRZYPIECIE ZNACZNIKA
   async onMapClick(e) {
+    // Zamknięcie party creator
+    const closeBtn = this.formSection.querySelector(".close-creator");
+    closeBtn.addEventListener("click", () =>
+      this.formSection.classList.add("hidden")
+    );
+    // Otwarcie
     this.formSection.classList.remove("hidden");
-    console.log(e);
     const latlng = Object.values(e.latlng);
     // Dodawanie ikony
     this.createPointer(latlng);
@@ -223,6 +260,7 @@ class Map {
         "Try again later ⌛"
       );
     }
+
     const addressFields = document.querySelectorAll(".address input");
     //Wypełnienie addressForm
     if (address != undefined) this.fillForm(address, lat, lng, addressFields);

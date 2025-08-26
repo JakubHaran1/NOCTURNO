@@ -1,6 +1,6 @@
 from os import name
 from django.urls import path, include
-from APP.views import reverseGeo, searchingBuddie, initFindBuddie, addDeleteBuddie, mainView, mapView, LoginUserView, RegisterView, ConfirmationView, ResetPasswordEmailView, ResetPasswordView, ResetDoneView, BuddiesView, generateParties, returnParty
+from APP.views import reverseGeo, searchingBuddie, initFindBuddie, addDeleteBuddie, mainView, mapView, LoginUserView, RegisterView, ConfirmationView, ResetPasswordEmailView, ResetPasswordView, ResetDoneView, BuddiesView, generateParties, returnParty, partySignUp
 
 
 urlpatterns = [
@@ -10,6 +10,7 @@ urlpatterns = [
          generateParties, name="generateParties"),
     path("map/getting-partie/<party_id>",
          returnParty, name="getting"),
+    path("/map/sign-up/<party_id>", partySignUp, name="party-sign-up"),
     path("geocode-reverse", reverseGeo, name="reverseGeo"),
 
     path("login", LoginUserView.as_view(), name="login"),

@@ -44,6 +44,7 @@
 
             <section class="parties">
                 <div class="party-creator {% if attempt == 1 %}attempt{% endif %}">
+                   <span class="close-creator"> <i class="fa-solid fa-xmark"></i></span>
                     <h2 >Configure your party:</h2>
                     <form method="POST" class="form form-creator" enctype="multipart/form-data" action="{% url "map" %}">
                        

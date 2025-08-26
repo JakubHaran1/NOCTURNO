@@ -3,6 +3,10 @@
 
 .layout.map {
   overflow: hidden;
+  .leaflet-popup-content {
+    text-align: center;
+  }
+
   h2 {
     padding-left: 1rem;
     padding-bottom: 0;
@@ -14,12 +18,15 @@
     overflow: scroll;
   }
 
-  // .navbar {
-  //   position: absolute;
-  //   left: 50%;
-  //   transform: translateX(-50%);
-  // }
-
+  .signup-link {
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 1rem auto 0 auto;
+    @include m.neon-button;
+    padding: 0.25rem 0.5rem;
+    width: auto;
+  }
   .parties {
     padding: 0;
     scroll-behavior: smooth;
@@ -285,6 +292,18 @@
   .party-creator {
     padding: 0;
     margin-bottom: 1rem;
+
+    .close-creator i {
+      font-size: 1.25rem;
+      margin-top: 0.5rem;
+      margin-left: 85%;
+      color: #a1a1b5;
+      cursor: pointer;
+    }
+
+    h2 {
+      padding: 0.5rem;
+    }
 
     .form-creator {
       padding: 1rem;

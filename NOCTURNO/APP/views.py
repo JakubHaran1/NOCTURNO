@@ -104,8 +104,13 @@ def returnParty(request, party_id):
     return JsonResponse(serialize_party, safe=False)
 
 
+def partySignUp(request, party_id):
+    print(party_id)
+
 # Views
 # @login_required(login_url="login")
+
+
 def mainView(request):
     parties = PartyModel.objects.all()
 
