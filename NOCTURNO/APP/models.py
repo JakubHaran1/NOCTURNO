@@ -1,9 +1,6 @@
-
-from enum import unique
-import io
-from pickle import TRUE
+from tkinter import CASCADE
+from django import forms
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 from django.core import validators
 from django.core.exceptions import ValidationError
 
@@ -12,7 +9,6 @@ from django.utils.translation import gettext as _
 from django.utils.text import slugify
 
 from django.contrib.auth.models import AbstractUser
-from django.core.files.base import ContentFile
 
 from datetime import date
 import os
@@ -29,63 +25,6 @@ def uploadAvatar(username, file):
 def date_checker(value):
     if date.today() > value:
         raise ValidationError(f"This date isn't correct")
-
-
-class PartyModel(models.Model):
-    party_title = models.CharField(_("Party title"), max_length=100)
-    # dodac description
-    date = models.DateField(_("Date"), validators=[date_checker])
-    creation_day = models.DateField(auto_now_add=True)
-    people_number = models.IntegerField(_("People"),
-                                        validators=[validators.MinValueValidator(1)])
-    age = models.IntegerField(_("Age"), validators=[validators.MinValueValidator(
-        16, "You can't invite such young person..")])
-    alco = models.BooleanField(_("Alcohol"), default=False)
-    file = models.FileField(_("File"), upload_to="party_images/")
-    file_thumb = models.FileField(
-        _("File_thumb"), upload_to="party_images/", blank=True)
-
-    city = models.CharField(_("city"), max_length=50)
-    road = models.CharField(_("road"), max_length=100)
-    house_number = models.CharField(_("house number"), max_length=20)
-    lat = models.CharField(max_length=9, null=True)
-    lng = models.CharField(max_length=9, null=True)
-
-    class Meta:
-        verbose_name = _("party")
-        verbose_name_plural = _("parties")
-
-    def __str__(self):
-        return f"{self.party_title}: {self.date}"
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        file_path = self.file.path
-        print("name", self.file.name)
-        name_path = self.file.name.split("/")[1]
-        thumb_path = self.party_title + \
-            name_path.split(".")[0] + '_thumbnail.webp'
-
-        size = (220, 110)
-
-        try:
-            # Create thumbnail
-            with Image.open(self.file) as im:
-                im.thumbnail(size)
-                bufor = BytesIO()
-                im.save(bufor, 'webp')
-
-                # Save new wersion partie's banner in the base
-                self.file_thumb.save(
-                    thumb_path,
-                    bufor,
-                    save=False,
-                )
-                print(self.file_thumb)
-                super().save(*args, **kwargs)
-
-        except OSError:
-            print("can not create thumbnail for", thumb_path)
 
 
 class PartyUser(AbstractUser):
@@ -134,6 +73,68 @@ class PartyUser(AbstractUser):
             print(avatar_path)
             self.avatar.save(avatar_path, bufor, save=False)
             super().save(*args, **kwargs)
+
+
+class PartyModel(models.Model):
+    author = models.ForeignKey(
+        PartyUser,  on_delete=models.CASCADE)
+    party_title = models.CharField(_("Party title"), max_length=100)
+    description = models.TextField(
+        _("Description"), blank=False, default="brak", max_length=200)
+    date = models.DateField(_("Date"), validators=[date_checker])
+    creation_day = models.DateField(auto_now_add=True)
+    people_number = models.IntegerField(_("People"),
+                                        validators=[validators.MinValueValidator(1)])
+    age = models.IntegerField(_("Age"), validators=[validators.MinValueValidator(
+        16, "You can't invite such young person..")])
+    alco = models.BooleanField(_("Alcohol"), default=False)
+    file = models.FileField(_("File"), upload_to="party_images/")
+    file_thumb = models.FileField(
+        _("File_thumb"), upload_to="party_images/", blank=True)
+
+    participants = models.ManyToManyField(
+        PartyUser, related_name="participants")
+    city = models.CharField(_("city"), max_length=50)
+    road = models.CharField(_("road"), max_length=100)
+    house_number = models.CharField(_("house number"), max_length=20)
+    lat = models.CharField(max_length=9, null=True)
+    lng = models.CharField(max_length=9, null=True)
+
+    class Meta:
+        verbose_name = _("party")
+        verbose_name_plural = _("parties")
+
+    def __str__(self):
+        return f"{self.party_title}: {self.date}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        file_path = self.file.path
+        print("name", self.file.name)
+        name_path = self.file.name.split("/")[1]
+        thumb_path = self.party_title + \
+            name_path.split(".")[0] + '_thumbnail.webp'
+
+        size = (220, 110)
+
+        try:
+            # Create thumbnail
+            with Image.open(self.file) as im:
+                im.thumbnail(size)
+                bufor = BytesIO()
+                im.save(bufor, 'webp')
+
+                # Save new wersion partie's banner in the base
+                self.file_thumb.save(
+                    thumb_path,
+                    bufor,
+                    save=False,
+                )
+                print(self.file_thumb)
+                super().save(*args, **kwargs)
+
+        except OSError:
+            print("can not create thumbnail for", thumb_path)
 
 
 class PartyGroup(models.Model):

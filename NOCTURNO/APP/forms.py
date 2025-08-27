@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.forms.widgets import DateInput
-from django.urls import include
 from APP.models import PartyModel,  PartyUser
 
 from django.core.exceptions import ValidationError
@@ -15,10 +14,11 @@ class myDateInput(DateInput):
 
 class PartyForm(forms.ModelForm):
     date = forms.DateField(widget=myDateInput)
+    description = forms.CharField(widget=forms.Textarea(attrs={"rows": 5}))
 
     class Meta:
         model = PartyModel
-        exclude = ["creation_day"]
+        exclude = ["creation_day", "participants", "author"]
 
     def clean(self):
         cleaned_data = super().clean()

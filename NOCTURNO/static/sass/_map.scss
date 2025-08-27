@@ -22,10 +22,15 @@
     text-decoration: none;
     text-transform: uppercase;
     text-align: center;
-    margin: 1rem auto 0 auto;
     @include m.neon-button;
     padding: 0.25rem 0.5rem;
+
     width: auto;
+  }
+  #map {
+    .signup-btn {
+      margin: 0;
+    }
   }
   .parties {
     padding: 0;
@@ -63,6 +68,16 @@
   display: none;
 }
 
+#map .description {
+  display: block;
+  color: #f5f5f5;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+#map h4 {
+  color: #f5f5f5;
+  font-size: 1.2rem;
+}
 .party-creator.hidden {
   display: none;
   opacity: 0;
@@ -98,6 +113,10 @@
   }
   .position.alco {
     grid-column: 1/2;
+  }
+  .position.description-wrapper textarea {
+    padding: 0.5rem;
+    width: 100%;
   }
   .position.file {
     grid-column: 2/3;
@@ -231,7 +250,7 @@
       }
       .position.city {
         grid-column: 2/3;
-        grid-row: 3/4;
+        grid-row: 4/5;
       }
 
       .position.road {

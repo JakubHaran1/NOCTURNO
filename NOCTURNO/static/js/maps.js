@@ -22,9 +22,6 @@ class Map {
       this.formSection.classList.add("hidden");
 
     // Czyszczenie pól w formularzu
-    this.formSection
-      .querySelectorAll(".position input")
-      .forEach((el) => (el.value = ""));
 
     // INICJACJA MAPY
     this.map = L.map("map", {});
@@ -211,7 +208,13 @@ class Map {
       safeCreate("h4", {}, popUpContent, el["fields"]["party_title"]);
       // dodać description
       this.createDesc(el, popUpContent);
-      safeCreate("button", { class: "signup-link" }, popUpContent, "Sign up");
+      safeCreate(
+        "p",
+        { class: "description" },
+        popUpContent,
+        el["fields"]["description"]
+      );
+      safeCreate("button", { class: "signup-btn" }, popUpContent, "Sign up");
       const mapPopup = L.popup(
         [parseFloat(el["fields"]["lat"]), parseFloat(el["fields"]["lng"])],
         {

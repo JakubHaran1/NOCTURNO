@@ -234,7 +234,6 @@ button {
   text-decoration: none;
   text-transform: uppercase;
   text-align: center;
-  margin: 1rem auto 0 auto;
   position: relative;
   display: inline-block;
   padding: 0.5rem 0.5rem;
@@ -275,6 +274,9 @@ button {
   border-color: #ffd900;
   text-shadow: none;
 }
+.layout.map #map .signup-btn {
+  margin: 0;
+}
 .layout.map .parties {
   padding: 0;
   scroll-behavior: smooth;
@@ -307,6 +309,18 @@ button {
 
 #map .navbar {
   display: none;
+}
+
+#map .description {
+  display: block;
+  color: #f5f5f5;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+#map h4 {
+  color: #f5f5f5;
+  font-size: 1.2rem;
 }
 
 .party-creator.hidden {
@@ -343,6 +357,10 @@ button {
 }
 .party-creator .position.alco {
   grid-column: 1/2;
+}
+.party-creator .position.description-wrapper textarea {
+  padding: 0.5rem;
+  width: 100%;
 }
 .party-creator .position.file {
   grid-column: 2/3;
@@ -506,7 +524,7 @@ button {
   }
   .party-creator .form-positions .position.city {
     grid-column: 2/3;
-    grid-row: 3/4;
+    grid-row: 4/5;
   }
   .party-creator .form-positions .position.road {
     grid-column: 1/2;

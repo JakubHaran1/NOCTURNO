@@ -109,9 +109,9 @@ def partySignUp(request, party_id):
     return JsonResponse("1", safe=False)
 
 # Views
-# @login_required(login_url="login")
 
 
+@login_required(login_url="login")
 def mainView(request):
     parties = PartyModel.objects.all()
 
@@ -128,10 +128,13 @@ class mapView(View):
         })
 
     def post(self, request):
+        print(request.POST)
         partyForm = PartyForm(request.POST, request.FILES)
         attempt = 0
         if partyForm.is_valid():
-            partyForm.save(commit=True)
+            party = partyForm.save(commit=False)
+            party.author = request.user
+            party.save()
             return redirect("map")
         else:
             attempt = 1
@@ -162,6 +165,7 @@ class RegisterView(views.View):
         return render(request, "register.html", {"form": form})
 
     def post(self, request):
+
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save(commit=False)
