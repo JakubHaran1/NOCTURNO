@@ -113,7 +113,7 @@ def partySignUp(request, party_id):
 
 @login_required(login_url="login")
 def mainView(request):
-    parties = PartyModel.objects.all()
+    parties = PartyModel.objects.all()[:9]
 
     return render(request, "main.html", {
         "parties": parties
@@ -184,6 +184,7 @@ class RegisterView(views.View):
 
             htmlTemplate = "email_confirm.html"
             emailSending(user, mail_subject, mail_context, htmlTemplate)
+            return redirect("home")
 
         return render(request, "register.html", {"form": form})
 

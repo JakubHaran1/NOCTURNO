@@ -1,5 +1,21 @@
 @use "./variables" as v;
 @use "./mixins" as m;
+.map.layout .leaflet-popup-content-wrapper {
+  word-wrap: break-word;
+  .signup-btn {
+    margin: 0.8rem 0 0.25rem;
+  }
+}
+
+.signup-btn {
+  text-decoration: none;
+  text-transform: uppercase;
+  text-align: center;
+  @include m.neon-button;
+  padding: 0.25rem 0.5rem;
+  margin: 1rem 0;
+  width: auto;
+}
 
 .layout.map {
   overflow: hidden;
@@ -14,40 +30,23 @@
   .main-header {
     padding: 0;
   }
-  .parties_bgc {
-    overflow: scroll;
-  }
 
-  .signup-btn {
-    text-decoration: none;
-    text-transform: uppercase;
-    text-align: center;
-    @include m.neon-button;
-    padding: 0.25rem 0.5rem;
-
-    width: auto;
-  }
   #map {
-    .signup-btn {
-      margin: 0;
-    }
-  }
-  .parties {
-    padding: 0;
-    scroll-behavior: smooth;
-    .party:first-child {
-      margin-left: 1rem;
-    }
-    .party:last-child {
-      margin-right: 1rem;
-    }
+    height: 80vh;
+    border-radius: 0 0 15px;
 
-    .party.active {
-      background-color: #4a3459;
-      transform: translateY(-10px);
-      -webkit-box-shadow: 0px 0px 45px -10px #0b0c10;
-      -moz-box-shadow: 0px 0px 45px -10px #0b0c10;
-      box-shadow: 0px 0px 45px -10px #0b0c10;
+    .navbar {
+      display: none;
+    }
+    .description {
+      width: 100%;
+      color: #a1a1b5;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    h4 {
+      color: #f5f5f5;
+      font-size: 1.2rem;
     }
   }
 }
@@ -59,25 +58,6 @@
   z-index: -10000;
 }
 
-#map {
-  height: 80vh;
-  border-radius: 0 0 15px;
-}
-
-#map .navbar {
-  display: none;
-}
-
-#map .description {
-  display: block;
-  color: #f5f5f5;
-  margin: 1rem 0;
-  font-size: 0.9rem;
-}
-#map h4 {
-  color: #f5f5f5;
-  font-size: 1.2rem;
-}
 .party-creator.hidden {
   display: none;
   opacity: 0;
@@ -277,25 +257,19 @@
 }
 
 @media (min-width: 1250px) {
-  #map {
+  .layout.map #map {
     width: 100%;
     height: 100vh;
     margin: 0;
     border-radius: 0;
   }
 
-  .layout.map .parties_bgc {
-    overflow: auto;
+  .layout.map #map .navbar {
+    display: block;
   }
-
   .layout.map .navbar {
     display: none;
   }
-
-  #map .navbar {
-    display: block;
-  }
-
   .map-wrapper {
     display: flex;
     flex-direction: row-reverse;
@@ -331,30 +305,6 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         width: auto;
-      }
-    }
-  }
-
-  .layout.map {
-    .parties {
-      width: 30rem;
-      padding: 1.2rem;
-      background-color: #1f1d39;
-      height: 100vh;
-      overflow-y: scroll;
-      scrollbar-color: #1f1d39 #0b0c10;
-    }
-
-    .parties-wrapper {
-      box-shadow: inset 0px 0px 16px 1px #0b0c10;
-    }
-
-    .row-parties {
-      overflow-x: auto;
-      flex-direction: column;
-
-      .parties_bgc {
-        flex-direction: column;
       }
     }
   }

@@ -8,9 +8,11 @@
 }
 
 .user-profile {
-  margin: 1rem 0;
+  width: 90%;
+  margin: 2rem auto;
+
   padding: 0.8rem 0.5rem;
-  margin: 1rem;
+
   background-color: v.$bg-section-2;
   border-radius: 5px;
   color: v.$text-main;
@@ -66,14 +68,6 @@
   }
 }
 
-.main-party {
-  .user-party,
-  .popular-party {
-    padding: 0.75rem;
-    background-color: v.$bg-section;
-  }
-}
-
 .user-party {
   margin: 1rem 0;
 }
@@ -83,19 +77,5 @@
     position: relative;
     width: 80%;
     margin: 0 auto;
-  }
-  .user-profile {
-    margin: 2rem;
-  }
-  .main-party {
-    margin: 0 2rem;
-  }
-}
-
-@media (min-width: 1250px) {
-  .user-profile,
-  .main-party {
-    width: 80%;
-    margin: 1rem auto;
   }
 }

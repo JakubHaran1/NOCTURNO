@@ -59,19 +59,24 @@ class PartyUser(AbstractUser):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        size = (100, 100)
+        size = (200, 200)
         if not self.avatar.name.lower().endswith((".jpg", ".png", ".webp")):
-            return ValidationError("Wrong img type!")
+            raise ValidationError("Wrong img type!")
 
         file_name = self.avatar.name.split("/")[1]
 
-        avatar_path = f'{self.username}/{file_name.split(".")[0]}_thumb.webp'
+        avatar_path = file_name.split(".")[0] + "_thumb.webp"
+
         with Image.open(self.avatar) as im:
+
             im.thumbnail(size)
+
             bufor = BytesIO()
             im.save(bufor, "webp")
-            print(avatar_path)
+
             self.avatar.save(avatar_path, bufor, save=False)
+            print("self", self)
+            print("self", self.avatar)
             super().save(*args, **kwargs)
 
 
@@ -79,7 +84,7 @@ class PartyModel(models.Model):
     author = models.ForeignKey(
         PartyUser,  on_delete=models.CASCADE)
     party_title = models.CharField(_("Party title"), max_length=100)
-    description = models.TextField(
+    description = models.CharField(
         _("Description"), blank=False, default="brak", max_length=200)
     date = models.DateField(_("Date"), validators=[date_checker])
     creation_day = models.DateField(auto_now_add=True)

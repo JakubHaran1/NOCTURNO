@@ -24,6 +24,10 @@ section h2 {
   @include m.header;
 }
 
+.party {
+  word-wrap: break-word;
+}
+
 h2 {
   padding: 1rem;
 }

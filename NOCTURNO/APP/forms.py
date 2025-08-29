@@ -43,7 +43,6 @@ class RegisterForm(UserCreationForm):
         clean_birth = self.cleaned_data["birth"]
         today = date.today()
 
-        print(type(clean_birth.month))
         age = (today.year - clean_birth.year) - ((today.month, today.day)
                                                  < (clean_birth.month, clean_birth.day))
         if (age) < 16:

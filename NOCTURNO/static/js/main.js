@@ -8,12 +8,14 @@ window.addEventListener("scroll", show);
 
 // ////////////////////////////////////////////////
 
-if (matchMedia("(min-width: 724px)").matches) {
+if (window.matchMedia("(min-width: 724px)").matches) {
+  console.log(12);
   rowTrendings.addEventListener(
     "wheel",
     (e) => {
       e.preventDefault();
       if (e.deltaY == 0) return;
+      console.log(`12`);
       const partiesBgc = rowTrendings.querySelector(".parties_bgc");
       animateScroll(partiesBgc, rowTrendings, e.deltaY);
     },

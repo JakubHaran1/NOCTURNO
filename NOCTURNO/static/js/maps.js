@@ -131,12 +131,13 @@ class Map {
 
         safeCreate("h4", {}, party_box, el["fields"]["party_title"]);
         this.createDesc(el, party_box);
+
         safeCreate("button", { class: "signup-btn" }, party_box, "Sign up");
+
         const latlng = [el["fields"]["lat"], el["fields"]["lng"]];
 
         // Ustawianie active partybox gdy resize
         if (this.last_party.id == `party-${el["pk"]}`) {
-          console.log(party_box);
           party_box.classList.add("active");
           this.last_party = party_box;
           this.scrollMapPartybox(this.last_party);
@@ -207,20 +208,22 @@ class Map {
       const popUpContent = safeCreate("div", { class: "map-popup-content" });
       safeCreate("h4", {}, popUpContent, el["fields"]["party_title"]);
       // dodać description
-      this.createDesc(el, popUpContent);
       safeCreate(
         "p",
         { class: "description" },
         popUpContent,
         el["fields"]["description"]
       );
+      this.createDesc(el, popUpContent);
+
       safeCreate("button", { class: "signup-btn" }, popUpContent, "Sign up");
       const mapPopup = L.popup(
         [parseFloat(el["fields"]["lat"]), parseFloat(el["fields"]["lng"])],
         {
           content: popUpContent.innerHTML,
-          minWidth: 300,
-          maxWidth: 400,
+          keepInView: true,
+          minWidth: 310,
+          maxWidth: 320,
           className: `map-popup `,
           autoPan: false,
         }

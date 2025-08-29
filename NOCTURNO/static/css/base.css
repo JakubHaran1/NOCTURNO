@@ -7,19 +7,22 @@
 }
 .parties .row-parties {
   scrollbar-color: #1f1d39 #0b0c10;
-  overflow: hidden;
+  overflow-x: scroll;
 }
 .parties .row-parties .parties_bgc {
   display: flex;
   gap: 1rem;
   padding: 0 0 1rem;
   will-change: transform;
-  transition: transform 0.7s;
+  transition: transform 0.5s;
 }
 .parties .party {
-  flex: 0 0 15rem;
-  padding: 0.8rem;
-  width: 90%;
+  width: 15rem;
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
   margin: 0 auto;
   margin-top: 1.25rem;
   text-align: center;
@@ -47,6 +50,8 @@
 .parties .party h4 {
   margin: 0.8rem 0;
   text-align: center;
+  word-break: break-word;
+  padding: 0 1rem;
 }
 .parties .party .desc {
   display: flex;
@@ -56,11 +61,90 @@
   color: #f5f5f5;
   font-size: 1.2rem;
 }
-.parties .party .desc p {
+.parties .party .desc p.description {
   font-size: 1rem;
+  word-break: break-word;
   color: #a1a1b5;
 }
 
+.layout.map {
+  overflow: hidden;
+}
+.layout.map .parties_bgc {
+  overflow: scroll;
+}
+.layout.map .parties {
+  padding: 0;
+  scroll-behavior: smooth;
+}
+.layout.map .parties .party:first-child {
+  margin-left: 1rem;
+}
+.layout.map .parties .party:last-child {
+  margin-right: 1rem;
+}
+.layout.map .parties .party.active {
+  background-color: #4a3459;
+  transform: translateY(-10px);
+  -webkit-box-shadow: 0px 0px 45px -10px #0b0c10;
+  -moz-box-shadow: 0px 0px 45px -10px #0b0c10;
+  box-shadow: 0px 0px 45px -10px #0b0c10;
+}
+
+.main-party .user-party,
+.main-party .popular-party {
+  padding: 0.75rem;
+  background-color: #1f1d39;
+}
+.main-party .main-party {
+  margin: 0 2rem;
+}
+
+@media (min-width: 724px) {
+  .layout.map .parties_bgc {
+    overflow: auto;
+  }
+  .parties .row-parties {
+    overflow-x: hidden;
+  }
+}
+@media (min-width: 1200px) {
+  .layout.map .parties {
+    width: 30rem;
+    padding: 1.2rem;
+    background-color: #1f1d39;
+    height: 100vh;
+    overflow-y: scroll;
+    scrollbar-color: #1f1d39 #0b0c10;
+  }
+  .layout.map .parties .party:first-child {
+    margin: 1rem auto 0;
+  }
+  .layout.map .parties .party:last-child {
+    margin: 1rem auto 0;
+  }
+  .layout.map .parties-wrapper {
+    box-shadow: inset 0px 0px 16px 1px #0b0c10;
+  }
+  .layout.map .row-parties {
+    overflow-x: auto;
+    flex-direction: column;
+  }
+  .layout.map .row-parties .parties_bgc {
+    flex-direction: column;
+  }
+  .main-party .user-party,
+  .main-party .popular-party {
+    padding: 0.75rem;
+    background-color: #1f1d39;
+    width: 80%;
+    margin: 1rem auto;
+  }
+  .main-party .user-party .party,
+  .main-party .popular-party .party {
+    width: 15rem;
+  }
+}
 .position label {
   display: block;
   color: #a1a1b5;
@@ -130,9 +214,9 @@ button {
 }
 
 .user-profile {
-  margin: 1rem 0;
+  width: 90%;
+  margin: 2rem auto;
   padding: 0.8rem 0.5rem;
-  margin: 1rem;
   background-color: #2a2640;
   border-radius: 5px;
   color: #f5f5f5;
@@ -184,12 +268,6 @@ button {
   bottom: 0;
 }
 
-.main-party .user-party,
-.main-party .popular-party {
-  padding: 0.75rem;
-  background-color: #1f1d39;
-}
-
 .user-party {
   margin: 1rem 0;
 }
@@ -200,37 +278,15 @@ button {
     width: 80%;
     margin: 0 auto;
   }
-  .user-profile {
-    margin: 2rem;
-  }
-  .main-party {
-    margin: 0 2rem;
-  }
 }
-@media (min-width: 1250px) {
-  .user-profile,
-  .main-party {
-    width: 80%;
-    margin: 1rem auto;
-  }
+.map.layout .leaflet-popup-content-wrapper {
+  word-wrap: break-word;
 }
-.layout.map {
-  overflow: hidden;
+.map.layout .leaflet-popup-content-wrapper .signup-btn {
+  margin: 0.8rem 0 0.25rem;
 }
-.layout.map .leaflet-popup-content {
-  text-align: center;
-}
-.layout.map h2 {
-  padding-left: 1rem;
-  padding-bottom: 0;
-}
-.layout.map .main-header {
-  padding: 0;
-}
-.layout.map .parties_bgc {
-  overflow: scroll;
-}
-.layout.map .signup-btn {
+
+.signup-btn {
   text-decoration: none;
   text-transform: uppercase;
   text-align: center;
@@ -251,9 +307,10 @@ button {
   overflow: hidden;
   z-index: 1;
   padding: 0.25rem 0.5rem;
+  margin: 1rem 0;
   width: auto;
 }
-.layout.map .signup-btn:before {
+.signup-btn:before {
   content: "";
   position: absolute;
   top: 0;
@@ -265,34 +322,45 @@ button {
   transition: all 0.3s ease;
   z-index: -1;
 }
-.layout.map .signup-btn:hover::before {
+.signup-btn:hover::before {
   opacity: 1;
   box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
 }
-.layout.map .signup-btn:hover {
+.signup-btn:hover {
   color: #2a2640;
   border-color: #ffd900;
   text-shadow: none;
 }
-.layout.map #map .signup-btn {
-  margin: 0;
+
+.layout.map {
+  overflow: hidden;
 }
-.layout.map .parties {
+.layout.map .leaflet-popup-content {
+  text-align: center;
+}
+.layout.map h2 {
+  padding-left: 1rem;
+  padding-bottom: 0;
+}
+.layout.map .main-header {
   padding: 0;
-  scroll-behavior: smooth;
 }
-.layout.map .parties .party:first-child {
-  margin-left: 1rem;
+.layout.map #map {
+  height: 80vh;
+  border-radius: 0 0 15px;
 }
-.layout.map .parties .party:last-child {
-  margin-right: 1rem;
+.layout.map #map .navbar {
+  display: none;
 }
-.layout.map .parties .party.active {
-  background-color: #4a3459;
-  transform: translateY(-10px);
-  -webkit-box-shadow: 0px 0px 45px -10px #0b0c10;
-  -moz-box-shadow: 0px 0px 45px -10px #0b0c10;
-  box-shadow: 0px 0px 45px -10px #0b0c10;
+.layout.map #map .description {
+  width: 100%;
+  color: #a1a1b5;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.layout.map #map h4 {
+  color: #f5f5f5;
+  font-size: 1.2rem;
 }
 
 .position.lat,
@@ -300,27 +368,6 @@ button {
   position: absolute;
   opacity: 0;
   z-index: -10000;
-}
-
-#map {
-  height: 80vh;
-  border-radius: 0 0 15px;
-}
-
-#map .navbar {
-  display: none;
-}
-
-#map .description {
-  display: block;
-  color: #f5f5f5;
-  margin: 1rem 0;
-  font-size: 0.9rem;
-}
-
-#map h4 {
-  color: #f5f5f5;
-  font-size: 1.2rem;
 }
 
 .party-creator.hidden {
@@ -546,20 +593,17 @@ button {
   }
 }
 @media (min-width: 1250px) {
-  #map {
+  .layout.map #map {
     width: 100%;
     height: 100vh;
     margin: 0;
     border-radius: 0;
   }
-  .layout.map .parties_bgc {
-    overflow: auto;
+  .layout.map #map .navbar {
+    display: block;
   }
   .layout.map .navbar {
     display: none;
-  }
-  #map .navbar {
-    display: block;
   }
   .map-wrapper {
     display: flex;
@@ -592,24 +636,6 @@ button {
     display: grid;
     grid-template-columns: 1fr 1fr;
     width: auto;
-  }
-  .layout.map .parties {
-    width: 30rem;
-    padding: 1.2rem;
-    background-color: #1f1d39;
-    height: 100vh;
-    overflow-y: scroll;
-    scrollbar-color: #1f1d39 #0b0c10;
-  }
-  .layout.map .parties-wrapper {
-    box-shadow: inset 0px 0px 16px 1px #0b0c10;
-  }
-  .layout.map .row-parties {
-    overflow-x: auto;
-    flex-direction: column;
-  }
-  .layout.map .row-parties .parties_bgc {
-    flex-direction: column;
   }
 }
 .log-user {
@@ -1027,6 +1053,10 @@ section h4,
 section h2 {
   color: #a1a1b5;
   text-transform: uppercase;
+}
+
+.party {
+  word-wrap: break-word;
 }
 
 h2 {
