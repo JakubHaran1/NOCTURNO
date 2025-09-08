@@ -54,6 +54,7 @@ class RegisterForm(UserCreationForm):
 
         if not avatar.name.lower().endswith((".jpg", ".png", ".webp")):
             raise ValidationError("Wrong file type!")
+        return avatar
 
     class Meta:
         model = PartyUser

@@ -49,6 +49,9 @@ class Map {
             e.target.closest(".party").getAttribute("id").split("-")[1]
           }`
         );
+        if (!response.ok) throw Error("We cant add your relations");
+        
+        console.log(response);
       }
 
       this.formSection.classList.add("hidden");

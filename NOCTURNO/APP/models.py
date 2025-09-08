@@ -17,6 +17,7 @@ from io import BytesIO
 from PIL import Image
 
 
+
 def uploadAvatar(username, file):
     name = slugify(username)
     return os.path.join("users_image", name, file)
@@ -58,26 +59,21 @@ class PartyUser(AbstractUser):
         return self.following.exists()
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
         size = (200, 200)
         if not self.avatar.name.lower().endswith((".jpg", ".png", ".webp")):
             raise ValidationError("Wrong img type!")
 
-        file_name = self.avatar.name.split("/")[1]
+        file_path = os.path.split(self.avatar.path)
 
-        avatar_path = file_name.split(".")[0] + "_thumb.webp"
+        file_new_path = f'{self.username}/{file_path[1].split(".")[0]} + "_thumb.webp"'
 
         with Image.open(self.avatar) as im:
-
             im.thumbnail(size)
-
             bufor = BytesIO()
             im.save(bufor, "webp")
+            self.avatar.save(file_new_path, bufor, save=False)
 
-            self.avatar.save(avatar_path, bufor, save=False)
-            print("self", self)
-            print("self", self.avatar)
-            super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class PartyModel(models.Model):
@@ -113,15 +109,9 @@ class PartyModel(models.Model):
         return f"{self.party_title}: {self.date}"
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        file_path = self.file.path
-        print("name", self.file.name)
-        name_path = self.file.name.split("/")[1]
-        thumb_path = self.party_title + \
-            name_path.split(".")[0] + '_thumbnail.webp'
-
+        file_path = os.path.split(self.file.path)
+        thumb_path = f'{self.party_title}/{file_path[1].split(".")[0]}_thumbnail.webp'
         size = (220, 110)
-
         try:
             # Create thumbnail
             with Image.open(self.file) as im:
@@ -135,8 +125,7 @@ class PartyModel(models.Model):
                     bufor,
                     save=False,
                 )
-                print(self.file_thumb)
-                super().save(*args, **kwargs)
+            super().save(*args, **kwargs)
 
         except OSError:
             print("can not create thumbnail for", thumb_path)

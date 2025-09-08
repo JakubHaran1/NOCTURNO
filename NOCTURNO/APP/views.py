@@ -105,7 +105,9 @@ def returnParty(request, party_id):
 
 
 def partySignUp(request, party_id):
-    print(party_id)
+    party = PartyModel.objects.get(pk=party_id)
+    user = PartyUser.objects.get(id=request.user.id)
+    party.participants.add(user)
     return JsonResponse("1", safe=False)
 
 # Views
@@ -113,10 +115,11 @@ def partySignUp(request, party_id):
 
 @login_required(login_url="login")
 def mainView(request):
-    parties = PartyModel.objects.all()[:9]
-
+    user_parties = PartyModel.objects.filter(author=request.user)
+    participant_parties = PartyModel.objects.filter(participants=request.user)
     return render(request, "main.html", {
-        "parties": parties
+        "user_parties": user_parties,
+        "participant_parties": participant_parties
     })
 
 
@@ -171,6 +174,7 @@ class RegisterView(views.View):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
+            print("avatar", user.avatar)
             user.age = calcAge(
                 user.birth.year, user.birth.month, user.birth.day)
 
@@ -184,7 +188,7 @@ class RegisterView(views.View):
 
             htmlTemplate = "email_confirm.html"
             emailSending(user, mail_subject, mail_context, htmlTemplate)
-            return redirect("home")
+            # return redirect("home")
 
         return render(request, "register.html", {"form": form})
 
@@ -205,7 +209,7 @@ class ConfirmationView(View):
 
         if user is not None and emailActivationToken.check_token(user, token):
             user.is_active = True
-            user.save()
+            user.save(update_fields="is_active")
             return redirect("home")
         return redirect("register")
 

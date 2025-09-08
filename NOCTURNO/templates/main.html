@@ -56,14 +56,42 @@
     <section class="main-party">
         <div class="popular-party">
             <div class="parties">
-                <h2>Trending:</h2>
-                {% include "includes/parties.html" %}
+                <h2>Yours parties</h2>
+                {% if user_parties %}
+                    <div class="row-parties">
+                        <div class="parties_bgc" style="transform: translateX(0px);">
+                            {% for party in user_parties %}
+                                {% include "includes/parties.html" %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="party">
+                        <p>You have to create partie! 🎶🫡</p>
+                        <a class="btn" href="{% url "map" %}">Create</a>
+                    </div>
+                {% endif %}
+             
             </div>
         </div>
         <div class="user-party">
             <div class="parties">
-                <h2>Trending:</h2>
-                {% include "includes/parties.html" %}
+                <h2>Joined parties</h2>
+                {% if participant_parties %}
+                    <div class="row-parties">
+                        <div class="parties_bgc" style="transform: translateX(0px);">
+                            {% for party in participant_parties %}
+                                {% include "includes/parties.html" %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% else %}
+                    
+                     <div class="party-info">
+                        <p>You have to join to some parties!🎉✨</p>
+                        <a class="btn" href="{% url "map" %}">Join!</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </section>
