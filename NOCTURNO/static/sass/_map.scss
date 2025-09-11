@@ -7,16 +7,6 @@
   }
 }
 
-.signup-btn {
-  text-decoration: none;
-  text-transform: uppercase;
-  text-align: center;
-  @include m.neon-button;
-  padding: 0.25rem 0.5rem;
-  margin: 1rem 0;
-  width: auto;
-}
-
 .layout.map {
   overflow: hidden;
   .leaflet-popup-content {
@@ -126,8 +116,7 @@
     accent-color: v.$accent-purple;
   }
 }
-
-.party-card .desc {
+.desc {
   @include m.description;
   margin-top: 1rem;
 }
@@ -138,7 +127,7 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -100%);
   z-index: 11111;
   width: 75%;
   padding: 1rem 1.5rem;
@@ -150,6 +139,13 @@
 
   .pop-content {
     margin: 1rem;
+    word-wrap: break-word;
+  }
+
+  h2.pop-header {
+    text-transform: uppercase;
+    margin: 0;
+    padding: 0;
   }
 
   a {

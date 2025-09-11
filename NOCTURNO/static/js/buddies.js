@@ -63,7 +63,7 @@ class Buddies {
 
       button.setAttribute("data-id", `${el.id}`);
       button.setAttribute("data-action", `${btnAction}`);
-      button.classList.add(`${btnAction}-buddie`, "actionBtn");
+      button.classList.add(`${btnAction}-buddie`, "actionBtn", "signup-btn");
       button.textContent = `${btnAction}`;
 
       buddyInfo.appendChild(nick);

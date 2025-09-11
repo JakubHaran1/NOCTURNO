@@ -1,5 +1,7 @@
 "use strict";
+
 import { menuFunction, safeCreate } from "./base.js";
+
 class Map {
   spinColor = "#9b30ff";
   iconMarkerUrl = "static/imgs/marker.svg";
@@ -43,6 +45,8 @@ class Map {
     // Click event na partybox
     this.parties_bgc.addEventListener("click", async (e) => {
       if (!e.target.closest(".party")) return;
+
+      // Gdy na przycisk
       if (e.target.closest(".signup-btn")) {
         const response = await fetch(
           `map/sign-up/${
@@ -50,8 +54,15 @@ class Map {
           }`
         );
         if (!response.ok) throw Error("We cant add your relations");
-        
-        console.log(response);
+      }
+
+      if (e.target.closest(".delete-btn")) {
+        const response = await fetch(
+          `map/sign-out/${
+            e.target.closest(".party").getAttribute("id").split("-")[1]
+          }`
+        );
+        if (!response.ok) throw Error("We cant remove your relations");
       }
 
       this.formSection.classList.add("hidden");
@@ -90,11 +101,15 @@ class Map {
     }
   };
 
-  openPopUp(header, content) {
-    const popHeader = document.querySelector(".pop-header");
-    const popContent = document.querySelector(".pop-content");
-    popHeader.textContent = header;
-    popContent.textContent = content;
+  openPopUp(header, content, btnTxt = "Refresh the page", error = true) {
+    const popHeader = this.popUp.querySelector(".pop-header");
+    const popContent = this.popUp.querySelector(".pop-content");
+    if (error == true) {
+      popHeader.textContent = header;
+      popContent.textContent = content;
+      safeCreate("a", { href: "/map" }, this.popUp, btnTxt);
+    }
+
     this.popUp.classList.remove("hidden");
     this.overlay.classList.remove("hidden");
   }
@@ -103,57 +118,68 @@ class Map {
   async sendMapRange(data) {
     const [_southWest, _northEast] = Object.values(data);
 
-    try {
-      const response = await fetch(
-        `map/generate-parties/${[_southWest["lat"], _northEast["lat"]]},${[
-          _southWest["lng"],
-          _northEast["lng"],
-        ]}`
+    // try {
+    const response = await fetch(
+      `map/generate-parties/${[_southWest["lat"], _northEast["lat"]]},${[
+        _southWest["lng"],
+        _northEast["lng"],
+      ]}`
+    );
+
+    const [participiant_parties, user_parties, parties] = await response.json();
+    const participiant_parties_data = JSON.parse(participiant_parties);
+    const user_parties_data = JSON.parse(user_parties);
+    const parties_data = JSON.parse(parties);
+
+    this.parties_bgc.textContent = "";
+    parties_data.forEach((el) => {
+      // Create party box and return latlng
+      const party_box = safeCreate(
+        "div",
+        { id: `party-${el["pk"]}`, class: "party" },
+        this.parties_bgc
       );
 
-      const parties = await response.json();
-      const parties_data = JSON.parse(parties);
-
-      this.parties_bgc.textContent = "";
-      parties_data.forEach((el) => {
-        // Create party box and return latlng
-        const party_box = safeCreate(
-          "div",
-          { id: `party-${el["pk"]}`, class: "party" },
-          this.parties_bgc
-        );
-
-        safeCreate(
-          "div",
-          {
-            class: "img-hero",
-            style: `background-image:url(/media/${el["fields"]["file_thumb"]})`,
-          },
-          party_box
-        );
-
-        safeCreate("h4", {}, party_box, el["fields"]["party_title"]);
-        this.createDesc(el, party_box);
-
-        safeCreate("button", { class: "signup-btn" }, party_box, "Sign up");
-
-        const latlng = [el["fields"]["lat"], el["fields"]["lng"]];
-
-        // Ustawianie active partybox gdy resize
-        if (this.last_party.id == `party-${el["pk"]}`) {
-          party_box.classList.add("active");
-          this.last_party = party_box;
-          this.scrollMapPartybox(this.last_party);
-        }
-
-        this.createPointer(latlng, el);
-      });
-    } catch {
-      this.openPopUp(
-        "😭 We have problems with our database 😭",
-        "Try again later ⌛"
+      safeCreate(
+        "div",
+        {
+          class: "img-hero",
+          style: `background-image:url(/media/${el["fields"]["file_thumb"]})`,
+        },
+        party_box
       );
-    }
+
+      safeCreate("h4", {}, party_box, el["fields"]["party_title"]);
+      this.createDesc(el, party_box);
+
+      let class_btn = "signup-btn";
+      let content = "Sign up";
+      if (participiant_parties_data.some((party) => party.pk == el.pk)) {
+        class_btn = "delete-btn";
+        content = "Sign out ";
+      } else if (user_parties_data.some((party) => party.pk == el.pk)) {
+        class_btn = "check-btn";
+        content = "Check";
+      }
+
+      safeCreate("button", { class: class_btn }, party_box, content);
+      const latlng = [el["fields"]["lat"], el["fields"]["lng"]];
+
+      // Ustawianie active partybox gdy resize
+      if (this.last_party.id == `party-${el["pk"]}`) {
+        party_box.classList.add("active");
+        this.last_party = party_box;
+        this.scrollMapPartybox(this.last_party);
+      }
+
+      this.createPointer(latlng, el);
+    });
+    // } catch {
+    //   this.openPopUp(
+    //     "😭 We have problems with our database 😭",
+    //     "Try again later ⌛"
+    //   );
+    // }
   }
 
   createPointer(latlng, el = false) {
@@ -219,7 +245,6 @@ class Map {
       );
       this.createDesc(el, popUpContent);
 
-      safeCreate("button", { class: "signup-btn" }, popUpContent, "Sign up");
       const mapPopup = L.popup(
         [parseFloat(el["fields"]["lat"]), parseFloat(el["fields"]["lng"])],
         {
@@ -291,7 +316,6 @@ class Map {
     try {
       address = await this.getAdress(lat, lng);
     } catch (error) {
-      console.log(`Error:${error.message}, code:${error.status}`);
       this.openPopUp(
         "😭 We have problems with reverse geolocalization 😭",
         "Try again later ⌛"
@@ -326,7 +350,6 @@ class Map {
     ageField.addEventListener("input", (e) => {
       if (Number(e.data)) {
         age += e.data;
-        console.log(e.data);
       } else {
         const num = ageField.value;
         age = num;

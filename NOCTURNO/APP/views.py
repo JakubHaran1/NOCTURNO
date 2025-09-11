@@ -93,21 +93,32 @@ def generateParties(request, coords):
     near_parties = PartyModel.objects.filter(
         lat__gte=latitude[0], lat__lte=latitude[1], lng__gte=longitude[0], lng__lte=latitude[1])
 
-    serialized = serialize("json", near_parties)
+    participiant_parties = request.user.participant_parties.all()
+    user_parties = request.user.partymodel_set.all()
 
-    return JsonResponse(serialized, safe=False)
+    near_parties_serialized = serialize("json", near_parties)
+    participiant_parties_serialized = serialize("json", participiant_parties)
+    user_parties_serialized = serialize("json", user_parties)
+
+    partiesData = [participiant_parties_serialized,
+                   user_parties_serialized, near_parties_serialized]
+
+    print(partiesData)
+    return JsonResponse(partiesData, safe=False)
 
 
-def returnParty(request, party_id):
-    party = PartyModel.objects.get(pk=party_id)
-    serialize_party = serialize("json", [party])
-    return JsonResponse(serialize_party, safe=False)
-
-
-def partySignUp(request, party_id):
+def partyAction(request, action, party_id):
     party = PartyModel.objects.get(pk=party_id)
     user = PartyUser.objects.get(id=request.user.id)
-    party.participants.add(user)
+
+    if action == "sign-up":
+        party.participants.add(user)
+    elif action == "sign-out":
+        party.participants.remove(user)
+    else:
+        serialize_party = serialize("json", [party])
+        return JsonResponse(serialize_party, safe=False)
+
     return JsonResponse("1", safe=False)
 
 # Views
@@ -116,7 +127,8 @@ def partySignUp(request, party_id):
 @login_required(login_url="login")
 def mainView(request):
     user_parties = PartyModel.objects.filter(author=request.user)
-    participant_parties = PartyModel.objects.filter(participants=request.user)
+    participant_parties = PartyModel.objects.filter(
+        participants=request.user)
     return render(request, "main.html", {
         "user_parties": user_parties,
         "participant_parties": participant_parties
@@ -131,7 +143,6 @@ class mapView(View):
         })
 
     def post(self, request):
-        print(request.POST)
         partyForm = PartyForm(request.POST, request.FILES)
         attempt = 0
         if partyForm.is_valid():
@@ -150,7 +161,7 @@ class mapView(View):
 
 class LoginUserView(LoginView):
     template_name = "login.html"
-    success_ur = "home"
+    success_url = "home"
 
     def get_success_url(self):
         return reverse_lazy('home')
@@ -174,7 +185,6 @@ class RegisterView(views.View):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
-            print("avatar", user.avatar)
             user.age = calcAge(
                 user.birth.year, user.birth.month, user.birth.day)
 
@@ -188,7 +198,7 @@ class RegisterView(views.View):
 
             htmlTemplate = "email_confirm.html"
             emailSending(user, mail_subject, mail_context, htmlTemplate)
-            # return redirect("home")
+            return redirect("home")
 
         return render(request, "register.html", {"form": form})
 
@@ -209,7 +219,7 @@ class ConfirmationView(View):
 
         if user is not None and emailActivationToken.check_token(user, token):
             user.is_active = True
-            user.save(update_fields="is_active")
+            user.save(update_fields=["is_active"])
             return redirect("home")
         return redirect("register")
 

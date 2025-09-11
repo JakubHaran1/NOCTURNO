@@ -17,7 +17,6 @@ from io import BytesIO
 from PIL import Image
 
 
-
 def uploadAvatar(username, file):
     name = slugify(username)
     return os.path.join("users_image", name, file)
@@ -94,7 +93,7 @@ class PartyModel(models.Model):
         _("File_thumb"), upload_to="party_images/", blank=True)
 
     participants = models.ManyToManyField(
-        PartyUser, related_name="participants")
+        PartyUser, related_name="participant_parties")
     city = models.CharField(_("city"), max_length=50)
     road = models.CharField(_("road"), max_length=100)
     house_number = models.CharField(_("house number"), max_length=20)

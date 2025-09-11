@@ -14,10 +14,9 @@
   border-radius: 5px;
 }
 
-.form button {
+form button {
   width: 10rem;
   margin-top: 1rem;
-  @include m.neon-button;
 }
 .errorlist {
   li,
@@ -27,9 +26,4 @@
     font-size: 0.9rem;
     margin-top: 0.3rem;
   }
-}
-// sprawdzic czy tego buttona nie wyciągnąc
-button {
-  width: 12rem;
-  margin-top: 1rem;
 }

@@ -96,29 +96,10 @@
   }
 
   button {
-    @include m.neon-button;
     width: 5rem;
-
     font-size: 0.8rem;
     padding: 0.25rem;
-  }
-
-  .delete-buddie {
-    color: #ff0000;
-    border: 2px solid #ff0000;
-    box-shadow: 0 0 8px #ff0000;
-
-    display: block;
-
-    &:before {
-      background: #ff0000;
-    }
-    &:hover {
-      border-color: #ff0000;
-    }
-    &:hover::before {
-      box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
-    }
+    margin-top: 1rem;
   }
 }
 

@@ -75,6 +75,7 @@
   align-items: center;
   flex-shrink: 0;
   margin: 0 auto;
+  padding: 1rem;
   margin-top: 1.25rem;
   text-align: center;
   background-color: #3a3459;
@@ -83,6 +84,9 @@
   -webkit-box-shadow: 0px 0px 37px -12px #0b0c10;
   -moz-box-shadow: 0px 0px 37px -12px #0b0c10;
   box-shadow: 0px 0px 37px -12px #0b0c10;
+}
+.parties .party button {
+  margin-top: 1rem;
 }
 .parties .party:hover {
   transform: translateY(-10px);
@@ -209,46 +213,9 @@
   border-radius: 5px;
 }
 
-.form button {
+form button {
   width: 10rem;
   margin-top: 1rem;
-  position: relative;
-  display: inline-block;
-  padding: 0.5rem 0.5rem;
-  font-size: 16px;
-  color: #ffea00;
-  background: transparent;
-  border: 2px solid #ffea00;
-  border-radius: 6px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 8px #ffea00;
-  font-weight: bold;
-  overflow: hidden;
-  z-index: 1;
-}
-.form button:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #ffd900;
-  opacity: 0;
-  transition: all 0.3s ease;
-  z-index: -1;
-}
-.form button:hover::before {
-  opacity: 1;
-  box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
-}
-.form button:hover {
-  color: #2a2640;
-  border-color: #ffd900;
-  text-shadow: none;
 }
 
 .errorlist li,
@@ -257,11 +224,6 @@
   list-style: none;
   font-size: 0.9rem;
   margin-top: 0.3rem;
-}
-
-button {
-  width: 12rem;
-  margin-top: 1rem;
 }
 
 .user-profile {
@@ -335,52 +297,6 @@ button {
 }
 .map.layout .leaflet-popup-content-wrapper .signup-btn {
   margin: 0.8rem 0 0.25rem;
-}
-
-.signup-btn {
-  text-decoration: none;
-  text-transform: uppercase;
-  text-align: center;
-  position: relative;
-  display: inline-block;
-  padding: 0.5rem 0.5rem;
-  font-size: 16px;
-  color: #ffea00;
-  background: transparent;
-  border: 2px solid #ffea00;
-  border-radius: 6px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 8px #ffea00;
-  font-weight: bold;
-  overflow: hidden;
-  z-index: 1;
-  padding: 0.25rem 0.5rem;
-  margin: 1rem 0;
-  width: auto;
-}
-.signup-btn:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #ffd900;
-  opacity: 0;
-  transition: all 0.3s ease;
-  z-index: -1;
-}
-.signup-btn:hover::before {
-  opacity: 1;
-  box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
-}
-.signup-btn:hover {
-  color: #2a2640;
-  border-color: #ffd900;
-  text-shadow: none;
 }
 
 .layout.map {
@@ -485,7 +401,7 @@ button {
   accent-color: #9b30ff;
 }
 
-.party-card .desc {
+.desc {
   display: flex;
   justify-content: center;
   gap: 1rem;
@@ -494,7 +410,7 @@ button {
   font-size: 1.2rem;
   margin-top: 1rem;
 }
-.party-card .desc p {
+.desc p {
   font-size: 1rem;
   color: #a1a1b5;
 }
@@ -504,7 +420,7 @@ button {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -100%);
   z-index: 11111;
   width: 75%;
   padding: 1rem 1.5rem;
@@ -516,6 +432,12 @@ button {
 }
 .pop-up .pop-content {
   margin: 1rem;
+  word-wrap: break-word;
+}
+.pop-up h2.pop-header {
+  text-transform: uppercase;
+  margin: 0;
+  padding: 0;
 }
 .pop-up a {
   position: relative;
@@ -994,61 +916,10 @@ button {
   color: #a1a1b5;
 }
 .buddy-box button {
-  position: relative;
-  display: inline-block;
-  padding: 0.5rem 0.5rem;
-  font-size: 16px;
-  color: #ffea00;
-  background: transparent;
-  border: 2px solid #ffea00;
-  border-radius: 6px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 8px #ffea00;
-  font-weight: bold;
-  overflow: hidden;
-  z-index: 1;
   width: 5rem;
   font-size: 0.8rem;
   padding: 0.25rem;
-}
-.buddy-box button:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #ffd900;
-  opacity: 0;
-  transition: all 0.3s ease;
-  z-index: -1;
-}
-.buddy-box button:hover::before {
-  opacity: 1;
-  box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
-}
-.buddy-box button:hover {
-  color: #2a2640;
-  border-color: #ffd900;
-  text-shadow: none;
-}
-.buddy-box .delete-buddie {
-  color: #ff0000;
-  border: 2px solid #ff0000;
-  box-shadow: 0 0 8px #ff0000;
-  display: block;
-}
-.buddy-box .delete-buddie:before {
-  background: #ff0000;
-}
-.buddy-box .delete-buddie:hover {
-  border-color: #ff0000;
-}
-.buddy-box .delete-buddie:hover::before {
-  box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+  margin-top: 1rem;
 }
 
 @media (min-width: 500px) {
@@ -1092,6 +963,152 @@ button {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.signup-btn {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.5rem;
+  font-size: 16px;
+  color: #ffea00;
+  background: transparent;
+  border: 2px solid #ffea00;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px #ffea00;
+  font-weight: bold;
+  overflow: hidden;
+  z-index: 1;
+}
+.signup-btn:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffd900;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+.signup-btn:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
+}
+.signup-btn:hover {
+  color: #2a2640;
+  border-color: #ffd900;
+  text-shadow: none;
+}
+
+.delete-btn {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.5rem;
+  font-size: 16px;
+  color: #ffea00;
+  background: transparent;
+  border: 2px solid #ffea00;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px #ffea00;
+  font-weight: bold;
+  overflow: hidden;
+  z-index: 1;
+  color: #ff0000;
+  border: 2px solid #ff0000;
+  box-shadow: 0 0 8px #ff0000;
+  display: block;
+}
+.delete-btn:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffd900;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+.delete-btn:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
+}
+.delete-btn:hover {
+  color: #2a2640;
+  border-color: #ffd900;
+  text-shadow: none;
+}
+.delete-btn:before {
+  background: #ff0000;
+}
+.delete-btn:hover {
+  border-color: #ff0000;
+}
+.delete-btn:hover::before {
+  box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+}
+
+.check-btn {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.5rem;
+  font-size: 16px;
+  color: #ffea00;
+  background: transparent;
+  border: 2px solid #ffea00;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px #ffea00;
+  font-weight: bold;
+  overflow: hidden;
+  z-index: 1;
+  color: #a200ff;
+  border: 2px solid #a200ff;
+  box-shadow: 0 0 8px #a200ff;
+  display: block;
+}
+.check-btn:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffd900;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+.check-btn:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
+}
+.check-btn:hover {
+  color: #2a2640;
+  border-color: #ffd900;
+  text-shadow: none;
+}
+.check-btn:before {
+  background: #a200ff;
+}
+.check-btn:hover {
+  border-color: #a200ff;
+}
+.check-btn:hover::before {
+  box-shadow: 0 0 10px #a200ff, 0 0 20px #a200ff, 0 0 30px #a200ff;
 }
 
 body {
@@ -1188,8 +1205,7 @@ h2 {
   bottom: -10%;
 }
 
-.parties .party .desc,
-.map-popup .desc {
+.desc {
   display: flex;
   justify-content: center;
   gap: 1rem;

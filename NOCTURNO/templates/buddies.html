@@ -48,7 +48,7 @@
                                 <h3 class='nick'>{{relation.followed.username}}</h3>
                                 <form   action="{% url "add_delete_buddie" %}" method='POST'>
                                     {% csrf_token %}
-                                    <button class="delete-buddie actionBtn" data-id="{{relation.followed.id}}" data-action="delete">delete</button>
+                                    <button class="delete-btn actionBtn" data-id="{{relation.followed.id}}" data-action="delete">delete</button>
                                 </form>
                             </div>
                         </div> 
