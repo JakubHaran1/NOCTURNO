@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="party">
+<div class="party" >
   <div
     class="img-hero"
     style="background-image: url(media/{{party.file_thumb}})"></div>
@@ -21,5 +21,5 @@
       <p>>{{party.people_number}}</p>
     </div>
   </div>
-    <button class="signup-btn">Check</button>
+    <a class="signup-btn" href="{% url "map" %}" id="{{party.pk}}">Check</a>
 </div>

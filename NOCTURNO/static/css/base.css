@@ -226,6 +226,11 @@ form button {
   margin-top: 0.3rem;
 }
 
+a.signup-btn {
+  text-decoration: none;
+  margin-top: 0.5rem;
+}
+
 .user-profile {
   width: 90%;
   margin: 2rem auto;

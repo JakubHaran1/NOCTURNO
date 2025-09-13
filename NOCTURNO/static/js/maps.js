@@ -33,10 +33,11 @@ class Map {
     this.getLatLng();
 
     // DRAG/ZOOM EVENT na mapie
-    this.map.on("moveend", (e) => {
+    this.map.on("moveend", async (e) => {
       // Pobieranie map range
       const range = this.map.getBounds();
-      this.sendMapRange(range);
+      await this.sendMapRange(range);
+      this.checkParty();
     });
 
     // CLICK MAP EVENT
@@ -69,13 +70,56 @@ class Map {
 
       // Zoom na mapie po kliknięciu w party box
       const id = e.target.closest(".party").id;
-      const marker = this.currentParties.find(
-        (el) => el.options.className.split("-")[2] == id.split("-")[1]
-      );
-      this.map.setView(marker._latlng);
+      const marker = this.find_marker(id);
       marker.openPopup();
+      this.map.setView(marker._latlng);
       this.last_party = e.target.closest(".party");
     });
+  }
+
+  find_marker(id) {
+    const marker = this.currentParties.find(
+      (el) => el.options.className.split("-")[2] == id.split("-")[1]
+    );
+    return marker;
+  }
+
+  async checkParty() {
+    let check_party = document.cookie.split(";");
+    let party_id;
+    check_party.forEach((el) => {
+      if (el.includes("party=")) {
+        party_id = el.split("=")[1];
+      }
+    });
+    try {
+      party_id = Number(party_id);
+    } catch {
+      console.log("no choice id");
+    }
+    if (party_id) {
+      const respone = await fetch(`map/check/${party_id}`);
+      if (!respone.ok) throw new Error("We can't find your Party:(");
+      const party = await respone.json();
+      const party_parsed = JSON.parse(party)[0];
+
+      console.log(party_parsed["pk"]);
+
+      const target = this.parties_bgc.querySelector(
+        `#party-${party_parsed["pk"]}`
+      );
+      console.log(target);
+      if (this.last_party.id != target.id) {
+        target.classList.add("active");
+        this.last_party = target;
+        // Podpięcie w wrapper party scrolla do partyBox
+        this.scrollMapPartybox(target);
+        document.cookie = "party=";
+        const marker = this.find_marker(`#party-${party_parsed["pk"]}`);
+        this.map.setView(marker._latlng);
+        marker.openPopup();
+      }
+    }
   }
 
   // POBRANIE GEOLOKACJI
@@ -83,7 +127,9 @@ class Map {
     try {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          const { latitude: lat, longitude: lng } = pos.coords;
+          let { latitude: lat, longitude: lng } = pos.coords;
+
+          // dla main -> check -> map find party
 
           this.createMap(lat, lng);
         },
@@ -94,14 +140,14 @@ class Map {
         }
       );
     } catch {
-      this.openPopUp(
+      this.openErrorPopUp(
         "😭 Something goes wrong 😭",
         "We haven't acces to your geolocation ⌛"
       );
     }
   };
 
-  openPopUp(header, content, btnTxt = "Refresh the page", error = true) {
+  openErrorPopUp(header, content, btnTxt = "Refresh the page", error = true) {
     const popHeader = this.popUp.querySelector(".pop-header");
     const popContent = this.popUp.querySelector(".pop-content");
     if (error == true) {
@@ -175,7 +221,7 @@ class Map {
       this.createPointer(latlng, el);
     });
     // } catch {
-    //   this.openPopUp(
+    //   this.openErrorPopUp(
     //     "😭 We have problems with our database 😭",
     //     "Try again later ⌛"
     //   );
@@ -211,17 +257,9 @@ class Map {
     marker.addTo(this.map);
     this.currentParties.push(marker);
 
-    // TWWORZENIE POP UP + SCROLL DO PARTYBOX
+    // TWWORZENIE MAP POPUP + SCROLL DO PARTYBOX
     marker.on("click", (e) => {
-      this.formSection.classList.add("hidden");
-      this.map.setView([
-        parseFloat(el["fields"]["lat"]),
-        parseFloat(el["fields"]["lng"]),
-      ]);
-      // znajdywanie party box na podstawie id znacznika
-      const target = this.parties_bgc.querySelector(
-        `#${e.target._icon.getAttribute("id")}`
-      );
+      const target = this.openMapPopUp(el, e);
 
       if (this.last_party.id != target.id) {
         target.classList.add("active");
@@ -262,6 +300,24 @@ class Map {
         this.last_party = "";
       });
     }
+  }
+  // trzeba rozróżnic gdy id a gdy e target
+  openMapPopUp(el, e, id = false) {
+    this.formSection.classList.add("hidden");
+    this.map.setView([
+      parseFloat(el["fields"]["lat"]),
+      parseFloat(el["fields"]["lng"]),
+    ]);
+    let target;
+    if (!id)
+      // znajdywanie party box na podstawie id znacznika
+      target = this.parties_bgc.querySelector(
+        `#${e.target._icon.getAttribute("id")}`
+      );
+    else target = this.parties_bgc.querySelector(id);
+    console.log(this.parties_bgc);
+    console.log(id);
+    return target;
   }
 
   createDesc(el, wrapper) {
@@ -316,7 +372,7 @@ class Map {
     try {
       address = await this.getAdress(lat, lng);
     } catch (error) {
-      this.openPopUp(
+      this.openErrorPopUp(
         "😭 We have problems with reverse geolocalization 😭",
         "Try again later ⌛"
       );
@@ -389,7 +445,10 @@ class Map {
       return data;
     } catch (error) {
       this.popUp;
-      this.openPopUp("😭 Reverse geocoding failed! 😭", "Try again later ⌛");
+      this.openErrorPopUp(
+        "😭 Reverse geocoding failed! 😭",
+        "Try again later ⌛"
+      );
     }
   }
 }

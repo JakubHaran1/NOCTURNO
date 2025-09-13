@@ -2,6 +2,7 @@
 import { menuFunction, show, animateScroll } from "./base.js";
 const rowTrendings = document.querySelector(".popular-party .row-parties");
 const userPerties = document.querySelector(".user-party .row-parties");
+const bgcImg = document.querySelector(".parties_bgc");
 document.addEventListener("DOMContentLoaded", menuFunction);
 
 window.addEventListener("scroll", show);
@@ -9,6 +10,12 @@ window.addEventListener("scroll", show);
 // ////////////////////////////////////////////////
 
 if (window.matchMedia("(min-width: 724px)").matches) {
+  bgcImg.addEventListener("click", (e) => {
+    if (!e.target.closest(".signup-btn")) return;
+    const id = e.target.getAttribute("id");
+    document.cookie = `party=${id};`;
+    console.log(document.cookie);
+  });
   console.log(12);
   rowTrendings.addEventListener(
     "wheel",
