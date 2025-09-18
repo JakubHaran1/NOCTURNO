@@ -17,6 +17,14 @@
 .signup-btn {
   @include m.neon-button;
 }
+
+.add-btn {
+  @include m.neon-button;
+}
+.add-btn {
+  @include m.neon-button;
+}
+
 .delete-btn {
   @include m.neon-button;
   color: #ff0000;

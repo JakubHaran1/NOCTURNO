@@ -52,7 +52,7 @@
     <section class="main-party">
         <div class="popular-party">
             <div class="parties">
-                <h2>Yours parties</h2>
+                <h2>Your parties</h2>
                 {% if user_parties %}
                     <div class="row-parties">
                         <div class="parties_bgc" style="transform: translateX(0px);">
@@ -77,7 +77,10 @@
                     <div class="row-parties">
                         <div class="parties_bgc" style="transform: translateX(0px);">
                             {% for party in participant_parties %}
+                                
                                 {% include "includes/parties.html" %}
+                               
+                                
                             {% endfor %}
                         </div>
                     </div>

@@ -16,7 +16,7 @@ if (window.matchMedia("(min-width: 724px)").matches) {
     document.cookie = `party=${id};`;
     console.log(document.cookie);
   });
-  console.log(12);
+
   rowTrendings.addEventListener(
     "wheel",
     (e) => {

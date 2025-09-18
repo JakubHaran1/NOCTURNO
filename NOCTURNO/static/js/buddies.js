@@ -1,5 +1,5 @@
 "use strict";
-import { menuFunction, show } from "./base.js";
+import { menuFunction, show, addBuddie } from "./base.js";
 
 class Buddies {
   searchRow = document.querySelector(".search-row");
@@ -22,73 +22,11 @@ class Buddies {
       this.searchingBuddie.bind(this)
     );
     // Dodawnie buddietgo do listy zaiobserwowanych przez zalogowanego uzytkownika
-    this.searchRow.addEventListener("click", this.addBuddie.bind(this));
-  }
-  errorHandler(first, second = "Try again") {
-    const errorBox = `
-    <div class="buddies-txt">
-        <p>${first}</p>
-        <p>${second}</p>
-    </div>`;
-    this.searchRow.textContent = "";
-    this.searchRow.insertAdjacentHTML("afterbegin", errorBox);
-  }
-  // Funkcja pomocnicza do pobierania danych i tworzenia userbox
-  async getData(link) {
-    const fetchResponse = await fetch(link);
-    if (!fetchResponse.ok) throw new Error("Something goes wrong with link");
-    const data = await fetchResponse.json();
-    return data;
+    this.searchRow.addEventListener("click", addBuddie.bind(this));
   }
 
-  createBuddiesBox(data, friendsId = null) {
-    this.searchRow.textContent = "";
-
-    const generate = (el, btnAction = "delete") => {
-      const buddyBox = document.createElement("div");
-      buddyBox.classList.add("buddy-box");
-
-      const buddyInfo = document.createElement("div");
-      buddyInfo.classList.add("buddy-info");
-
-      const avatar = document.createElement("img");
-      avatar.setAttribute("src", `{% static ${el.avatar} %}`);
-      avatar.setAttribute("alt", `${el.username}`);
-
-      const nick = document.createElement("h3");
-      nick.classList.add("nick");
-      nick.textContent = `${el.username}`;
-
-      const button = document.createElement("button");
-
-      button.setAttribute("data-id", `${el.id}`);
-      button.setAttribute("data-action", `${btnAction}`);
-      button.classList.add(`${btnAction}-buddie`, "actionBtn", "signup-btn");
-      button.textContent = `${btnAction}`;
-
-      buddyInfo.appendChild(nick);
-      buddyInfo.appendChild(button);
-      buddyBox.appendChild(avatar);
-      buddyBox.appendChild(buddyInfo);
-      this.searchRow.appendChild(buddyBox);
-    };
-
-    // Dwie wersje pętli tworzących aby przy generowaniu "Yours" nie sprawedzało czy znajduje sie na liscie znajomych tylko od razu generowało z przyciskiem delete -> lepsze wydajność
-    // Dla find sprawdza żeby był wyświetlany przycisk delete lub add
-
-    if (friendsId != null) {
-      data.forEach((el) => {
-        let keyWord = "add";
-        if (friendsId.includes(el.id)) keyWord = "delete";
-        generate(el, keyWord);
-      });
-    } else {
-      data.forEach((el) => {
-        generate(el);
-      });
-    }
-  }
-
+  // GŁÓWNE
+  // ----------------
   // Zmiana typów wyszukiwań (inicjacja generowania buddiesbox)
   async changeSearch(e) {
     const el = e.target.closest(".search-link");
@@ -123,42 +61,74 @@ class Buddies {
     }
   }
 
-  // Dodawanie,usuwanie buddies
-  async addBuddie(e) {
-    e.preventDefault();
-    const el = e.target.closest(".actionBtn");
-    console.log(el);
-    if (!el) return;
-    const action = el.dataset.action;
-    const friendID = el.dataset.id;
-    const fetchLink = `buddies/action-buddie/`;
-    console.log([friendID, action]);
+  // POMOCNICZE
+  // ----------------
+  // Funkcja pomocnicza do pobierania danych i tworzenia userbox
+  async getData(link) {
+    const fetchResponse = await fetch(link);
+    if (!fetchResponse.ok) throw new Error("Something goes wrong with link");
+    const data = await fetchResponse.json();
+    return data;
+  }
 
-    try {
-      const sendData = await fetch(fetchLink, {
-        method: "POST",
-        body: JSON.stringify([friendID, action]),
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content"),
-        },
+  createBuddiesBox(data, friendsId = null) {
+    this.searchRow.textContent = "";
+    const generate = (el, btnAction = "delete") => {
+      const buddyBox = document.createElement("div");
+      buddyBox.classList.add("buddy-box");
+
+      const buddyInfo = document.createElement("div");
+      buddyInfo.classList.add("buddy-info");
+
+      const avatar = document.createElement("img");
+      avatar.setAttribute("src", `${el.avatar}`);
+      avatar.setAttribute("alt", `${el.username}`);
+
+      const nick = document.createElement("h3");
+      nick.classList.add("nick");
+      nick.textContent = `${el.username}`;
+
+      const button = document.createElement("button");
+
+      button.setAttribute("data-id", `${el.id}`);
+      button.setAttribute("data-action", `${btnAction}`);
+      button.classList.add(`${btnAction}-btn`, "actionBtn");
+      button.textContent = `${btnAction}`;
+
+      buddyInfo.appendChild(nick);
+      buddyInfo.appendChild(button);
+      buddyBox.appendChild(avatar);
+      buddyBox.appendChild(buddyInfo);
+      this.searchRow.appendChild(buddyBox);
+    };
+
+    // Dwie wersje pętli tworzących aby przy generowaniu "Yours" nie sprawedzało czy znajduje sie na liscie znajomych tylko od razu generowało z przyciskiem delete -> lepsze wydajność
+    // Dla find sprawdza żeby był wyświetlany przycisk delete lub add
+
+    if (friendsId != null) {
+      data.forEach((el) => {
+        let keyWord = "add";
+        if (friendsId.includes(el.id)) keyWord = "delete";
+        generate(el, keyWord);
       });
-
-      if (!sendData.ok)
-        throw new Error("We can't add this buddie to your list 😭");
-      const backData = await sendData.json();
-
-      if (backData.redirect) {
-        window.location.href = backData.redirect;
-      } else {
-        throw new Error(backData.error);
-      }
-    } catch (err) {
-      this.errorHandler(err);
+    } else {
+      data.forEach((el) => {
+        generate(el);
+      });
     }
   }
+
+  errorHandler(first, second = "Try again") {
+    const errorBox = `
+    <div class="buddies-txt">
+        <p>${first}</p>
+        <p>${second}</p>
+    </div>`;
+    this.searchRow.textContent = "";
+    this.searchRow.insertAdjacentHTML("afterbegin", errorBox);
+  }
+
+  // Dodawanie,usuwanie buddies
 }
 
 // Basic function

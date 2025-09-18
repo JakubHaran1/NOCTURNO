@@ -1,10 +1,4 @@
-from ast import List
-from asyncio.windows_events import NULL
-from email import message
-import html
-from logging import log
-import re
-from sys import flags
+
 from django.conf import settings
 
 from django import views
@@ -103,7 +97,6 @@ def generateParties(request, coords):
     partiesData = [participiant_parties_serialized,
                    user_parties_serialized, near_parties_serialized]
 
-    print(partiesData)
     return JsonResponse(partiesData, safe=False)
 
 
@@ -126,9 +119,10 @@ def partyAction(request, action, party_id):
 
 @login_required(login_url="login")
 def mainView(request):
-    user_parties = PartyModel.objects.filter(author=request.user)
+    user_parties = PartyModel.objects.filter(
+        author=request.user).order_by("-date")
     participant_parties = PartyModel.objects.filter(
-        participants=request.user)
+        participants=request.user).exclude(author=request.user).order_by("-date")
     return render(request, "main.html", {
         "user_parties": user_parties,
         "participant_parties": participant_parties
@@ -149,6 +143,7 @@ class mapView(View):
             party = partyForm.save(commit=False)
             party.author = request.user
             party.save()
+            party.participants.add(request.user)
             return redirect("map")
         else:
             attempt = 1
@@ -254,6 +249,22 @@ class BuddiesView(View):
         })
 
 
+class CheckBuddiesView(View):
+    def get(self, request, party_id):
+        check_query = PartyUser.objects.filter(
+            participant_parties=party_id)
+
+        new_friend_query = PartyUser.objects.all()
+        user_response = list(
+            request.user.following.values_list("followed__id", flat=True))
+
+        return render(request, "check_list.html", {
+            "check_query":  check_query,
+            'new_friend_query': new_friend_query,
+            "user_response": user_response
+        })
+
+
 # Zwraca 5 (10) najnowszych użytkowników dla find/yours 5/10 -> umozliwia zmiane typow i dynamiczne generowanie html bez przeładowania strony
 def initFindBuddie(request):
     search_type_cookie = request.COOKIES.get("searchingType")
@@ -317,6 +328,7 @@ def searchingBuddie(request):
 
 def addDeleteBuddie(request):
     if request.method == "POST":
+        print("zdsad", request.body)
         action_friend = json.loads(request.body)
 
         [friendID, action] = action_friend

@@ -1,6 +1,6 @@
 from os import name
 from django.urls import path, include
-from APP.views import reverseGeo, searchingBuddie, initFindBuddie, addDeleteBuddie, mainView, mapView, LoginUserView, RegisterView, ConfirmationView, ResetPasswordEmailView, ResetPasswordView, ResetDoneView, BuddiesView, generateParties, partyAction
+from APP.views import reverseGeo, searchingBuddie, initFindBuddie, addDeleteBuddie, mainView, mapView, LoginUserView, RegisterView, ConfirmationView, ResetPasswordEmailView, ResetPasswordView, ResetDoneView, BuddiesView, generateParties, partyAction, CheckBuddiesView
 
 
 urlpatterns = [
@@ -23,6 +23,8 @@ urlpatterns = [
 
     path("buddies", BuddiesView.as_view(), name="buddies"),
     path("buddies/find-buddie/", searchingBuddie, name="searchBuddie"),
+    path('buddies/initial-find/<party_id>',
+         CheckBuddiesView.as_view(), name="check_party"),
     path('buddies/initial-find/', initFindBuddie, name="init_find"),
     path("buddies/action-buddie/", addDeleteBuddie, name="add_delete_buddie"),
 ]

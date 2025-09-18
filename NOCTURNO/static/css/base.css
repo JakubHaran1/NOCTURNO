@@ -85,6 +85,12 @@
   -moz-box-shadow: 0px 0px 37px -12px #0b0c10;
   box-shadow: 0px 0px 37px -12px #0b0c10;
 }
+.parties .party .date {
+  text-decoration: none;
+  letter-spacing: 3px;
+  margin-bottom: 0.5rem;
+  color: #a1a1b5;
+}
 .parties .party button {
   margin-top: 1rem;
 }
@@ -115,11 +121,16 @@
   text-align: center;
   color: #f5f5f5;
   font-size: 1.2rem;
+  margin-bottom: 0.5rem;
 }
 .parties .party .desc p.description {
   font-size: 1rem;
   word-break: break-word;
   color: #a1a1b5;
+}
+.parties a.show-users {
+  text-decoration: none;
+  color: #9b30ff;
 }
 
 .layout.map {
@@ -228,7 +239,7 @@ form button {
 
 a.signup-btn {
   text-decoration: none;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .user-profile {
@@ -312,7 +323,6 @@ a.signup-btn {
 }
 .layout.map h2 {
   padding-left: 1rem;
-  padding-bottom: 0;
 }
 .layout.map .main-header {
   padding: 0;
@@ -328,7 +338,7 @@ a.signup-btn {
   width: 100%;
   color: #a1a1b5;
   margin: 1rem 0;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
 }
 .layout.map #map h4 {
   color: #f5f5f5;
@@ -413,7 +423,6 @@ a.signup-btn {
   text-align: center;
   color: #f5f5f5;
   font-size: 1.2rem;
-  margin-top: 1rem;
 }
 .desc p {
   font-size: 1rem;
@@ -1005,6 +1014,86 @@ a.signup-btn {
   box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
 }
 .signup-btn:hover {
+  color: #2a2640;
+  border-color: #ffd900;
+  text-shadow: none;
+}
+
+.add-btn {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.5rem;
+  font-size: 16px;
+  color: #ffea00;
+  background: transparent;
+  border: 2px solid #ffea00;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px #ffea00;
+  font-weight: bold;
+  overflow: hidden;
+  z-index: 1;
+}
+.add-btn:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffd900;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+.add-btn:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
+}
+.add-btn:hover {
+  color: #2a2640;
+  border-color: #ffd900;
+  text-shadow: none;
+}
+
+.add-btn {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.5rem;
+  font-size: 16px;
+  color: #ffea00;
+  background: transparent;
+  border: 2px solid #ffea00;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px #ffea00;
+  font-weight: bold;
+  overflow: hidden;
+  z-index: 1;
+}
+.add-btn:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffd900;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+.add-btn:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 10px #ffd900, 0 0 20px #ffd900, 0 0 30px #ffd900;
+}
+.add-btn:hover {
   color: #2a2640;
   border-color: #ffd900;
   text-shadow: none;
