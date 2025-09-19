@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-...'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Aplikacje
 INSTALLED_APPS = [
@@ -36,7 +36,7 @@ ROOT_URLCONF = 'NOCTURNO.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # <- jeśli używasz szablonów z folderu templates/
+
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -58,7 +58,7 @@ DATABASES = {
         'NAME': 'nocturnobase',
         'USER': os.environ.get("db_user"),
         'PASSWORD': os.environ.get("db_password"),
-        'HOST': 'localhost',
+        'HOST': os.environ.get("db_host"),
         'PORT': '5432',
     }
 }
