@@ -328,7 +328,6 @@ def searchingBuddie(request):
 
 def addDeleteBuddie(request):
     if request.method == "POST":
-        print("zdsad", request.body)
         action_friend = json.loads(request.body)
 
         [friendID, action] = action_friend
