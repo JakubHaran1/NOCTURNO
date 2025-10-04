@@ -50,8 +50,10 @@ class RegisterForm(UserCreationForm):
         return clean_birth
 
     def clean_avatar(self):
-        avatar = self.cleaned_data["avatar"]
 
+        avatar = self.cleaned_data["avatar"]
+        if not avatar:
+            raise ValidationError("You have to pass avatar")
         if not avatar.name.lower().endswith((".jpg", ".png", ".webp")):
             raise ValidationError("Wrong file type!")
         return avatar

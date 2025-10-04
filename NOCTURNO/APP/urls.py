@@ -1,7 +1,6 @@
-from os import name
-from django.urls import path, include
-from APP.views import reverseGeo, searchingBuddie, initFindBuddie, addDeleteBuddie, mainView, mapView, LoginUserView, RegisterView, ConfirmationView, ResetPasswordEmailView, ResetPasswordView, ResetDoneView, BuddiesView, generateParties, partyAction, CheckBuddiesView
 
+from django.urls import path, include
+from APP.views import reverseGeo, searchingBuddie, initFindBuddie, addDeleteBuddie, mainView, mapView, LoginUserView, RegisterView, ConfirmationView, ResetPasswordEmailView, ResetPasswordView, ResetDoneView, BuddiesView, generateParties, partyAction, CheckBuddiesView, logoutUser
 
 urlpatterns = [
     path("", mainView, name="home"),
@@ -13,6 +12,7 @@ urlpatterns = [
     path("geocode-reverse", reverseGeo, name="reverseGeo"),
 
     path("login", LoginUserView.as_view(), name="login"),
+    path("logout", logoutUser, name="logout"),
     path("register", RegisterView.as_view(), name="register"),
     path("email-confirmation/<uidb64>/<token>",
          ConfirmationView.as_view(), name="activate_email"),

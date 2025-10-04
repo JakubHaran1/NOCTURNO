@@ -1,4 +1,5 @@
-from tkinter import CASCADE
+import datetime
+from datetime import date
 from django import forms
 from django.db import models
 from django.core import validators
@@ -10,7 +11,7 @@ from django.utils.text import slugify
 
 from django.contrib.auth.models import AbstractUser
 
-from datetime import date
+
 import os
 from io import BytesIO
 
@@ -45,6 +46,9 @@ class PartyUser(AbstractUser):
     def __str__(self):
         return f'{self.username},{self.email},{self.id}'
 
+    def return_age(self):
+        return (date.today().year - self.birth.year)
+
     def follow(self, other_user):
         if self != other_user:
             FollowModel.objects.get_or_create(
@@ -58,19 +62,23 @@ class PartyUser(AbstractUser):
         return self.following.exists()
 
     def save(self, *args, **kwargs):
-        size = (200, 200)
-        if not self.avatar.name.lower().endswith((".jpg", ".png", ".webp")):
-            raise ValidationError("Wrong img type!")
+        try:
+            size = (200, 200)
 
-        file_path = os.path.split(self.avatar.path)
+            if not self.avatar.name.lower().endswith((".jpg", ".png", ".webp")):
+                raise ValidationError("Wrong img type!")
 
-        file_new_path = f'{self.username}/{file_path[1].split(".")[0]} + "_thumb.webp"'
+            file_path = os.path.split(self.avatar.path)
 
-        with Image.open(self.avatar) as im:
-            im.thumbnail(size)
-            bufor = BytesIO()
-            im.save(bufor, "webp")
-            self.avatar.save(file_new_path, bufor, save=False)
+            file_new_path = f'{self.username}/{file_path[1].split(".")[0]} + "_thumb.webp"'
+
+            with Image.open(self.avatar) as im:
+                im.thumbnail(size)
+                bufor = BytesIO()
+                im.save(bufor, "webp")
+                self.avatar.save(file_new_path, bufor, save=False)
+        except:
+            ValueError("Wrong img")
 
         super().save(*args, **kwargs)
 

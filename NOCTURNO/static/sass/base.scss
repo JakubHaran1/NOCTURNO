@@ -115,6 +115,10 @@ h2 {
       0 0 40px v.$cta-yellow;
   }
 }
+.nav-header {
+  position: relative;
+  z-index: 11112;
+}
 
 .navbar.nav {
   position: fixed;

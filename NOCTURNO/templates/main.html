@@ -11,7 +11,8 @@
     <section class="user-profile">
         
         <div class="user-card">
-        
+           
+            
             <div class="user-img">
                 <img src="{{request.user.avatar.url}}" alt="{{request.user.username}}'s profile image">
             </div>
@@ -25,6 +26,7 @@
                     <h4>Surname:</h4>
                     <p>Cage</p>
                 </div>
+              
             </div>
             <div class="user-info">
                 <div class="position">
@@ -33,7 +35,7 @@
                 </div>
                 <div class="position">
                     <h4>Age:</h4>
-                    <p></p>
+                    <p>{{request.user.return_age}}</p>
                 </div>
             </div>
 
@@ -43,6 +45,12 @@
                     <i class="fas fa-user-friends"></i>
                     <h4>Buddies</h4>
                 </div>
+                <div class="acction ">
+                    <a href="{% url "logout" %} " class="link"></a>
+                    <i class="fa-solid fa-arrow-right-from-bracket logout-btn"></i>
+                    <h4>Logout</h4>
+                </div>
+                  
                 
                
             </div>
@@ -63,7 +71,7 @@
                     </div>
                 {% else %}
                     <div class="party-info">
-                        <p>You have to create partie! 🎶🫡</p>
+                        <p>You have to create party! 🎶🫡</p>
                         <a class="btn" href="{% url "map" %}">Create</a>
                     </div>
                 {% endif %}

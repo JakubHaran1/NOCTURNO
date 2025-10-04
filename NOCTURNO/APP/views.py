@@ -4,22 +4,22 @@ from django.conf import settings
 from django import views
 from django.views import View
 from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
+from django.contrib.auth.decorators import login_required
 
-from django.contrib.auth import get_user_model
 
-from .forms import PartyForm,  RegisterForm, EmailChangeForm
-from .models import PartyModel,  PartyUser, FollowModel
+from .forms import PartyForm,  RegisterForm
+from .models import PartyModel,  PartyUser
 from .tokens import emailActivationToken
 
 
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from django.urls import reverse
 from django.core.mail import send_mail
-from django.core.paginator import Paginator
 from django.core.serializers import serialize
 
 from django.contrib.sites.shortcuts import get_current_site
@@ -85,7 +85,7 @@ def generateParties(request, coords):
     latitude = coords_nums[:2]
     longitude = coords_nums[2:]
     near_parties = PartyModel.objects.filter(
-        lat__gte=latitude[0], lat__lte=latitude[1], lng__gte=longitude[0], lng__lte=latitude[1])
+        lat__gte=latitude[0], lat__lte=latitude[1], lng__gte=longitude[0], lng__lte=latitude[1]).order_by("date")
 
     participiant_parties = request.user.participant_parties.all()
     user_parties = request.user.partymodel_set.all()
@@ -120,16 +120,19 @@ def partyAction(request, action, party_id):
 @login_required(login_url="login")
 def mainView(request):
     user_parties = PartyModel.objects.filter(
-        author=request.user).order_by("-date")
+        author=request.user).order_by("date")
     participant_parties = PartyModel.objects.filter(
-        participants=request.user).exclude(author=request.user).order_by("-date")
+        participants=request.user).exclude(author=request.user).order_by("date")
     return render(request, "main.html", {
         "user_parties": user_parties,
         "participant_parties": participant_parties
     })
 
 
-class mapView(View):
+class mapView(LoginRequiredMixin, View):
+    template_name = "map.html"
+    login_url = "login"
+
     def get(self, request):
         partyForm = PartyForm()
         return render(request, "map.html", {
@@ -166,6 +169,11 @@ class LoginUserView(LoginView):
         messages.add_message(self.request, messages.ERROR,
                              "WRONG! PASSWORD or USERNAME")
         return self.render_to_response(self.get_context_data(form=form))
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect("login")
 
 
 class RegisterView(views.View):
@@ -241,7 +249,10 @@ class ResetDoneView(PasswordResetDoneView):
 
 # Początkowe wyświetlanie buddies -> generowanie pocztkowego html wraz z buddies uzytkownika
 # BuddiesView stanowi baze dla dalszych operacji na template -> jedyny view odnoszący się do buddies który nie zwraca json response
-class BuddiesView(View):
+class BuddiesView(LoginRequiredMixin, View):
+
+    login_url = "login"
+
     def get(self, request):
         users_subscriptions = request.user.following.all()
         return render(request, "buddies.html", {
@@ -249,7 +260,10 @@ class BuddiesView(View):
         })
 
 
-class CheckBuddiesView(View):
+class CheckBuddiesView(LoginRequiredMixin, View):
+
+    login_url = "login"
+
     def get(self, request, party_id):
         check_query = PartyUser.objects.filter(
             participant_parties=party_id)

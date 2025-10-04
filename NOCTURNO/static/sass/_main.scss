@@ -21,6 +21,8 @@ a.signup-btn {
   color: v.$text-main;
 
   .user-card {
+    position: relative;
+
     @include row-center;
     flex-wrap: wrap;
     gap: 1rem;
