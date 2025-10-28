@@ -179,7 +179,7 @@ class RegisterView(views.View):
 
             page = get_current_site(request)
             mail_subject =  F"Confirm your email to finish user creation"
-            from_email = "nocturno.app@gmail.com"
+            from_email = "kontakt@nocturno.app"
             message = "email_confirm.html"
             recipient_list= [user.email]
             mail_context = {"user": user,
