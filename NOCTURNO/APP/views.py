@@ -173,15 +173,15 @@ class RegisterView(views.View):
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
-            user.save()
             user.age = calcAge(
                 user.birth.year, user.birth.month, user.birth.day)
+            user.save()
 
             page = get_current_site(request)
             mail_subject =  F"Confirm your email to finish user creation"
             from_email = "nocturno.app@gmail.com"
             message = "email_confirm.html"
-            recipient_list= user.email
+            recipient_list= [user.email]
             mail_context = {"user": user,
                             "domain": page,
                             "subject": mail_subject,
